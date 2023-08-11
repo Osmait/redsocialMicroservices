@@ -43,15 +43,8 @@ jobs:
           push: true
           tags: osmait/post-service:latest
 
-      - name: Build and push apiGateway
-        uses: docker/build-push-action@v4
-        with:
-          context: apiGateway/
-          push: true
-          tags: osmait/api-gateway:latest
-
       # Comment service
-      - name: Build and push apiGateway
+      - name: Build and push commentService
         uses: docker/build-push-action@v4
         with:
           context: CommentServices/
