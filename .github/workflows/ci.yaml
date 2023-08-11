@@ -1,41 +1,41 @@
-# name: Build and Push Docker Images
+name: Build and Push Docker Images
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   build-and-push:
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#       - name: Login to Docker Hub
-#         run: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+      - name: Login to Docker Hub
+        run: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
 
-#       - name: Build and push Api Gateway image
-#         working-directory: apiGateway
-#         run: |
-#           docker build -t $DOCKERHUB_USERNAME/api-gateway .
-#           docker push $DOCKERHUB_USERNAME/api-gateway
+      - name: Build and push Api Gateway image
+        working-directory: apiGateway
+        run: |
+          docker build -t $DOCKERHUB_USERNAME/api-gateway .
+          docker push $DOCKERHUB_USERNAME/api-gateway
 
-#       - name: Build and push User Service image
-#         working-directory: userService/userService
-#         run: |
-#           docker build -t $DOCKERHUB_USERNAME/user-service .
-#           docker push $DOCKERHUB_USERNAME/user-service
+      - name: Build and push User Service image
+        working-directory: userService/userService
+        run: |
+          docker build -t $DOCKERHUB_USERNAME/user-service .
+          docker push $DOCKERHUB_USERNAME/user-service
 
-#       - name: Build and push Post Service image
-#         working-directory: PostServices/post-service
-#         run: |
-#           docker build -t $DOCKERHUB_USERNAME/post-service .
-#           docker push $DOCKERHUB_USERNAME/post-service
+      - name: Build and push Post Service image
+        working-directory: PostServices/post-service
+        run: |
+          docker build -t $DOCKERHUB_USERNAME/post-service .
+          docker push $DOCKERHUB_USERNAME/post-service
 
-#       - name: Build and push Comment Service image
-#         working-directory: CommentServices
-#         run: |
-#           docker build -t $DOCKERHUB_USERNAME/comment-service .
-#           docker push $DOCKERHUB_USERNAME/comment-service
+      - name: Build and push Comment Service image
+        working-directory: CommentServices
+        run: |
+          docker build -t $DOCKERHUB_USERNAME/comment-service .
+          docker push $DOCKERHUB_USERNAME/comment-service
