@@ -25,6 +25,7 @@ func main() {
 
 	postUrl := fmt.Sprintf("http://%s:%s/post", postHost, postport)
 	commentsUrl := fmt.Sprintf("http://%s:%s/comments", commentHost, commentport)
+	fmt.Println(postUrl)
 
 	r.GET("/api/user", func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
@@ -42,6 +43,7 @@ func main() {
 	r.GET("/api/post", func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
 		responseBody, err := makeBackendGetRequest(postUrl)
+
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error en la API Gateway"})
 			return

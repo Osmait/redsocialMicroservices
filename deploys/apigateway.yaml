@@ -15,6 +15,19 @@ spec:
       containers:
         - name: api-gateway
           image: osmait/api-gateway:latest
+          env:
+            - name: USER_HOST
+              value: user-service-service
+            - name: USER_PORT
+              value: "8080" # Puerto del servicio UserService
+            - name: POST_HOST
+              value: post-service-service
+            - name: POST_PORT
+              value: "8081" # Puerto del servicio PostService
+            - name: COMMENT_HOST
+              value: comment-service-service
+            - name: COMMENT_PORT
+              value: "8000" # Puerto del servicio CommentService
           ports:
             - containerPort: 5000
 
