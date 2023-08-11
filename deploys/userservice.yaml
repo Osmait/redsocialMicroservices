@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: osmait/user-service:latest
+
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_DATABASE
+              value: my_store
+            - name: DB_USER
+              value: osmait
+            - name: DB_PASSWORD
+              value: admin123
+            - name: DB_HOSTNAME
+              value: postgres-user
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
