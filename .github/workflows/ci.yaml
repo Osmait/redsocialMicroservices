@@ -16,9 +16,44 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push
+      # Api GateWay
+
+      - name: Build and push apiGateway
         uses: docker/build-push-action@v4
         with:
           context: apiGateway/
           push: true
           tags: osmait/api-gateway:latest
+
+      # User Service
+
+      - name: Build and push userService
+        uses: docker/build-push-action@v4
+        with:
+          context: userService/userService/
+          push: true
+          tags: osmait/user-service:latest
+
+      # Post Service
+
+      - name: Build and push postService
+        uses: docker/build-push-action@v4
+        with:
+          context: PostServices/post-service/
+          push: true
+          tags: osmait/post-service:latest
+
+      - name: Build and push apiGateway
+        uses: docker/build-push-action@v4
+        with:
+          context: apiGateway/
+          push: true
+          tags: osmait/api-gateway:latest
+
+      # Comment service
+      - name: Build and push apiGateway
+        uses: docker/build-push-action@v4
+        with:
+          context: CommentServices/
+          push: true
+          tags: osmait/comment-service:latest
