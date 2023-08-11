@@ -10,32 +10,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      name: Login to Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Api Gateway image
-        working-directory: apiGateway
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Build and push User Service image
-        working-directory: userService/userService
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}user-service .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/user-service
 
-      - name: Build and push Post Service image
-        working-directory: PostServices/post-service
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/post-service .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/post-service
-
-      - name: Build and push Comment Service image
-        working-directory: CommentServices
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/comment-service .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/comment-service
+       - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: "apiGateway/"
+          push: true
+          tags: api-gateway
+          labels: "1"
