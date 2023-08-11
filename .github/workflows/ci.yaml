@@ -27,12 +27,12 @@ jobs:
 
       # User Service
 
-      - name: Build and push userService
-        uses: docker/build-push-action@v4
-        with:
-          context: userService/userService/
-          push: true
-          tags: osmait/user-service:latest
+      # - name: Build and push userService
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: userService/userService/
+      #     push: true
+      #     tags: osmait/user-service:latest
 
       # Post Service
 
