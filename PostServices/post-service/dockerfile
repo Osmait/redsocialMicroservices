@@ -1,0 +1,41 @@
+# FROM node:18
+
+# WORKDIR /app
+
+
+# COPY package*.json ./
+# COPY . .
+
+
+# RUN npm install
+
+# RUN npm i -g nestjs
+
+# EXPOSE 3000
+
+
+# CMD ["npm run start:dev"]
+
+# Etapa de construcción
+FROM node:18 as build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# Etapa de producción
+FROM node:18-slim
+
+WORKDIR /app
+
+COPY --from=build /app/package*.json ./
+COPY --from=build /app/dist ./dist
+
+RUN npm install --only=production
+
+CMD ["node", "dist/main"]

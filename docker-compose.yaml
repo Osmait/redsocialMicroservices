@@ -1,0 +1,94 @@
+services:
+# Api GateWay
+  api-gateway:
+    build:
+      context: apiGateway/
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+
+# UserService
+  postgres-user:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=my_store
+      - POSTGRES_USER=osmait
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  user-service:
+    build:
+      context: userService/userService/
+      dockerfile: Dockerfile
+    environment:
+      - DB_PORT=5432
+      - DB_DATABASE=my_store
+      - DB_USER=osmait
+      - DB_PASSWORD=admin123
+      - DB_HOSTNAME=postgres-user
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres-user
+
+# PostService
+
+  postgres-post:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=my_store
+      - POSTGRES_USER=osmait
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5433:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  post-service:
+    build:
+      context: PostServices/post-service/
+      dockerfile: Dockerfile
+    ports:
+      - 8081:3000
+    depends_on:
+      - postgres-post
+    # command: npm run start:dev
+
+
+
+# CommentService
+
+  comment-service:
+    build:
+      context: CommentServices/
+      dockerfile: Dockerfile
+ 
+    ports:
+      - 8000:8000
+
+
+  postgres-comment:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=my_store
+      - POSTGRES_USER=osmait
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5434:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+
+
+
+ 
+    
+    
+
+
+
+  
+

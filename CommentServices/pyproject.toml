@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "commentservices"
+version = "0.1.0"
+description = ""
+authors = ["Saul Burgos <saulburgos6@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.101.0"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
