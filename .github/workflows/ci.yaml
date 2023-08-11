@@ -10,26 +10,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Build Docker Image
-        id: buildAndPushImage
-        uses: abhishek-070/docker-image-build-push-action@v1.0
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          registry_url: "docker.io"
-          repository_name: api-gateway'
-          user_name: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          image_version: "v0.0.1"
-          docker_file: "/apiGateway"
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: "apiGateway/"
-      #     file: "./dockerfile"
-      #     push: true
-      #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: apiGateway/
+          push: true
+          tags: osmait/api-gateway:latest
+
+   
