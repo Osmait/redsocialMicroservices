@@ -30,5 +30,3 @@ spec:
     - protocol: TCP
       port: 8081
       targetPort: 3000
-
-  type: NodePort
