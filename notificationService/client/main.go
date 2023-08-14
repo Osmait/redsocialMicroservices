@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/streadway/amqp"
 )
@@ -22,8 +23,11 @@ type Messge struct {
 }
 
 func main() {
+	hostRabbit := os.Getenv("HOST_RABBIT")
+
+	url := fmt.Sprintf("amqp://guest:guest@%s:5672/", hostRabbit)
 	// Here we connect to RabbitMQ or send a message if there are any errors connecting.
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial(url)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 

@@ -1,4 +1,18 @@
 services:
+
+  rabbitmq-notification:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+
+
+
 # Api GateWay
   api-gateway:
     build:
@@ -76,7 +90,6 @@ services:
     ports:
       - 8000:8000
 
-
   postgres-comment:
     image: postgres:13
     environment:
@@ -87,6 +100,22 @@ services:
       - 5434:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+
+
+    # Notification Service
+
+  notification-service:
+    build: 
+      context: notificationService/
+      dockerfile: Dockerfile
+    environment:
+      - HOST_RABBIT=rabbitmq-notification
+    ports:
+      - 8083:8083
+    depends_on:
+      - rabbitmq-notification
+    restart: always 
+
 
 
 

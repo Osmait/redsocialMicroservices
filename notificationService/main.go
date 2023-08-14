@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -39,6 +40,15 @@ func (r RabbitMQEventStore) Consume() <-chan amqp.Delivery {
 	if err != nil {
 		log.Fatal(err)
 	}
+	ch.QueueDeclare(
+		fmt.Sprintf("userId_%s_notification_queue", r.userId),
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+
 	msgs, err := ch.Consume(
 		fmt.Sprintf("userId_%s_notification_queue", r.userId),
 		"",
@@ -56,7 +66,9 @@ func (r RabbitMQEventStore) Consume() <-chan amqp.Delivery {
 }
 
 func main() {
-	url := "amqp://guest:guest@localhost:5672/"
+	hostRabbit := os.Getenv("HOST_RABBIT")
+
+	url := fmt.Sprintf("amqp://guest:guest@%s:5672/", hostRabbit)
 	conn, err := amqp.Dial(url)
 
 	if err != nil {
@@ -80,5 +92,5 @@ func main() {
 			ws.WriteMessage(websocket.TextMessage, msg.Body)
 		}
 	})
-	router.Run(":8080")
+	router.Run(":8083")
 }
