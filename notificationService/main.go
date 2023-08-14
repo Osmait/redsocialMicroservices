@@ -92,5 +92,6 @@ func main() {
 			ws.WriteMessage(websocket.TextMessage, msg.Body)
 		}
 	})
+
 	router.Run(":8083")
 }
