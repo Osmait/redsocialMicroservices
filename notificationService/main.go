@@ -41,7 +41,7 @@ func (r RabbitMQEventStore) Consume() <-chan amqp.Delivery {
 		log.Fatal(err)
 	}
 	ch.QueueDeclare(
-		fmt.Sprintf("userId_%s_notification_queue", r.userId),
+		"notification_queue",
 		false,
 		false,
 		false,
@@ -50,7 +50,7 @@ func (r RabbitMQEventStore) Consume() <-chan amqp.Delivery {
 	)
 
 	msgs, err := ch.Consume(
-		fmt.Sprintf("userId_%s_notification_queue", r.userId),
+		"notification_queue",
 		"",
 		true,
 		false,
@@ -77,7 +77,8 @@ func main() {
 	rabi := newRabbitMQEventStore(conn, "1")
 	msgs := rabi.Consume()
 	router := gin.Default()
-	router.GET("/ws", func(c *gin.Context) {
+	router.GET("/ws/:id", func(c *gin.Context) {
+		id := c.Param("id")
 		ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
 			log.Print("upgrade:", err)
@@ -87,9 +88,12 @@ func main() {
 		var message Messge
 
 		for msg := range msgs {
-			json.Unmarshal(msg.Body, &message)
 
-			ws.WriteMessage(websocket.TextMessage, msg.Body)
+			json.Unmarshal(msg.Body, &message)
+			if message.Id == id {
+				ws.WriteMessage(websocket.TextMessage, msg.Body)
+
+			}
 		}
 	})
 

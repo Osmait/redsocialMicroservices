@@ -34,7 +34,7 @@ func main() {
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-	body := Messge{Id: "1", Content: "prueba"}
+	body := Messge{Id: "2", Content: "prueba"}
 
 	// We create a Queue to send the message to.
 	q, err := ch.QueueDeclare(

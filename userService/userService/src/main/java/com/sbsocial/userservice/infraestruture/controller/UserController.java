@@ -1,25 +1,42 @@
 package com.sbsocial.userservice.infraestruture.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.sbsocial.userservice.domain.User;
+import com.sbsocial.userservice.services.UserServices;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.query.QueryParameter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
+    final private UserServices userServices;
 
 
-    @GetMapping
-    public String getUser(){
-        return "List of User";
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id")UUID id){
+      User user = userServices.findOne(id);
+      return  new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @PostMapping
-    public String postUser(){
-        return "Created";
+    public ResponseEntity<String> postUser(@RequestBody User userRequest ){
+        userServices.create(userRequest);
+        return new ResponseEntity<>("Created",HttpStatus.CREATED);
     }
 
+    @GetMapping("/email")
+    public ResponseEntity<User> getUserByEmail(@RequestParam("email")String email){
+        if (email == null){
+           throw  new RuntimeException("Error Email Is required");
+        }
+        User user = userServices.findOneByEmail(email);
+        return  new ResponseEntity<>(user,HttpStatus.OK);
+    }
 
 }
