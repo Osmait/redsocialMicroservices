@@ -1,5 +1,6 @@
 from fastapi import FastAPI,status
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from database import engine,Base,Session
 from Comment import Comment
 from comment_model import CommentDto
@@ -8,6 +9,14 @@ from comment_model import CommentDto
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 db = Session()
 

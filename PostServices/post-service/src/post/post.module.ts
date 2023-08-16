@@ -4,9 +4,11 @@ import { PostService } from './service/post.service';
 import { Post } from './domain/post.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     TypeOrmModule.forFeature([Post]),
     ClientsModule.register([
       {
