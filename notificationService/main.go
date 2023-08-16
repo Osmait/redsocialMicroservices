@@ -78,7 +78,7 @@ func main() {
 	msgs := rabi.Consume()
 	router := gin.Default()
 	router.GET("/ws/:id", func(c *gin.Context) {
-		id := c.Param("id")
+		// id := c.Param("id")
 		ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
 			log.Print("upgrade:", err)
@@ -90,10 +90,10 @@ func main() {
 		for msg := range msgs {
 
 			json.Unmarshal(msg.Body, &message)
-			if message.Id == id {
-				ws.WriteMessage(websocket.TextMessage, msg.Body)
+			// if message.Id == id {
+			ws.WriteMessage(websocket.TextMessage, msg.Body)
 
-			}
+			// }
 		}
 	})
 
