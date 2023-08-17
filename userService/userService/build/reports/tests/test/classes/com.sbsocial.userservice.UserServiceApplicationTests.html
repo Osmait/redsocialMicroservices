@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.974s</div>
+<div class="counter">0.793s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">contextLoads()</td>
-<td class="success">0.974s</td>
+<td class="success">0.793s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,8 +87,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>16:02:25.878 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sbsocial.userservice.UserServiceApplicationTests]: UserServiceApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-16:02:26.025 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sbsocial.userservice.UserServiceApplication for test class com.sbsocial.userservice.UserServiceApplicationTests
+<pre>09:27:51.365 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sbsocial.userservice.UserServiceApplicationTests]: UserServiceApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:27:51.530 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sbsocial.userservice.UserServiceApplication for test class com.sbsocial.userservice.UserServiceApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -98,25 +98,32 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.2)
 
-2023-08-15T16:02:26.707-04:00  INFO 37022 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Starting UserServiceApplicationTests using Java 17.0.6 with PID 37022 (started by osmait in /home/osmait/Documents/WorkSpace/redsocialMicroservices/userService/userService)
-2023-08-15T16:02:26.710-04:00  INFO 37022 --- [    Test worker] c.s.u.UserServiceApplicationTests        : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2023-08-15T16:02:27.836-04:00  INFO 37022 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-08-15T16:02:27.945-04:00  INFO 37022 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 91 ms. Found 1 JPA repository interfaces.
-2023-08-15T16:02:29.066-04:00  INFO 37022 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-08-15T16:02:29.172-04:00  INFO 37022 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
-2023-08-15T16:02:29.177-04:00  INFO 37022 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2023-08-15T16:02:29.457-04:00  INFO 37022 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-08-15T16:02:29.700-04:00  INFO 37022 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-08-15T16:02:29.734-04:00  INFO 37022 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-08-15T16:02:30.039-04:00  INFO 37022 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5da6b13d
-2023-08-15T16:02:30.043-04:00  INFO 37022 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-08-15T16:02:30.525-04:00  INFO 37022 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-08-15T16:02:31.596-04:00  INFO 37022 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-17T09:27:52.386-04:00  INFO 13321 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Starting UserServiceApplicationTests using Java 17.0.6 with PID 13321 (started by osmait in /home/osmait/Documents/WorkSpace/redsocialMicroservices/userService/userService)
+2023-08-17T09:27:52.391-04:00  INFO 13321 --- [    Test worker] c.s.u.UserServiceApplicationTests        : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2023-08-17T09:27:53.949-04:00  INFO 13321 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-17T09:27:54.033-04:00  INFO 13321 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 1 JPA repository interfaces.
+2023-08-17T09:27:54.778-04:00  INFO 13321 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-17T09:27:54.869-04:00  INFO 13321 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
+2023-08-17T09:27:54.873-04:00  INFO 13321 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-08-17T09:27:55.046-04:00  INFO 13321 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-08-17T09:27:55.236-04:00  INFO 13321 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-08-17T09:27:55.259-04:00  INFO 13321 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-17T09:27:55.444-04:00  INFO 13321 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1412682c
+2023-08-17T09:27:55.448-04:00  INFO 13321 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-17T09:27:55.825-04:00  INFO 13321 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-08-17T09:27:56.620-04:00  INFO 13321 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
 Hibernate: alter table if exists users alter column update_at set data type timestamp(6)
 Hibernate: alter table if exists users alter column created_at set data type timestamp(6)
-2023-08-15T16:02:31.652-04:00  INFO 37022 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-08-15T16:02:32.538-04:00  WARN 37022 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-08-15T16:02:33.161-04:00  INFO 37022 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Started UserServiceApplicationTests in 6.925 seconds (process running for 8.735)
+2023-08-17T09:27:56.677-04:00  INFO 13321 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-17T09:27:57.245-04:00  WARN 13321 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-17T09:27:57.277-04:00  WARN 13321 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 7cf4b840-7c6e-4097-8e17-bf38c3afb026
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2023-08-17T09:27:57.756-04:00  INFO 13321 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@15a5cc6e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4a65c40, org.springframework.security.web.context.SecurityContextHolderFilter@1f02b6d1, org.springframework.security.web.header.HeaderWriterFilter@7f20dfd5, org.springframework.web.filter.CorsFilter@4fc84c92, org.springframework.security.web.authentication.logout.LogoutFilter@62ff14cd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5bddd141, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3cb376a3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5f7bd970, org.springframework.security.web.access.ExceptionTranslationFilter@2a5ed225, org.springframework.security.web.access.intercept.AuthorizationFilter@2396408a]
+2023-08-17T09:27:58.337-04:00  INFO 13321 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Started UserServiceApplicationTests in 6.458 seconds (process running for 8.025)
 </pre>
 </span>
 </div>
@@ -128,7 +135,7 @@ Hibernate: alter table if exists users alter column created_at set data type tim
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.2.1</a> at Aug 15, 2023, 4:02:34 PM</p>
+<a href="http://www.gradle.org">Gradle 8.2.1</a> at Aug 17, 2023, 9:27:59 AM</p>
 </div>
 </div>
 </body>

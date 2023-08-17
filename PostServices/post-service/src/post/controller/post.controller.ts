@@ -6,6 +6,7 @@ import {
   Inject,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { Post as PostModel } from '../domain/post.entity';
@@ -19,7 +20,8 @@ export class PostController {
   ) {}
 
   @Get('/:id')
-  public getPost(@Param('id') id: string) {
+  public getPost(@Param('id') id: string, @Query('comment') comment: string) {
+    console.log(comment);
     return this.postService.findAll(id);
   }
 

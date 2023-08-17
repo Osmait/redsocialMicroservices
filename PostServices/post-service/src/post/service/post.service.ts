@@ -25,6 +25,7 @@ export class PostService {
       where: { userId, deleted: false },
     });
     const postReponse: PostResponse[] = [];
+
     for (const post of postList) {
       try {
         const comment = await lastValueFrom(
