@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Follower, User } from '../domain/follower';
 import { Repository } from 'typeorm';
 import { lastValueFrom, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+
+const USER_URL = 'http://user-service:8080';
 
 @Injectable()
 export class FollowerService {
@@ -30,15 +32,12 @@ export class FollowerService {
       try {
         const follow: User = await lastValueFrom(
           this.httpService
-            .get(
-              `http://127.0.0.1:8080/user/${follower.followerId}`,
-              this.header,
-            )
+            .get(`${USER_URL}/user/${follower.followerId}`, this.header)
             .pipe(map((res) => res.data)),
         );
         listUSer.push(follow);
       } catch (error) {
-        console.log(error);
+        throw new InternalServerErrorException();
       }
     }
     return listUSer;

@@ -7,11 +7,11 @@ import { Follower } from '../follower/domain/follower';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'osmait',
-      password: 'admin123',
-      database: 'my_store',
+      host: process.env.DB_HOSTNAME || 'localhost',
+      port: Number(process.env.DB_PORT) || 5433,
+      username: process.env.DB_USER || 'osmait',
+      password: process.env.PASSWORD_DB || 'admin123',
+      database: process.env.DB_DATABASE || 'my_store',
       //   autoLoadEntities: true,
       entities: [Follower],
       synchronize: true,

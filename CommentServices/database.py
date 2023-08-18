@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.ext.automap import automap_base
 
 
-database_url = 'postgresql://osmait:admin123@localhost:5432/my_store'
+database_url = 'postgresql://osmait:admin123@postgres-user:5432/my_store'
 
 engine =  create_engine(database_url,echo=True)
 Session = sessionmaker(bind=engine)

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -67,8 +68,9 @@ func main() {
 }
 
 func LoginService(loginRequest LoginRequest) (string, error) {
+	USER_URL := os.Getenv("USER_URL")
 	// var user User
-	url := fmt.Sprintf("http://localhost:8080/user/email?email=%s", loginRequest.Email)
+	url := fmt.Sprintf("http://%s/user/email?email=%s", USER_URL, loginRequest.Email)
 
 	response, err := makeBackendGetRequest(url)
 	if err != nil {

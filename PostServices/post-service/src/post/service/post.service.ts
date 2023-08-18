@@ -6,6 +6,8 @@ import { randomUUID } from 'crypto';
 import { HttpService } from '@nestjs/axios';
 import { PostResponse } from '../domain/postDto';
 import { lastValueFrom, map } from 'rxjs';
+
+const COMMENT_URL = 'http://comment-service:8000';
 @Injectable()
 export class PostService {
   header = { headers: { 'Content-Type': 'application/json' } };
@@ -30,7 +32,7 @@ export class PostService {
       try {
         const comment = await lastValueFrom(
           this.httpService
-            .get(`http://127.0.0.1:8000/comment/${post.id}`, this.header)
+            .get(`${COMMENT_URL}/comment/${post.id}`, this.header)
             .pipe(map((res) => res.data)),
         );
 

@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { HttpModule } from '@nestjs/axios';
 
+const RABI_URL = process.env.RABI_URL || 'amqp://guest:guest@localhost:5672';
+
 @Module({
   imports: [
     HttpModule,
@@ -15,7 +17,7 @@ import { HttpModule } from '@nestjs/axios';
         name: 'POST',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://guest:guest@localhost:5672'],
+          urls: [RABI_URL],
           queue: 'notification_queue',
           queueOptions: {
             durable: false,

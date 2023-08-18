@@ -2,16 +2,27 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
+
+type Follower struct {
+	followerId  string
+	followingId string
+}
 
 func main() {
 	r := gin.Default()
+	err := godotenv.Load("develop.env")
+	if err != nil {
+		fmt.Println("Not env")
+	}
 
 	userHost := os.Getenv("USER_HOST")
 	postHost := os.Getenv("POST_HOST")
@@ -21,11 +32,14 @@ func main() {
 	postport := os.Getenv("POST_PORT")
 	commentport := os.Getenv("COMMENT_PORT")
 
+	followerPort := os.Getenv("FOLLOWER_PORT")
+	followeHost := os.Getenv("FOLLOWER_HOST")
+
 	userUrl := fmt.Sprintf("http://%s:%s/user", userHost, userPort)
 
 	postUrl := fmt.Sprintf("http://%s:%s/post", postHost, postport)
 	commentsUrl := fmt.Sprintf("http://%s:%s/comments", commentHost, commentport)
-	fmt.Println(postUrl)
+	followeURL := fmt.Sprintf("http://%s:%s", followeHost, followerPort)
 
 	r.GET("/api/user", func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
@@ -63,6 +77,44 @@ func main() {
 
 		// Devolver la respuesta del servicio backend 1
 		ctx.String(http.StatusOK, responseBody)
+
+	})
+	r.GET("/api/following/:id", func(ctx *gin.Context) {
+		id := ctx.Param("id")
+		responseBody, err := makeBackendGetRequest(fmt.Sprintf("%s/following/%s", followeURL, id))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error en la API Gateway"})
+			return
+		}
+		ctx.String(http.StatusOK, responseBody)
+
+	})
+	r.GET("/api/follower/:id", func(ctx *gin.Context) {
+		id := ctx.Param("id")
+		responseBody, err := makeBackendGetRequest(fmt.Sprintf("%s/follower/%s", followeURL, id))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error en la API Gateway"})
+			return
+		}
+		ctx.String(http.StatusOK, responseBody)
+
+	})
+	r.POST("/api/follower", func(ctx *gin.Context) {
+		var followerRequest Follower
+
+		ctx.BindJSON(&followerRequest)
+		requestBody, err := json.Marshal(followerRequest)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Parsing"})
+			return
+		}
+		_, err = makeBackendRequest(fmt.Sprintf("%s/follower", followeURL), requestBody)
+		fmt.Println(requestBody)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.Status(http.StatusOK)
 
 	})
 

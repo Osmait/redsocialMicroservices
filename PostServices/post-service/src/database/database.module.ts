@@ -7,11 +7,11 @@ import { Post } from '../post/domain/post.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'osmait',
-      password: 'admin123',
-      database: 'my_store',
+      host: process.env.DB_HOSTNAME || 'postgres-post',
+      port: Number(process.env.DB_PORT) || 5432,
+      username: process.env.DB_USER || 'osmait',
+      password: process.env.DB_PASSWORD || 'admin123',
+      database: process.env.DB_DATABASE || 'my_store',
       //   autoLoadEntities: true,
       entities: [Post],
       synchronize: true,
