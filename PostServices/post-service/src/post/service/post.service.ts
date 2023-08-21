@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../domain/post.entity';
 import { Repository } from 'typeorm';
@@ -39,7 +43,7 @@ export class PostService {
         const postR = new PostResponse(post, comment);
         postReponse.push(postR);
       } catch (error) {
-        console.log(error);
+        throw new InternalServerErrorException('Error doing request');
       }
     }
     return postReponse;
@@ -49,6 +53,9 @@ export class PostService {
     const post = await this.postRepository.findOne({
       where: { id },
     });
+    if (!post) {
+      throw new NotFoundException(`post with ${id} dont exist`);
+    }
     post.deleted = true;
     this.postRepository.save(post);
   }

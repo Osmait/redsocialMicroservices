@@ -14,21 +14,21 @@ services:
 
 
 # Api GateWay
-  # api-gateway:
-  #   build:
-  #     context: apiGateway/
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 5000:5000
-  #   environment:
-  #     - USER_HOST=user-service
-  #     - USER_PORT=8080 
-  #     - POST_HOST=post-service
-  #     - POST_PORT=3000
-  #     - COMMENT_HOST=comment-service
-  #     - COMMENT_PORT=8000 
-  #     - FOLLOWER_HOST=follower-service
-  #     - FOLLOWER_PORT=3001
+  api-gateway:
+    build:
+      context: apiGateway/
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - USER_HOST=user-service
+      - USER_PORT=8080 
+      - POST_HOST=post-service
+      - POST_PORT=3000
+      - COMMENT_HOST=comment-service
+      - COMMENT_PORT=8000 
+      - FOLLOWER_HOST=follower-service
+      - FOLLOWER_PORT=3001
 
 # UserService
   postgres-user:

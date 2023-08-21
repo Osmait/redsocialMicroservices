@@ -1,6 +1,8 @@
 package com.sbsocial.userservice.infraestruture.controller;
 
 import com.sbsocial.userservice.domain.User;
+import com.sbsocial.userservice.infraestruture.dto.UserDto;
+import com.sbsocial.userservice.infraestruture.dto.UserResponse;
 import com.sbsocial.userservice.services.UserServices;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.QueryParameter;
@@ -25,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> postUser(@RequestBody User userRequest ){
+    public ResponseEntity<String> postUser(@RequestBody UserDto userRequest ){
         userServices.create(userRequest);
         return new ResponseEntity<>("Created",HttpStatus.CREATED);
     }
@@ -38,5 +40,12 @@ public class UserController {
         User user = userServices.findOneByEmail(email);
         return  new ResponseEntity<>(user,HttpStatus.OK);
     }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<UserResponse>Profile(@PathVariable("id") UUID id){
+       UserResponse user =  userServices.findProfile(id);
+       return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
 
 }
