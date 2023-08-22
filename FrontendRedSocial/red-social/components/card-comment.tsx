@@ -1,21 +1,18 @@
-"use client";
-import React from "react";
 import {
+  Avatar,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
-  Avatar,
-  Button,
+  CardHeader,
 } from "@nextui-org/react";
-import { PostResponse } from "../types";
-import { IconHeart, IconMessageCircle } from "@tabler/icons-react";
-import { ModalComment } from "./modal-comment";
+import { Comment } from "../types";
+import { IconHeart } from "@tabler/icons-react";
+
 export interface Props {
-  post: PostResponse;
+  comment: Comment;
 }
 
-export default function CardPost({ post }: Props) {
+export default function CardComment({ comment }: Props) {
   return (
     <Card className="max-w-[750px] hover:bg-zinc-800">
       <CardHeader className="justify-between">
@@ -37,15 +34,12 @@ export default function CardPost({ post }: Props) {
         </div>
       </CardHeader>
       <CardBody className="px-3 py-0 text-small text-default-400">
-        <p>{post.post.content}</p>
+        <p>{comment.content}</p>
       </CardBody>
       <CardFooter className="gap-3">
         <button>
           <IconHeart className="w-4 h-4" color="#71767B" />
         </button>
-        <div className="flex gap-1  text-zinc-500">
-          <ModalComment comments={post.comment} />
-        </div>
       </CardFooter>
     </Card>
   );

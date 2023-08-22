@@ -1,7 +1,9 @@
 import { ComposePost } from "../../components/compose-post";
 import CardPost from "../../components/card-post";
+import { findProfilePost } from "../services/post.services";
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const posts = await findProfilePost("1");
   return (
     <div className=" flex gap-4 flex-col w-1/3 p-4">
       <div className="text-gray-600">
@@ -18,7 +20,9 @@ export default function ProfilePage() {
           p
         </div>
       </div>
-      <CardPost />
+      {posts.map((post) => (
+        <CardPost key={post.post.id} post={post} />
+      ))}
     </div>
   );
 }

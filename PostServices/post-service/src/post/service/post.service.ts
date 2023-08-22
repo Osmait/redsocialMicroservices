@@ -29,6 +29,9 @@ export class PostService {
   async findAll(userId: string) {
     const postList = await this.postRepository.find({
       where: { userId, deleted: false },
+      order: {
+        createdAt: 'DESC',
+      },
     });
     const postReponse: PostResponse[] = [];
 

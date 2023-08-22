@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 type Follower struct {
@@ -74,6 +75,8 @@ type Comment struct {
 
 func main() {
 	r := gin.Default()
+	r.Use(cors.Default())
+
 	err := godotenv.Load("develop.env")
 	if err != nil {
 		fmt.Println("Not env")
