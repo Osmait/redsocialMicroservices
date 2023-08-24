@@ -9,6 +9,9 @@ import { Link } from "@nextui-org/link";
 import clsx from "clsx";
 import SearchInput from "../components/search-input";
 import { UserImage } from "../components/user-image";
+import twLogo from "../public/iconmonstr-twitter-1-240.png";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -44,21 +47,11 @@ export default function RootLayout({
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
             {/* <Navbar /> */}
-            <main className="container mx-auto max-w-full pt-16 px-6 flex-grow ">
+            <main className="container mx-auto max-w-full  flex-grow  ">
               <section className="flex justify-center">
-                <div className="flex flex-col gap-5 items-start w-1/4 p-4">
-                  <UserImage />
-                  {siteConfig.navItems.map((item) => (
-                    <>
-                      <NextLink
-                        key={item.href}
-                        color="foreground"
-                        href={item.href}
-                      >
-                        {item.label}
-                      </NextLink>
-                    </>
-                  ))}
+                <div className="flex flex-col gap-5 items-center w-1/5 ">
+                  <Image src={twLogo} alt="logo" className=" h-8 w-8" />
+                  <Navbar />
                 </div>
 
                 {children}

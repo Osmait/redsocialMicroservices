@@ -14,7 +14,7 @@ export interface Props {
 
 export default function CardComment({ comment }: Props) {
   return (
-    <Card className="max-w-[750px] hover:bg-zinc-800">
+    <Card className="max-w-[750px] hover:bg-zinc-800 ">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <Avatar

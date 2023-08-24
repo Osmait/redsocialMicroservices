@@ -6,6 +6,7 @@ import { PostButton } from "../../components/post-buttom";
 import { PostRequest } from "../../types";
 import { createPost } from "../services/post.services";
 import { useRouter } from "next/navigation";
+import { Textarea } from "@nextui-org/input";
 
 export function ComposePost() {
   const postFrom = useRef<HTMLFormElement>(null);
@@ -39,12 +40,12 @@ export function ComposePost() {
         <UserImage />
       </div>
       <div className="flex flex-1 flex-col gap-y-4">
-        <textarea
+        <Textarea
           name="content"
           rows={4}
-          className="w-full text-xl bg-black placeholder-gray-500 p-2 focus-within:ring-2 focus-within:ring-black"
           placeholder="¡¿Qué está pasando!?"
-        ></textarea>
+          className="bg-black"
+        ></Textarea>
         <PostButton />
       </div>
     </form>

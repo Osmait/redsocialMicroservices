@@ -19,7 +19,7 @@ export interface Props {
 
 export default function CardPost({ post }: Props) {
   return (
-    <Card className="max-w-[750px] hover:bg-zinc-800">
+    <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none ">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <Avatar
@@ -38,7 +38,7 @@ export default function CardPost({ post }: Props) {
           </div>
         </div>
       </CardHeader>
-      <CardBody className="px-3 py-0 text-small text-default-400">
+      <CardBody className="px-3 py-0 text-small  text-white">
         <p>{post.post.content}</p>
       </CardBody>
       <CardFooter className="gap-3">
