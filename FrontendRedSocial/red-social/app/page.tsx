@@ -1,6 +1,5 @@
-import CardPost from "../components/card-post";
-
-import { ComposePost } from "../components/compose-post";
+import CardPost from "./components/card-post";
+import { ComposePost } from "./components/compose-post";
 import { findProfilePost } from "./services/post.services";
 
 export default async function Home() {

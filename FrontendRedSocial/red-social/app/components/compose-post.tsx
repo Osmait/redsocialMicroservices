@@ -1,13 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { UserImage } from "./user-image";
-import { PostButton } from "./post-buttom";
-import { PostRequest } from "../types";
-import { createPost } from "../app/services/post.services";
+import { UserImage } from "../../components/user-image";
+import { PostButton } from "../../components/post-buttom";
+import { PostRequest } from "../../types";
+import { createPost } from "../services/post.services";
+import { useRouter } from "next/navigation";
 
 export function ComposePost() {
   const postFrom = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +23,10 @@ export function ComposePost() {
       content: formData.get("content") as string,
       userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
     };
+
     await createPost(data);
+    postFrom.current.reset();
+    router.refresh();
   };
 
   return (
