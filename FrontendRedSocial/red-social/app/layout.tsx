@@ -12,6 +12,7 @@ import { UserImage } from "../components/user-image";
 import twLogo from "../public/iconmonstr-twitter-1-240.png";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { Notification } from "./components/Notification";
 
 export const metadata: Metadata = {
   title: {
@@ -52,6 +53,7 @@ export default function RootLayout({
                 <div className="flex flex-col gap-5 items-center w-1/5 ">
                   <Image src={twLogo} alt="logo" className=" h-8 w-8" />
                   <Navbar />
+                  <Notification />
                 </div>
 
                 {children}

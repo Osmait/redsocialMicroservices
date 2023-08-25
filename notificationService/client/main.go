@@ -34,16 +34,16 @@ func main() {
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-	body := Messge{Id: "2", Content: "prueba"}
+	body := Messge{Id: "1", Content: "prueba3"}
 
 	// We create a Queue to send the message to.
 	q, err := ch.QueueDeclare(
-		fmt.Sprintf("userId_%s_notification_queue", body.Id), // name
-		false, // durable
-		false, // delete when unused
-		false, // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"notification_queue", // name
+		false,                // durable
+		false,                // delete when unused
+		false,                // exclusive
+		false,                // no-wait
+		nil,                  // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 

@@ -120,7 +120,7 @@ services:
     environment:
       - HOST_RABBIT=rabbitmq-notification
     ports:
-      - 8084:8084
+      - 8083:8083
     depends_on:
       - rabbitmq-notification
     restart: always 
