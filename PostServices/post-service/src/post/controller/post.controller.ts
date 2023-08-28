@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { Post as PostModel } from '../domain/post.entity';
@@ -26,8 +27,10 @@ export class PostController {
   }
 
   @Post('/')
-  public createdPost(@Body() post: PostModel) {
+  public createdPost(@Body() post: PostModel, @Req() request: Request) {
     this.client.emit('new-Post', post.content);
+    const userId = request.headers['user'];
+    post.userId = userId;
     this.postService.created(post);
   }
 

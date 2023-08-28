@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { PostModule } from './post/post.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DatabaseModule } from './database/database.module';
         },
       },
     ]),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
