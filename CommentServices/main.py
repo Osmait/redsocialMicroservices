@@ -26,7 +26,8 @@ comment_service = CommentService(db)
 
 @app.get("/comment/{id}")
 def getComment(id:str):
-    return comment_service.find_all_by_id(id)
+    comments =  comment_service.find_all_by_id(id)
+    return JSONResponse(status_code=status.HTTP_200_OK, content=comments)
 
 @app.post("/comment")
 def postComment(comment:CommentDto):
