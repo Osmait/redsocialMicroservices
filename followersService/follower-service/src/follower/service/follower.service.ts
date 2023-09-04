@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { lastValueFrom, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 
-const USER_URL = 'http://user-service:8080';
+export const USER_URL = 'http://user-service:8080';
 
 @Injectable()
 export class FollowerService {
