@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine,Base,Session
 from Comment import Comment
 from comment_model import CommentDto
+from comment_service import CommentService
 
 
 app = FastAPI()
@@ -20,13 +21,14 @@ Base.metadata.create_all(bind=engine)
 
 db = Session()
 
+
+comment_service = CommentService(db)
+
 @app.get("/comment/{id}")
 def getComment(id:str):
-    return db.query(Comment).filter(Comment.post_id == id).all()
+    return comment_service.find_all_by_id(id)
 
 @app.post("/comment")
 def postComment(comment:CommentDto):
-    comment_db = Comment(**comment.model_dump())
-    db.add(comment_db)
-    db.commit()
+    comment_service.create(comment)
     return JSONResponse(status_code=status.HTTP_201_CREATED , content="Created")
