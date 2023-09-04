@@ -1,8 +1,11 @@
-from fastapi import FastAPI,status
+from typing import Annotated
+from fastapi import Depends, FastAPI, HTTPException,status,Security
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer, SecurityScopes
+from jose import JWTError,jwt
+from pydantic import ValidationError
 from database import engine,Base,Session
-from Comment import Comment
 from comment_model import CommentDto
 from comment_service import CommentService
 
@@ -19,13 +22,42 @@ Base.metadata.create_all(bind=engine)
 #     allow_headers=["*"],
 # )
 
+SECRET_KEY = "secreto"
+ALGORITHM = "HS256"
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="token",
+    scopes={"me": "Read", "user": "write."},
+)
+async def get_current_id(
+    security_scopes: SecurityScopes,token: Annotated[str, Depends(oauth2_scheme)]
+):
+    if security_scopes.scopes:
+        authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
+    else:
+        authenticate_value = "Bearer"
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": authenticate_value},
+    )
+    try:
+        payload = jwt.decode(token ,SECRET_KEY, algorithms=[ALGORITHM])
+        return payload['sub']
+    except (JWTError, ValidationError):
+        raise credentials_exception
+
+
+
+
 db = Session()
 
 
 comment_service = CommentService(db)
 
 @app.get("/comment/{id}")
-def getComment(id:str):
+async def getComment(id:str ,current_user: Annotated[str, Security(get_current_id, scopes=["me"])]):
+    print(current_user)
     comments =  comment_service.find_all_by_id(id)
     return JSONResponse(status_code=status.HTTP_200_OK, content=comments)
 

@@ -2,6 +2,17 @@ version: '3.8'
 
 services:
 
+  postgres-user:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=my_store
+      - POSTGRES_USER=osmait
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
     
   app:
     build:
