@@ -13,6 +13,7 @@ import (
 )
 
 func Rotes(r *gin.Engine) {
+	// r.Use(middleware.CheckAuthMiddleware())
 
 	err := godotenv.Load("develop.env")
 	if err != nil {
@@ -75,8 +76,18 @@ func Rotes(r *gin.Engine) {
 	})
 	r.POST("/api/post", func(ctx *gin.Context) {
 
+		id, ok := ctx.Get("X-User-Id")
+		if !ok {
+			ctx.Status(http.StatusBadRequest)
+		}
+		if id == "" {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"err": "Error",
+			})
+		}
+
 		var postRequest dto.Post
-		err := ctx.BindJSON(&postRequest)
+		err = ctx.BindJSON(&postRequest)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err.Error())
 			return

@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/osmait/api-gateway/internals/platform/server/middleware"
+	"github.com/osmait/api-gateway/internals/platform/server/router"
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
@@ -31,6 +33,8 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 	return serverContext(ctx), srv
 }
 func (s *Server) registerRoutes() {
+	s.Engine.Use(middleware.CheckAuthMiddleware())
+	router.Rotes(s.Engine)
 
 }
 func (s *Server) Run(ctx context.Context) error {

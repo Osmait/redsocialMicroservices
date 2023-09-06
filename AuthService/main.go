@@ -7,11 +7,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginRequest struct {
@@ -68,25 +67,25 @@ func main() {
 }
 
 func LoginService(loginRequest LoginRequest) (string, error) {
-	USER_URL := os.Getenv("USER_URL")
+	// USER_URL := os.Getenv("USER_URL")
 	// var user User
-	url := fmt.Sprintf("http://%s/user/email?email=%s", USER_URL, loginRequest.Email)
+	// url := fmt.Sprintf("http://%s/user/email?email=%s", USER_URL, loginRequest.Email)
 
-	response, err := makeBackendGetRequest(url)
-	if err != nil {
-		fmt.Println(err.Error())
-		return "", err
-	}
+	// response, err := makeBackendGetRequest(url)
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// 	return "", err
+	// }
 
-	user, err := UnmarshalUser(response)
-	if err != nil {
-		return "", err
-	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
-	if err != nil {
-		return "", err
-	}
-	token, err := JwtCreate(user.ID)
+	// user, err := UnmarshalUser(response)
+	// if err != nil {
+	// 	return "", err
+	// }
+	// err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
+	// if err != nil {
+	// 	return "", err
+	// }
+	token, err := JwtCreate("1")
 	if err != nil {
 		return "", err
 	}
@@ -133,12 +132,22 @@ func makeBackendGetRequest(url string) ([]byte, error) {
 	return body, nil
 }
 
+type AppClaims struct {
+	UserId string `json:"id"`
+	jwt.StandardClaims
+}
+
 func JwtCreate(id string) (string, error) {
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id": id,
-	})
+
+	claims := AppClaims{
+		UserId: id,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(2 * time.Hour * 24).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte("secreto"))
