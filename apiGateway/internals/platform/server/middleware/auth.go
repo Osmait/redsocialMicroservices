@@ -11,7 +11,7 @@ import (
 
 var (
 	NO_AUTH_NEEDED = []string{
-		"login",
+
 		"user",
 	}
 )
@@ -32,10 +32,10 @@ type AppClaims struct {
 
 func CheckAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// if !shoulCheckToken(c.Request.URL.Path) {
-		// 	c.Next()
-		// 	return
-		// }
+		if !shoulCheckToken(c.Request.URL.Path) {
+			c.Next()
+			return
+		}
 
 		token := strings.TrimSpace(c.GetHeader("Authorization"))
 		tokenClean := strings.Split(token, " ")

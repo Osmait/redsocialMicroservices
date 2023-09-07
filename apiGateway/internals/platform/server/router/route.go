@@ -39,7 +39,7 @@ func Rotes(r *gin.Engine) {
 
 	r.GET("/api/user", func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
-		responseBody, err := utils.MakeBackendGetRequest(userUrl)
+		responseBody, err := utils.MakeBackendGetRequest(userUrl, nil)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -111,7 +111,12 @@ func Rotes(r *gin.Engine) {
 	r.GET("/api/post/:id", func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
 		id := ctx.Param("id")
-		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s%s", postUrl, id))
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s%s", postUrl, id), token)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -125,7 +130,7 @@ func Rotes(r *gin.Engine) {
 
 	r.GET("/api/comment", func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
-		responseBody, err := utils.MakeBackendGetRequest(commentsUrl)
+		responseBody, err := utils.MakeBackendGetRequest(commentsUrl, nil)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
@@ -162,7 +167,7 @@ func Rotes(r *gin.Engine) {
 
 	r.GET("/api/following/:id", func(ctx *gin.Context) {
 		id := ctx.Param("id")
-		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/following/%s", followeURL, id))
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/following/%s", followeURL, id), nil)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
@@ -172,7 +177,7 @@ func Rotes(r *gin.Engine) {
 	})
 	r.GET("/api/follower/:id", func(ctx *gin.Context) {
 		id := ctx.Param("id")
-		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/follower/%s", followeURL, id))
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/follower/%s", followeURL, id), nil)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
