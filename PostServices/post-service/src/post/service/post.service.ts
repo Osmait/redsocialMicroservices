@@ -14,7 +14,13 @@ import { lastValueFrom, map } from 'rxjs';
 const COMMENT_URL = 'http://comment-service:8000';
 @Injectable()
 export class PostService {
-  header = { headers: { 'Content-Type': 'application/json' } };
+  header = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjE2OTQyNzAzMzJ9.qQDWUQtP670NTOpBYgzVJ7uXOciXWIuNrPjI4vcFJ2w',
+    },
+  };
   constructor(
     @InjectRepository(Post)
     private postRepository: Repository<Post>,

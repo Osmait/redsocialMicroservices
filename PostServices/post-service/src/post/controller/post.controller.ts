@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PostService } from '../service/post.service';
 import { Post as PostModel } from '../domain/post.entity';
@@ -30,6 +31,9 @@ export class PostController {
   public createdPost(@Body() post: PostModel, @Req() request: Request) {
     this.client.emit('new-Post', post.content);
     const userId = request.headers['user'];
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
     post.userId = userId;
     this.postService.created(post);
   }

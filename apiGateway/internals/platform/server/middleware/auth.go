@@ -38,9 +38,9 @@ func CheckAuthMiddleware() gin.HandlerFunc {
 		// }
 
 		token := strings.TrimSpace(c.GetHeader("Authorization"))
-		fmt.Println(token)
+		tokenClean := strings.Split(token, " ")
 
-		tokenDecode, err := jwt.ParseWithClaims(token, &AppClaims{}, func(t *jwt.Token) (interface{}, error) {
+		tokenDecode, err := jwt.ParseWithClaims(tokenClean[1], &AppClaims{}, func(t *jwt.Token) (interface{}, error) {
 			return []byte("secreto"), nil
 		})
 		if err != nil {

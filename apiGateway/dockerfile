@@ -8,14 +8,14 @@ WORKDIR /app
 
 # Copy and build the Go application
 COPY . .
-RUN go build -o apiGateWay
+RUN go build -o apigateway ./cmd/
 
 # Use a minimal base image for the final image
 FROM alpine:latest
 WORKDIR /app
 
 # Copy the compiled binary from the build stage
-COPY --from=build /app/apiGateWay .
+COPY --from=build /app/apigateway .
 # COPY --from=build /app/develop.env .
 # Run the binary
-CMD ["./apiGateWay"]
+CMD ["./apigateway"]

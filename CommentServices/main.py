@@ -43,7 +43,7 @@ async def get_current_id(
     )
     try:
         payload = jwt.decode(token ,SECRET_KEY, algorithms=[ALGORITHM])
-        return payload['sub']
+        return payload
     except (JWTError, ValidationError):
         raise credentials_exception
 
@@ -59,7 +59,7 @@ comment_service = CommentService(db)
 async def getComment(id:str ,current_user: Annotated[str, Security(get_current_id, scopes=["me"])]):
     print(current_user)
     comments =  comment_service.find_all_by_id(id)
-    return JSONResponse(status_code=status.HTTP_200_OK, content=comments)
+    return comments
 
 @app.post("/comment")
 def postComment(comment:CommentDto):
