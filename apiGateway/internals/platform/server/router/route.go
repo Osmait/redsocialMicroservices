@@ -22,11 +22,11 @@ func Rotes(r *gin.Engine) {
 
 	userHost := os.Getenv("USER_HOST")
 	postHost := os.Getenv("POST_HOST")
-	commentHost := os.Getenv("COMMENT_HOST")
+	// commentHost := os.Getenv("COMMENT_HOST")
 
 	userPort := os.Getenv("USER_PORT")
 	postport := os.Getenv("POST_PORT")
-	commentport := os.Getenv("COMMENT_PORT")
+	// commentport := os.Getenv("COMMENT_PORT")
 
 	followerPort := os.Getenv("FOLLOWER_PORT")
 	followeHost := os.Getenv("FOLLOWER_HOST")
@@ -34,7 +34,7 @@ func Rotes(r *gin.Engine) {
 	userUrl := fmt.Sprintf("http://%s:%s/user", userHost, userPort)
 
 	postUrl := fmt.Sprintf("http://%s:%s/post/", postHost, postport)
-	commentsUrl := fmt.Sprintf("http://%s:%s/comment", commentHost, commentport)
+	// commentsUrl := fmt.Sprintf("http://%s:%s/comment", commentHost, commentport)
 	followeURL := fmt.Sprintf("http://%s:%s", followeHost, followerPort)
 
 	r.GET("/api/user", func(ctx *gin.Context) {
@@ -65,7 +65,7 @@ func Rotes(r *gin.Engine) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		err = utils.MakeBackendRequest(userUrl, requestBody)
+		err = utils.MakeBackendRequest(nil, userUrl, requestBody)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -85,6 +85,11 @@ func Rotes(r *gin.Engine) {
 				"err": "Error",
 			})
 		}
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
 
 		var postRequest dto.Post
 		err = ctx.BindJSON(&postRequest)
@@ -98,7 +103,7 @@ func Rotes(r *gin.Engine) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		err = utils.MakeBackendRequest(postUrl, requestBody)
+		err = utils.MakeBackendRequest(token, postUrl, requestBody)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -128,46 +133,51 @@ func Rotes(r *gin.Engine) {
 
 	})
 
-	r.GET("/api/comment", func(ctx *gin.Context) {
-		// Realizar una solicitud GET al servicio backend 1
-		responseBody, err := utils.MakeBackendGetRequest(commentsUrl, nil)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
+	// r.GET("/api/comment", func(ctx *gin.Context) {
+	// 	// Realizar una solicitud GET al servicio backend 1
+	// 	responseBody, err := utils.MakeBackendGetRequest(commentsUrl, nil)
+	// 	if err != nil {
+	// 		ctx.JSON(http.StatusInternalServerError, err.Error())
+	// 		return
+	// 	}
 
-		// Devolver la respuesta del servicio backend 1
-		ctx.String(http.StatusOK, responseBody)
+	// 	// Devolver la respuesta del servicio backend 1
+	// 	ctx.String(http.StatusOK, responseBody)
 
-	})
+	// })
 
-	r.POST("/api/comment", func(ctx *gin.Context) {
+	// r.POST("/api/comment", func(ctx *gin.Context) {
 
-		var commentRequest dto.Comment
-		err := ctx.BindJSON(&commentRequest)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
-			return
-		}
+	// 	var commentRequest dto.Comment
+	// 	err := ctx.BindJSON(&commentRequest)
+	// 	if err != nil {
+	// 		ctx.JSON(http.StatusBadRequest, err.Error())
+	// 		return
+	// 	}
 
-		requestBody, err := commentRequest.Marshal()
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		err = utils.MakeBackendRequest(commentsUrl, requestBody)
+	// 	requestBody, err := commentRequest.Marshal()
+	// 	if err != nil {
+	// 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 		return
+	// 	}
+	// 	err = utils.MakeBackendRequest(commentsUrl, requestBody)
 
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		ctx.Status(http.StatusCreated)
+	// 	if err != nil {
+	// 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 		return
+	// 	}
+	// 	ctx.Status(http.StatusCreated)
 
-	})
+	// })
 
 	r.GET("/api/following/:id", func(ctx *gin.Context) {
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
 		id := ctx.Param("id")
-		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/following/%s", followeURL, id), nil)
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/following/%s", followeURL, id), token)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
@@ -176,8 +186,13 @@ func Rotes(r *gin.Engine) {
 
 	})
 	r.GET("/api/follower/:id", func(ctx *gin.Context) {
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
 		id := ctx.Param("id")
-		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/follower/%s", followeURL, id), nil)
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/follower/%s", followeURL, id), token)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
@@ -188,6 +203,11 @@ func Rotes(r *gin.Engine) {
 	r.POST("/api/follower", func(ctx *gin.Context) {
 
 		var followerRequest dto.Follower
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
 
 		err := ctx.BindJSON(&followerRequest)
 		if err != nil {
@@ -199,7 +219,7 @@ func Rotes(r *gin.Engine) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		err = utils.MakeBackendRequest(fmt.Sprintf("%s", followeURL), requestBody)
+		err = utils.MakeBackendRequest(token, fmt.Sprintf("%s", followeURL), requestBody)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

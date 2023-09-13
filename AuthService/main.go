@@ -1,16 +1,15 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginRequest struct {
@@ -50,11 +49,12 @@ func main() {
 		err := c.BindJSON(&loginRequest)
 		if err != nil {
 			c.Status(http.StatusBadRequest)
+			return
 		}
 
 		resp, err := LoginService(loginRequest)
 		if err != nil || resp == "" {
-			fmt.Println(err.Error())
+
 			c.JSON(http.StatusBadRequest, err.Error())
 			return
 		}
@@ -63,28 +63,29 @@ func main() {
 			"token": resp,
 		})
 	})
-	r.Run(":8000")
+	r.Run(":8001")
 }
 
 func LoginService(loginRequest LoginRequest) (string, error) {
 	// USER_URL := os.Getenv("USER_URL")
-	// var user User
-	// url := fmt.Sprintf("http://%s/user/email?email=%s", USER_URL, loginRequest.Email)
+	var user User
+	url := fmt.Sprintf("http://localhost:8080/user/email?email=%s", loginRequest.Email)
 
-	// response, err := makeBackendGetRequest(url)
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	return "", err
-	// }
+	response, err := makeBackendGetRequest(url)
+	if err != nil {
 
-	// user, err := UnmarshalUser(response)
-	// if err != nil {
-	// 	return "", err
-	// }
-	// err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
-	// if err != nil {
-	// 	return "", err
-	// }
+		return "", err
+	}
+
+	user, err = UnmarshalUser(response)
+	if err != nil {
+		return "", err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
+	if err != nil {
+		return "", err
+	}
+
 	token, err := JwtCreate("1")
 	if err != nil {
 		return "", err
@@ -94,38 +95,59 @@ func LoginService(loginRequest LoginRequest) (string, error) {
 
 }
 
-func makeBackendRequest(url string, requestBody []byte) (*http.Response, error) {
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
-	if err != nil {
-		return nil, err
-	}
+// func makeBackendRequest(url string, requestBody []byte) (*http.Response, error) {
+// 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	client := &http.Client{}
-	response, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
+// 	client := &http.Client{}
+// 	response, err := client.Do(req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return response, nil
-}
+// 	return response, nil
+// }
 
 func makeBackendGetRequest(url string) ([]byte, error) {
-	response, err := http.Get(url)
+	// response, err := http.Get(url)
 
-	if response.StatusCode != 200 {
-		return nil, errors.New("Error Request")
-	}
+	// // if response.StatusCode != 200 {
+	// // 	return nil, errors.New("Error Request")
+	// // }
 
-	fmt.Println(response.StatusCode)
+	// fmt.Println(response.StatusCode)
 
+	// if err != nil {
+
+	// 	return nil, err
+	// }
+	// defer response.Body.Close()
+
+	// body, err := ioutil.ReadAll(response.Body)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// return body, nil
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-
 		return nil, err
 	}
-	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := client.Do(req)
 	if err != nil {
+		fmt.Println("Error sending HTTP request:", err)
+		return nil, err
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading HTTP response body:", err)
 		return nil, err
 	}
 
@@ -140,7 +162,7 @@ type AppClaims struct {
 func JwtCreate(id string) (string, error) {
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
-
+	fmt.Println("aquiii")
 	claims := AppClaims{
 		UserId: id,
 		StandardClaims: jwt.StandardClaims{

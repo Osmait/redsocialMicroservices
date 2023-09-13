@@ -18,7 +18,7 @@ export class PostService {
     headers: {
       'Content-Type': 'application/json',
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjE2OTQyNzAzMzJ9.qQDWUQtP670NTOpBYgzVJ7uXOciXWIuNrPjI4vcFJ2w',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjE2OTQ4MDI2ODZ9.MPOVLcRQ9LGowhkobubP-6ige33m9bDXNxuhQm2OmGU',
     },
   };
   constructor(

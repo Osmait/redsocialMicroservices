@@ -22,8 +22,19 @@ export class PostController {
   ) {}
 
   @Get('/:id')
-  public getPost(@Param('id') id: string, @Query('comment') comment: string) {
+  public getPost(
+    @Param('id') id: string,
+    @Query('comment') comment: string,
+    @Req() request: Request,
+  ) {
     console.log(comment);
+    const token = request.headers['token'];
+    const userId = request.headers['user'];
+    console.log(token);
+    console.log(userId);
+    // if (!token) {
+    //   throw new UnauthorizedException();
+    // }
     return this.postService.findAll(id);
   }
 
