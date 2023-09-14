@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -51,9 +52,11 @@ func MakeBackendGetRequest(url string, token any) (string, error) {
 	}
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
-	if err != nil {
+	fmt.Println("aquii")
+	fmt.Println(resp.StatusCode)
+	if err != nil || resp.StatusCode != 200 {
 		fmt.Println("Error sending HTTP request:", err)
-		return "", err
+		return "", errors.New("Internal Error with Request")
 	}
 
 	body, err := io.ReadAll(resp.Body)
