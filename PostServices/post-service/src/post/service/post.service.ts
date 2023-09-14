@@ -39,7 +39,7 @@ export class PostService {
         createdAt: 'DESC',
       },
     });
-    return await this.postResponseFetch(postList);
+    return await this.postResponseFetchComment(postList);
   }
 
   public async delete(id: string) {
@@ -53,7 +53,9 @@ export class PostService {
     this.postRepository.save(post);
   }
 
-  private async postResponseFetch(postList: Post[]): Promise<PostResponse[]> {
+  private async postResponseFetchComment(
+    postList: Post[],
+  ): Promise<PostResponse[]> {
     const postReponse: PostResponse[] = [];
 
     for (const post of postList) {
