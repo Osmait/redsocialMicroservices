@@ -14,11 +14,10 @@ import { lastValueFrom, map } from 'rxjs';
 const COMMENT_URL = 'http://comment-service:8000';
 @Injectable()
 export class PostService {
-  header = {
+  private header = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjE2OTQ4MDI2ODZ9.MPOVLcRQ9LGowhkobubP-6ige33m9bDXNxuhQm2OmGU',
+      Authorization: '',
     },
   };
   constructor(
@@ -32,13 +31,29 @@ export class PostService {
     this.postRepository.save(post);
   }
 
-  async findAll(userId: string) {
+  public async findAll(userId: string, token: string) {
+    this.header.headers.Authorization = `Bearer ${token}`;
     const postList = await this.postRepository.find({
       where: { userId, deleted: false },
       order: {
         createdAt: 'DESC',
       },
     });
+    return await this.postResponseFetch(postList);
+  }
+
+  public async delete(id: string) {
+    const post = await this.postRepository.findOne({
+      where: { id },
+    });
+    if (!post) {
+      throw new NotFoundException(`post with ${id} dont exist`);
+    }
+    post.deleted = true;
+    this.postRepository.save(post);
+  }
+
+  private async postResponseFetch(postList: Post[]): Promise<PostResponse[]> {
     const postReponse: PostResponse[] = [];
 
     for (const post of postList) {
@@ -56,16 +71,5 @@ export class PostService {
       }
     }
     return postReponse;
-  }
-
-  async delete(id: string) {
-    const post = await this.postRepository.findOne({
-      where: { id },
-    });
-    if (!post) {
-      throw new NotFoundException(`post with ${id} dont exist`);
-    }
-    post.deleted = true;
-    this.postRepository.save(post);
   }
 }

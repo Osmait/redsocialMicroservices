@@ -32,10 +32,10 @@ export class PostController {
     const userId = request.headers['user'];
     console.log(token);
     console.log(userId);
-    // if (!token) {
-    //   throw new UnauthorizedException();
-    // }
-    return this.postService.findAll(id);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.postService.findAll(id, token);
   }
 
   @Post('/')
