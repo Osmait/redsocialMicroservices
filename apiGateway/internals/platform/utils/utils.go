@@ -39,12 +39,12 @@ func MakeBackendRequest(token any, url string, requestBody []byte) error {
 	return nil
 }
 
-func MakeBackendGetRequest(url string, token any) (string, error) {
+func MakeBackendGetRequest(url string, token any) ([]byte, error) {
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if token != "" || token == nil {
@@ -56,14 +56,14 @@ func MakeBackendGetRequest(url string, token any) (string, error) {
 	fmt.Println(resp.StatusCode)
 	if err != nil || resp.StatusCode != 200 {
 		fmt.Println("Error sending HTTP request:", err)
-		return "", errors.New("Internal Error with Request")
+		return nil, errors.New("Internal Error with Request")
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading HTTP response body:", err)
-		return "", err
+		return nil, err
 	}
 
-	return string(body), nil
+	return body, nil
 }

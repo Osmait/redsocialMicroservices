@@ -42,8 +42,11 @@ func (r *Post) Marshal() ([]byte, error) {
 }
 
 type Post struct {
-	Content string `json:"content"`
-	UserID  string `json:"userId"`
+	ID        string `json:"id"`
+	Content   string `json:"content"`
+	UserID    string `json:"userId"`
+	Deleted   bool   `json:"deleted"`
+	CreatedAt string `json:"createdAt"`
 }
 
 func UnmarshalComment(data []byte) (Comment, error) {
@@ -57,7 +60,22 @@ func (r *Comment) Marshal() ([]byte, error) {
 }
 
 type Comment struct {
-	UserID  string `json:"userId"`
-	PostID  string `json:"postId"`
-	Content string `json:"content"`
+	UserID    string `json:"user_id"`
+	ID        string `json:"id"`
+	Deleted   string `json:"deleted"`
+	Content   string `json:"content"`
+	PostID    string `json:"post_id"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+type PostResponse struct {
+	Post    Post      `json:"post"`
+	Comment []Comment `json:"comment"`
+}
+
+func UnmarshalPostResponse(data []byte) ([]PostResponse, error) {
+	var r []PostResponse
+	err := json.Unmarshal(data, &r)
+	return r, err
 }

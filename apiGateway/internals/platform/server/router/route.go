@@ -127,48 +127,16 @@ func Rotes(r *gin.Engine) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		postResponse, err := dto.UnmarshalPostResponse(responseBody)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		fmt.Println(postResponse)
 
-		// Devolver la respuesta del servicio backend 1
-		ctx.String(http.StatusOK, responseBody)
+		ctx.JSON(http.StatusOK, postResponse)
 
 	})
-
-	// r.GET("/api/comment", func(ctx *gin.Context) {
-	// 	// Realizar una solicitud GET al servicio backend 1
-	// 	responseBody, err := utils.MakeBackendGetRequest(commentsUrl, nil)
-	// 	if err != nil {
-	// 		ctx.JSON(http.StatusInternalServerError, err.Error())
-	// 		return
-	// 	}
-
-	// 	// Devolver la respuesta del servicio backend 1
-	// 	ctx.String(http.StatusOK, responseBody)
-
-	// })
-
-	// r.POST("/api/comment", func(ctx *gin.Context) {
-
-	// 	var commentRequest dto.Comment
-	// 	err := ctx.BindJSON(&commentRequest)
-	// 	if err != nil {
-	// 		ctx.JSON(http.StatusBadRequest, err.Error())
-	// 		return
-	// 	}
-
-	// 	requestBody, err := commentRequest.Marshal()
-	// 	if err != nil {
-	// 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 		return
-	// 	}
-	// 	err = utils.MakeBackendRequest(commentsUrl, requestBody)
-
-	// 	if err != nil {
-	// 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 		return
-	// 	}
-	// 	ctx.Status(http.StatusCreated)
-
-	// })
 
 	r.GET("/api/following/:id", func(ctx *gin.Context) {
 		token, ok := ctx.Get("X-token")
@@ -182,7 +150,7 @@ func Rotes(r *gin.Engine) {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		ctx.String(http.StatusOK, responseBody)
+		ctx.JSON(http.StatusOK, responseBody)
 
 	})
 	r.GET("/api/follower/:id", func(ctx *gin.Context) {
@@ -197,7 +165,7 @@ func Rotes(r *gin.Engine) {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		ctx.String(http.StatusOK, responseBody)
+		ctx.JSON(http.StatusOK, responseBody)
 
 	})
 	r.POST("/api/follower", func(ctx *gin.Context) {

@@ -56,6 +56,7 @@ services:
       - 8080:8080
     depends_on:
       - postgres-user
+    restart: always 
 
 # PostService
 
@@ -83,6 +84,7 @@ services:
       - USER_URL=comment-service
     ports:
       - 3000:3000
+    restart: always 
     # depends_on:
     #   - postgres-post
  
@@ -95,9 +97,9 @@ services:
     build:
       context: CommentServices/
       dockerfile: Dockerfile
- 
     ports:
       - 8000:8000
+    restart: always 
 
   # postgres-comment:
   #   image: postgres:13
