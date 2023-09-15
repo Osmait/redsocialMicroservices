@@ -1,43 +1,21 @@
-package router
+package handlers
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	"github.com/osmait/api-gateway/config"
+
 	"github.com/osmait/api-gateway/internals/platform/server/dto"
 	"github.com/osmait/api-gateway/internals/platform/utils"
 )
 
-func Rotes(r *gin.Engine) {
-	// r.Use(middleware.CheckAuthMiddleware())
+func GetUser(c config.Config) gin.HandlerFunc {
 
-	err := godotenv.Load("develop.env")
-	if err != nil {
-		fmt.Println("Not env")
-	}
-
-	userHost := os.Getenv("USER_HOST")
-	postHost := os.Getenv("POST_HOST")
-	// commentHost := os.Getenv("COMMENT_HOST")
-
-	userPort := os.Getenv("USER_PORT")
-	postport := os.Getenv("POST_PORT")
-	// commentport := os.Getenv("COMMENT_PORT")
-
-	followerPort := os.Getenv("FOLLOWER_PORT")
-	followeHost := os.Getenv("FOLLOWER_HOST")
-
-	userUrl := fmt.Sprintf("http://%s:%s/user", userHost, userPort)
-
-	postUrl := fmt.Sprintf("http://%s:%s/post/", postHost, postport)
-	// commentsUrl := fmt.Sprintf("http://%s:%s/comment", commentHost, commentport)
-	followeURL := fmt.Sprintf("http://%s:%s", followeHost, followerPort)
-
-	r.GET("/api/user", func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		userUrl := c.UserUrl
 		// Realizar una solicitud GET al servicio backend 1
 		responseBody, err := utils.MakeBackendGetRequest(userUrl, nil)
 		if err != nil {
@@ -48,10 +26,12 @@ func Rotes(r *gin.Engine) {
 		// Devolver la respuesta del servicio backend 1
 		ctx.JSON(http.StatusOK, responseBody)
 
-	})
+	}
+}
 
-	r.POST("/api/user", func(ctx *gin.Context) {
-
+func CreateUser(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		userUrl := c.UserUrl
 		var userRequest dto.User
 
 		err := ctx.BindJSON(&userRequest)
@@ -73,8 +53,13 @@ func Rotes(r *gin.Engine) {
 		}
 		ctx.Status(http.StatusCreated)
 
-	})
-	r.POST("/api/post", func(ctx *gin.Context) {
+	}
+}
+
+func CreatePost(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+
+		postUrl := c.PostUrl
 
 		id, ok := ctx.Get("X-User-Id")
 		if !ok {
@@ -92,7 +77,7 @@ func Rotes(r *gin.Engine) {
 		}
 
 		var postRequest dto.Post
-		err = ctx.BindJSON(&postRequest)
+		err := ctx.BindJSON(&postRequest)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err.Error())
 			return
@@ -111,10 +96,13 @@ func Rotes(r *gin.Engine) {
 		}
 		ctx.Status(http.StatusCreated)
 
-	})
+	}
+}
 
-	r.GET("/api/post/:id", func(ctx *gin.Context) {
+func FindPost(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
+		postUrl := c.PostUrl
 		id := ctx.Param("id")
 		token, ok := ctx.Get("X-token")
 		if !ok {
@@ -136,9 +124,13 @@ func Rotes(r *gin.Engine) {
 
 		ctx.JSON(http.StatusOK, postResponse)
 
-	})
+	}
+}
 
-	r.GET("/api/following/:id", func(ctx *gin.Context) {
+func FindFolowing(c config.Config) gin.HandlerFunc {
+
+	return func(ctx *gin.Context) {
+		followeURL := c.FolloweUrl
 		token, ok := ctx.Get("X-token")
 		if !ok {
 			ctx.Status(http.StatusUnauthorized)
@@ -152,8 +144,12 @@ func Rotes(r *gin.Engine) {
 		}
 		ctx.JSON(http.StatusOK, responseBody)
 
-	})
-	r.GET("/api/follower/:id", func(ctx *gin.Context) {
+	}
+}
+
+func FindFollowers(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		followeURL := c.FolloweUrl
 		token, ok := ctx.Get("X-token")
 		if !ok {
 			ctx.Status(http.StatusUnauthorized)
@@ -167,8 +163,12 @@ func Rotes(r *gin.Engine) {
 		}
 		ctx.JSON(http.StatusOK, responseBody)
 
-	})
-	r.POST("/api/follower", func(ctx *gin.Context) {
+	}
+}
+
+func Follow(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		followeURL := c.FolloweUrl
 
 		var followerRequest dto.Follower
 		token, ok := ctx.Get("X-token")
@@ -195,5 +195,5 @@ func Rotes(r *gin.Engine) {
 		}
 		ctx.Status(http.StatusCreated)
 
-	})
+	}
 }

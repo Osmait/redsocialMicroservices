@@ -10,22 +10,25 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/osmait/api-gateway/config"
+	"github.com/osmait/api-gateway/internals/platform/server/handlers"
 	"github.com/osmait/api-gateway/internals/platform/server/middleware"
-	"github.com/osmait/api-gateway/internals/platform/server/router"
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
 type Server struct {
 	httpAddr string
 	Engine   *gin.Engine
+	Config   config.Config
 
 	shutdownTimeout time.Duration
 }
 
-func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration) (context.Context, Server) {
+func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, config config.Config) (context.Context, Server) {
 	srv := Server{
 		Engine:   gin.Default(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
+		Config:   config,
 
 		shutdownTimeout: shutdownTimeout,
 	}
@@ -34,7 +37,16 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 }
 func (s *Server) registerRoutes() {
 	s.Engine.Use(middleware.CheckAuthMiddleware())
-	router.Rotes(s.Engine)
+
+	s.Engine.GET("/api/user", handlers.GetUser(s.Config))
+	s.Engine.POST("/api/user", handlers.CreateUser(s.Config))
+
+	s.Engine.POST("/api/post", handlers.CreatePost(s.Config))
+	s.Engine.GET("/api/post/:id", handlers.FindPost(s.Config))
+
+	s.Engine.GET("/api/following/:id", handlers.FindFolowing(s.Config))
+	s.Engine.GET("/api/follower/:id", handlers.FindFollowers(s.Config))
+	s.Engine.POST("/api/follower", handlers.Follow(s.Config))
 
 }
 func (s *Server) Run(ctx context.Context) error {
