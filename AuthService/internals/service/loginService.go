@@ -12,7 +12,7 @@ import (
 func LoginService(loginRequest dtos.LoginRequest) (string, error) {
 
 	var user dtos.User
-	url := fmt.Sprintf("http://localhost:8080/user/email?email=%s", loginRequest.Email)
+	url := fmt.Sprintf("http://user-service:8080/user/email?email=%s", loginRequest.Email)
 
 	response, err := utils.MakeBackendGetRequest(url)
 	if err != nil {

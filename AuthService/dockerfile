@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy and build the Go application
 COPY . .
-RUN go build -o auth
+RUN go build -o auth ./cmd/
 
 # Use a minimal base image for the final image
 FROM alpine:latest

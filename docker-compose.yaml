@@ -11,7 +11,12 @@ services:
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
 
-
+  auth-service:
+    build:
+      context: AuthService/
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
 
 # Api GateWay
   api-gateway:
