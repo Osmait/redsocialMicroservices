@@ -52,7 +52,7 @@ func MakeBackendGetRequest(url string, token any) ([]byte, error) {
 	}
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
-	fmt.Println("aquii")
+
 	fmt.Println(resp.StatusCode)
 	if err != nil || resp.StatusCode != 200 {
 		fmt.Println("Error sending HTTP request:", err)
