@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -13,9 +12,7 @@ type AppClaims struct {
 }
 
 func JwtCreate(id string) (string, error) {
-	// Create a new token object, specifying signing method and the claims
-	// you would like it to contain.
-	fmt.Println("aquiii")
+
 	claims := AppClaims{
 		UserId: id,
 		StandardClaims: jwt.StandardClaims{
