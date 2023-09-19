@@ -22,7 +22,7 @@ public class UserServices {
         User userDb =  userRepository.findByEmailAndDeletedFalse(user.getEmail()).orElse(new User());
 
         if (Objects.equals(userDb.getEmail(), user.getEmail())){
-            throw  new RuntimeException("Email; Exist");
+            throw  new RuntimeException("Email Exist");
         }
         User userSave =  user.getUserFromDto();
         userSave.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -41,8 +41,8 @@ public class UserServices {
                 user.getName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getPhone(),
                 user.getAddress(),
+                user.getPhone(),
                 user.getCreateAt(),
                 user.getUpdateAt()
         );
