@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -161,7 +160,7 @@ func FindFollowers(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		ctx.JSON(http.StatusOK, responseBody)
+		ctx.JSON(http.StatusOK, string(responseBody))
 
 	}
 }
@@ -182,7 +181,7 @@ func Follow(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, err.Error())
 		}
 		fmt.Println(followerRequest)
-		requestBody, err := json.Marshal(followerRequest)
+		requestBody, err := followerRequest.Marshal()
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

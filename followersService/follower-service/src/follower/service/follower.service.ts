@@ -1,9 +1,14 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Follower, User } from '../domain/follower';
 import { Repository } from 'typeorm';
 import { lastValueFrom, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { ClientProxy } from '@nestjs/microservices';
 
 export const USER_URL = 'http://user-service:8080';
 
@@ -14,8 +19,10 @@ export class FollowerService {
     @InjectRepository(Follower)
     private followerRepository: Repository<Follower>,
     private readonly httpService: HttpService,
+    @Inject('FOLLOW') private readonly client: ClientProxy,
   ) {}
   public follow(follower: Follower) {
+    this.client.emit('new-follow', follower);
     this.followerRepository.save(follower);
   }
   public getfollowing(id: string) {

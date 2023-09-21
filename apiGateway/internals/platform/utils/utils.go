@@ -20,11 +20,11 @@ func MakeBackendRequest(token any, url string, requestBody []byte) error {
 		req.Header.Add("Authorization", fmt.Sprintf("%s", token))
 	}
 	req.Header.Add("Content-Type", "application/json")
-
+	fmt.Println("aquii")
 	resp, err := client.Do(req)
-	if err != nil || resp.StatusCode == 500 {
+	if err != nil {
 		fmt.Println("Error sending HTTP request:", err)
-		return err
+		return errors.New("Error doing request")
 	}
 	defer resp.Body.Close()
 

@@ -25,7 +25,7 @@ func (r *Message) Marshal() ([]byte, error) {
 
 type Message struct {
 	Pattern string `json:"pattern"`
-	Data    Data   `json:"data"`
+	Data    any    `json:"data"`
 }
 
 type Data struct {
@@ -113,8 +113,25 @@ func main() {
 
 			json.Unmarshal(msg.Body, &message)
 			fmt.Println(message)
-			if message.Data.UserID == id {
-				ws.WriteMessage(websocket.TextMessage, msg.Body)
+			if message.Pattern == "new-follow" {
+				if val, ok := message.Data.(map[string]interface{}); ok {
+					followingId, _ := val["followingId"]
+					fmt.Println(followingId)
+					if followingId == id {
+
+						ws.WriteMessage(websocket.TextMessage, msg.Body)
+					}
+
+				}
+
+			}
+			if val, ok := message.Data.(map[string]interface{}); ok {
+				userId, _ := val["userId"]
+				fmt.Println(userId)
+				if userId == id {
+
+					ws.WriteMessage(websocket.TextMessage, msg.Body)
+				}
 
 			}
 		}

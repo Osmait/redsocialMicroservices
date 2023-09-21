@@ -2,6 +2,16 @@ package dto
 
 import "encoding/json"
 
+func UnmarshalFollower(data []byte) (Follower, error) {
+	var r Follower
+	err := json.Unmarshal(data, &r)
+	return r, err
+}
+
+func (r *Follower) Marshal() ([]byte, error) {
+	return json.Marshal(r)
+}
+
 type Follower struct {
 	FollowerId  string `json:"followerId"`
 	FollowingId string `json:"followingId"`
