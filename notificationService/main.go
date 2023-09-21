@@ -13,18 +13,35 @@ import (
 	"github.com/streadway/amqp"
 )
 
+func UnmarshalMessage(data []byte) (Message, error) {
+	var r Message
+	err := json.Unmarshal(data, &r)
+	return r, err
+}
+
+func (r *Message) Marshal() ([]byte, error) {
+	return json.Marshal(r)
+}
+
+type Message struct {
+	Pattern string `json:"pattern"`
+	Data    Data   `json:"data"`
+}
+
+type Data struct {
+	Content   string `json:"content"`
+	UserID    string `json:"userId"`
+	ID        string `json:"id"`
+	Deleted   bool   `json:"deleted"`
+	CreatedAt string `json:"createdAt"`
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
 		return true // Permitir todos los orígenes
 	},
-}
-
-type Messge struct {
-	Id string
-
-	Content string
 }
 
 type RabbitMQEventStore struct {
@@ -78,27 +95,28 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	rabi := newRabbitMQEventStore(conn, "1")
-	msgs := rabi.Consume()
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.GET("/ws/:id", func(c *gin.Context) {
-		// id := c.Param("id")
+		id := c.Param("id")
+		rabi := newRabbitMQEventStore(conn, id)
+		msgs := rabi.Consume()
 		ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
 			log.Print("upgrade:", err)
 			return
 		}
 		defer ws.Close()
-		var message Messge
+		var message Message
 
 		for msg := range msgs {
 
 			json.Unmarshal(msg.Body, &message)
-			// if message.Id == id {
-			ws.WriteMessage(websocket.TextMessage, msg.Body)
+			fmt.Println(message)
+			if message.Data.UserID == id {
+				ws.WriteMessage(websocket.TextMessage, msg.Body)
 
-			// }
+			}
 		}
 	})
 

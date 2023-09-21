@@ -40,13 +40,14 @@ export class PostController {
 
   @Post('/')
   public createdPost(@Body() post: PostModel, @Req() request: Request) {
-    this.client.emit('new-Post', post.content);
     const userId = request.headers['user'];
     if (!userId) {
       throw new UnauthorizedException();
     }
     post.userId = userId;
     this.postService.created(post);
+
+    this.client.emit('new-Post', post);
   }
 
   @Delete('/:id')

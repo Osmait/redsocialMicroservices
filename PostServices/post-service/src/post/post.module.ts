@@ -6,7 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { HttpModule } from '@nestjs/axios';
 
-const RABI_URL = process.env.RABI_URL || 'amqp://guest:guest@localhost:5672';
+const RABI_URL =
+  process.env.RABI_URL || 'amqp://guest:guest@rabbitmq-notification:5672';
 
 @Module({
   imports: [

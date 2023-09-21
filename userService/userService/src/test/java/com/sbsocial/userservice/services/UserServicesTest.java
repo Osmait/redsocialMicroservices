@@ -120,7 +120,7 @@ class UserServicesTest {
         assertEquals(userId, userResponse.id());
         assertEquals(user.getName(), userResponse.name());
         assertEquals(user.getLastName(), userResponse.LastName());
-    
+
         assertEquals(user.getPhone(), userResponse.phone());
         assertEquals(user.getAddress(), userResponse.address());
     }

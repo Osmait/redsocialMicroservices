@@ -76,7 +76,7 @@ func CreatePost(c config.Config) gin.HandlerFunc {
 			return
 		}
 
-		var postRequest dto.Post
+		var postRequest dto.PostRequest
 		err := ctx.BindJSON(&postRequest)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err.Error())

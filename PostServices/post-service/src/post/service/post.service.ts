@@ -28,7 +28,13 @@ export class PostService {
 
   created(post: Post) {
     post.id = randomUUID();
-    this.postRepository.save(post);
+    console.log(post);
+
+    try {
+      this.postRepository.save(post);
+    } catch (err) {
+      throw new InternalServerErrorException('Error Creating Post');
+    }
   }
 
   public async findAll(userId: string, token: string) {

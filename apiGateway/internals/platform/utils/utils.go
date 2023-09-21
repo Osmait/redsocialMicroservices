@@ -10,14 +10,6 @@ import (
 
 func MakeBackendRequest(token any, url string, requestBody []byte) error {
 
-	// resp, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
-	// if err != nil {
-	// 	return err
-	// }
-
-	// defer resp.Body.Close()
-
-	// return nil
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
@@ -30,7 +22,7 @@ func MakeBackendRequest(token any, url string, requestBody []byte) error {
 	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := client.Do(req)
-	if err != nil {
+	if err != nil || resp.StatusCode == 500 {
 		fmt.Println("Error sending HTTP request:", err)
 		return err
 	}

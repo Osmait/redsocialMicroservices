@@ -79,3 +79,17 @@ func UnmarshalPostResponse(data []byte) ([]PostResponse, error) {
 	err := json.Unmarshal(data, &r)
 	return r, err
 }
+
+func UnmarshalPostRequest(data []byte) (PostRequest, error) {
+	var r PostRequest
+	err := json.Unmarshal(data, &r)
+	return r, err
+}
+
+func (r *PostRequest) Marshal() ([]byte, error) {
+	return json.Marshal(r)
+}
+
+type PostRequest struct {
+	Content string `json:"content"`
+}

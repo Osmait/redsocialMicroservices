@@ -7,7 +7,7 @@ import { Post } from '../post/domain/post.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOSTNAME || 'postgres-post',
+      host: process.env.DB_HOSTNAME || 'localhost',
       port: Number(process.env.DB_PORT) || 5432,
       username: process.env.DB_USER || 'osmait',
       password: process.env.DB_PASSWORD || 'admin123',
