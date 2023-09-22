@@ -8,7 +8,7 @@ import { Follower } from '../follower/domain/follower';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOSTNAME || 'localhost',
-      port: Number(process.env.DB_PORT) || 5433,
+      port: Number(process.env.DB_PORT) || 5432,
       username: process.env.DB_USER || 'osmait',
       password: process.env.PASSWORD_DB || 'admin123',
       database: process.env.DB_DATABASE || 'my_store',

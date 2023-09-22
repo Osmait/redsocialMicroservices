@@ -168,6 +168,7 @@ func FindFollowers(c config.Config) gin.HandlerFunc {
 func Follow(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		followeURL := c.FolloweUrl
+		fmt.Println(followeURL)
 
 		var followerRequest dto.Follower
 		token, ok := ctx.Get("X-token")
@@ -186,7 +187,7 @@ func Follow(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		err = utils.MakeBackendRequest(token, fmt.Sprintf("%s", followeURL), requestBody)
+		err = utils.MakeBackendRequest(token, fmt.Sprintf("%s/follower", followeURL), requestBody)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
