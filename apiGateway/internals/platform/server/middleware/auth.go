@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -44,17 +43,16 @@ func CheckAuthMiddleware() gin.HandlerFunc {
 			return []byte("secreto"), nil
 		})
 		if err != nil {
-			fmt.Println(err.Error())
+
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		fmt.Println(tokenDecode)
+
 		claims, ok := tokenDecode.Claims.(*AppClaims)
 		if !ok {
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		fmt.Println(claims.UserId)
 
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, err.Error())

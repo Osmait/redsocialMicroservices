@@ -20,10 +20,10 @@ func MakeBackendRequest(token any, url string, requestBody []byte) error {
 		req.Header.Add("Authorization", fmt.Sprintf("%s", token))
 	}
 	req.Header.Add("Content-Type", "application/json")
-	fmt.Println("aquii")
+
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error sending HTTP request:", err)
+
 		return errors.New("Error doing request")
 	}
 	defer resp.Body.Close()
@@ -45,15 +45,14 @@ func MakeBackendGetRequest(url string, token any) ([]byte, error) {
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
 
-	fmt.Println(resp.StatusCode)
 	if err != nil || resp.StatusCode != 200 {
-		fmt.Println("Error sending HTTP request:", err)
+
 		return nil, errors.New("Internal Error with Request")
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Error reading HTTP response body:", err)
+
 		return nil, err
 	}
 
