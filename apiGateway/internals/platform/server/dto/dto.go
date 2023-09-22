@@ -84,6 +84,12 @@ type PostResponse struct {
 	Comment []Comment `json:"comment"`
 }
 
+func UnmarshalFollowerResponse(data []byte) ([]User, error) {
+	var r []User
+	err := json.Unmarshal(data, &r)
+	return r, err
+}
+
 func UnmarshalPostResponse(data []byte) ([]PostResponse, error) {
 	var r []PostResponse
 	err := json.Unmarshal(data, &r)

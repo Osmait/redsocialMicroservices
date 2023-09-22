@@ -25,10 +25,24 @@ export class FollowerService {
     this.client.emit('new-follow', follower);
     this.followerRepository.save(follower);
   }
-  public getfollowing(id: string) {
-    return this.followerRepository.find({
+  public async getfollowing(id: string) {
+    const listFollowing = await this.followerRepository.find({
       where: { followerId: id },
     });
+    const listUSer: User[] = [];
+    for (const follower of listFollowing) {
+      try {
+        const follow: User = await lastValueFrom(
+          this.httpService
+            .get(`${USER_URL}/user/${follower.followerId}`, this.header)
+            .pipe(map((res) => res.data)),
+        );
+        listUSer.push(follow);
+      } catch (error) {
+        throw new InternalServerErrorException();
+      }
+    }
+    return listUSer;
   }
   public async getfollowers(id: string) {
     const listFollowers: Follower[] = await this.followerRepository.find({

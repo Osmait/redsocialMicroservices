@@ -119,7 +119,6 @@ func FindPost(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		fmt.Println(postResponse)
 
 		ctx.JSON(http.StatusOK, postResponse)
 
@@ -141,7 +140,13 @@ func FindFolowing(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		ctx.JSON(http.StatusOK, responseBody)
+		followinResponse, err := dto.UnmarshalFollowerResponse(responseBody)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		ctx.JSON(http.StatusOK, followinResponse)
 
 	}
 }
@@ -160,7 +165,12 @@ func FindFollowers(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		ctx.JSON(http.StatusOK, string(responseBody))
+		followeResponse, err := dto.UnmarshalFollowerResponse(responseBody)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		ctx.JSON(http.StatusOK, followeResponse)
 
 	}
 }
@@ -168,7 +178,6 @@ func FindFollowers(c config.Config) gin.HandlerFunc {
 func Follow(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		followeURL := c.FolloweUrl
-		fmt.Println(followeURL)
 
 		var followerRequest dto.Follower
 		token, ok := ctx.Get("X-token")
@@ -181,7 +190,7 @@ func Follow(c config.Config) gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err.Error())
 		}
-		fmt.Println(followerRequest)
+
 		requestBody, err := followerRequest.Marshal()
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
