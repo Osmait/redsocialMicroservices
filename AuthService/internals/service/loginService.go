@@ -1,29 +1,27 @@
 package service
 
 import (
-	"fmt"
-
+	"github.com/osmait/auth-service/internals/platform/repository"
 	"github.com/osmait/auth-service/internals/platform/server/dtos"
 	"github.com/osmait/auth-service/internals/platform/utils"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func LoginService(loginRequest dtos.LoginRequest) (string, error) {
+type AuthService struct {
+	UserRepository repository.Repository
+}
 
-	var user dtos.User
-	url := fmt.Sprintf("http://user-service:8080/user/email?email=%s", loginRequest.Email)
-
-	response, err := utils.MakeBackendGetRequest(url)
-	if err != nil {
-
-		return "", err
+func NewAuthService(repository repository.Repository) *AuthService {
+	return &AuthService{
+		UserRepository: repository,
 	}
+}
 
-	user, err = dtos.UnmarshalUser(response)
-	if err != nil {
-		return "", err
-	}
+func (s *AuthService) LoginService(loginRequest dtos.LoginRequest) (string, error) {
+
+	user, err := s.UserRepository.GetUser(loginRequest.Email)
+
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
 	if err != nil {
 		return "", err

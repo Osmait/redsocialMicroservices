@@ -6,12 +6,15 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Follower } from '../domain/follower';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
+import { ClientProxy } from '@nestjs/microservices';
 
 describe('FollowerController', () => {
   let controller: FollowerController;
   let service: FollowerService;
   let followRepository: Repository<Follower>;
   let httpService: HttpService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let clientProxy: ClientProxy;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,6 +35,12 @@ describe('FollowerController', () => {
             get: jest.fn(),
           },
         },
+        {
+          provide: 'FOLLOW',
+          useValue: {
+            emit: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -41,6 +50,7 @@ describe('FollowerController', () => {
       getRepositoryToken(Follower),
     );
     httpService = module.get<HttpService>(HttpService);
+    clientProxy = module.get<ClientProxy>('FOLLOW');
   });
 
   it('should be defined', () => {

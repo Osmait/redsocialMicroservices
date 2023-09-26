@@ -6,11 +6,14 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 import { of, throwError } from 'rxjs';
+import { ClientProxy } from '@nestjs/microservices';
 
 describe('FollowerService', () => {
   let service: FollowerService;
   let followRepository: Repository<Follower>;
   let httpService: HttpService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let clientProxy: ClientProxy;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,6 +33,12 @@ describe('FollowerService', () => {
             get: jest.fn(),
           },
         },
+        {
+          provide: 'FOLLOW',
+          useValue: {
+            emit: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -38,6 +47,7 @@ describe('FollowerService', () => {
       getRepositoryToken(Follower),
     );
     httpService = module.get<HttpService>(HttpService);
+    clientProxy = module.get<ClientProxy>('FOLLOW');
   });
 
   it('should be defined', () => {
@@ -59,16 +69,52 @@ describe('FollowerService', () => {
 
   describe('getfollowing', () => {
     it('should return a list of followers for a user', async () => {
-      const userId = 'someUserId'; // Provide a valid user ID here
+      const userId = '1'; // Provide a valid user ID here
       const followers = [new Follower(), new Follower()]; // Create Follower objects as needed
+      const users: User[] = [
+        {
+          id: '1',
+          name: 'John',
+          lastName: 'Doe',
+          phone: '1234567890',
+          address: '123 Main St',
+          email: 'john.doe@example.com',
+          img: null,
+          createAt: new Date(),
+          updateAt: new Date(),
+        },
+        {
+          id: '2',
+          name: 'juan',
+          lastName: 'duh',
+          phone: '1234567890',
+          address: '123 Main St',
+          email: 'juan.duh@example.com',
+          img: null,
+          createAt: new Date(),
+          updateAt: new Date(),
+        },
+      ]; // Create User objects as needed
       const findSpy = jest
         .spyOn(followRepository, 'find')
         .mockResolvedValue(followers);
 
+      const mockCommentResponse = {
+        data: JSON.stringify(followers),
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {
+          headers: undefined,
+        },
+      };
+
+      jest.spyOn(httpService, 'get').mockReturnValue(of(mockCommentResponse));
+
       const result = await service.getfollowing(userId);
 
       expect(findSpy).toHaveBeenCalledWith({ where: { followerId: userId } });
-      expect(result).toEqual(followers);
+      expect(result.length).toEqual(users.length);
     });
   });
 

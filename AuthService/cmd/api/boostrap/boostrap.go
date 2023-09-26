@@ -6,7 +6,9 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/osmait/auth-service/internals/platform/repository"
 	"github.com/osmait/auth-service/internals/platform/server"
+	"github.com/osmait/auth-service/internals/service"
 )
 
 func Run() error {
@@ -18,8 +20,11 @@ func Run() error {
 	cfg.Port = 8001
 
 	cfg.Host = "0.0.0.0"
+	url := "http://user-service:8080/user/email?email="
+	userRepository := repository.NewUserRepository(url)
+	userService := service.NewAuthService(userRepository)
 
-	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.shutdownTimeout)
+	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.shutdownTimeout, *userService)
 	return srv.Run(ctx)
 
 }

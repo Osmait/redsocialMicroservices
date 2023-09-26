@@ -21,7 +21,7 @@ export interface User {
   phone: string;
   address: string;
   email: string;
-  img: null;
+  img?: string;
   createAt: Date;
   updateAt: Date;
 }

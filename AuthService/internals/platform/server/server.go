@@ -11,22 +11,23 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/osmait/auth-service/internals/platform/server/handlers"
+	"github.com/osmait/auth-service/internals/service"
 
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
 type Server struct {
-	httpAddr string
-	Engine   *gin.Engine
-
+	httpAddr        string
+	Engine          *gin.Engine
+	AuthService     service.AuthService
 	shutdownTimeout time.Duration
 }
 
-func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration) (context.Context, Server) {
+func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, authService service.AuthService) (context.Context, Server) {
 	srv := Server{
-		Engine:   gin.Default(),
-		httpAddr: fmt.Sprintf("%s:%d", host, port),
-
+		Engine:          gin.Default(),
+		httpAddr:        fmt.Sprintf("%s:%d", host, port),
+		AuthService:     authService,
 		shutdownTimeout: shutdownTimeout,
 	}
 	srv.registerRoutes()
@@ -34,7 +35,7 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 }
 func (s *Server) registerRoutes() {
 
-	s.Engine.POST("/login", handlers.LoginHandler())
+	s.Engine.POST("/login", handlers.LoginHandler(s.AuthService))
 }
 func (s *Server) Run(ctx context.Context) error {
 	log.Println("Server running on", s.httpAddr)
