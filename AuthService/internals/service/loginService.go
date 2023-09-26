@@ -8,6 +8,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type Service interface {
+	LoginService(loginRequest dtos.LoginRequest) (string, error)
+}
+
 type AuthService struct {
 	UserRepository repository.Repository
 }

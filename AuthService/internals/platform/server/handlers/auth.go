@@ -8,7 +8,7 @@ import (
 	"github.com/osmait/auth-service/internals/service"
 )
 
-func LoginHandler(s service.AuthService) gin.HandlerFunc {
+func LoginHandler(s service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var loginRequest dtos.LoginRequest
 

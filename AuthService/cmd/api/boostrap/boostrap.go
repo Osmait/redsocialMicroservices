@@ -24,7 +24,7 @@ func Run() error {
 	userRepository := repository.NewUserRepository(url)
 	userService := service.NewAuthService(userRepository)
 
-	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.shutdownTimeout, *userService)
+	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.shutdownTimeout, userService)
 	return srv.Run(ctx)
 
 }

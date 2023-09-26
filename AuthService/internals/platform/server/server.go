@@ -19,11 +19,11 @@ import (
 type Server struct {
 	httpAddr        string
 	Engine          *gin.Engine
-	AuthService     service.AuthService
+	AuthService     service.Service
 	shutdownTimeout time.Duration
 }
 
-func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, authService service.AuthService) (context.Context, Server) {
+func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, authService service.Service) (context.Context, Server) {
 	srv := Server{
 		Engine:          gin.Default(),
 		httpAddr:        fmt.Sprintf("%s:%d", host, port),
