@@ -9,3 +9,14 @@ export class PostResponse {
     this.comment = comment;
   }
 }
+export interface User {
+  id: string;
+  name: string;
+  lastName: string;
+  phone: string;
+  address: string;
+  email: string;
+  img?: string;
+  createAt: Date;
+  updateAt: Date;
+}

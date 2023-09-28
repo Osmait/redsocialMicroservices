@@ -54,4 +54,19 @@ export class PostController {
   public deletePost(@Param('id') id: string) {
     this.postService.delete(id);
   }
+
+  @Get('/feed/:id')
+  public getfeed(
+    @Param('id') id: string,
+
+    @Req() request: Request,
+  ) {
+    const token = request.headers['token'];
+    // const userId = request.headers['user'];
+
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.postService.getFeed(id);
+  }
 }

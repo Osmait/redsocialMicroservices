@@ -34,7 +34,7 @@ export class FollowerService {
       try {
         const follow: User = await lastValueFrom(
           this.httpService
-            .get(`${USER_URL}/user/${follower.followerId}`, this.header)
+            .get(`${USER_URL}/user/${follower.followingId}`, this.header)
             .pipe(map((res) => res.data)),
         );
         listUSer.push(follow);

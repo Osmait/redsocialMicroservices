@@ -5,13 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../domain/post.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
 import { HttpService } from '@nestjs/axios';
-import { PostResponse } from '../domain/postDto';
+import { PostResponse, User } from '../domain/postDto';
 import { lastValueFrom, map } from 'rxjs';
 
 const COMMENT_URL = 'http://comment-service:8000';
+const FOLLOWER_URL = 'http://localhost:3001';
 @Injectable()
 export class PostService {
   private header = {
@@ -34,6 +35,26 @@ export class PostService {
       this.postRepository.save(post);
     } catch (err) {
       throw new InternalServerErrorException('Error Creating Post');
+    }
+  }
+
+  public async getFeed(userId: string) {
+    try {
+      const follower: User[] = await lastValueFrom(
+        this.httpService
+          .get(`${FOLLOWER_URL}/following/${userId}`, this.header)
+          .pipe(map((res) => res.data)),
+      );
+      const Ids = follower.map((user) => user.id);
+      return this.postRepository.find({
+        where: { userId: In(Ids) },
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Error doing request');
     }
   }
 

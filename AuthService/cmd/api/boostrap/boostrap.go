@@ -20,7 +20,7 @@ func Run() error {
 	cfg.Port = 8001
 
 	cfg.Host = "0.0.0.0"
-	url := "http://user-service:8080/user/email?email="
+	url := "http://localhost:8080/user/email?email="
 	userRepository := repository.NewUserRepository(url)
 	userService := service.NewAuthService(userRepository)
 
