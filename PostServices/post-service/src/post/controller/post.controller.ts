@@ -67,6 +67,6 @@ export class PostController {
     if (!token) {
       throw new UnauthorizedException();
     }
-    return this.postService.getFeed(id);
+    return this.postService.getFeed(id, token);
   }
 }

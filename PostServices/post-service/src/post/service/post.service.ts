@@ -12,7 +12,7 @@ import { PostResponse, User } from '../domain/postDto';
 import { lastValueFrom, map } from 'rxjs';
 
 const COMMENT_URL = 'http://comment-service:8000';
-const FOLLOWER_URL = 'http://localhost:3001';
+const FOLLOWER_URL = 'http://follower-service:3001';
 @Injectable()
 export class PostService {
   private header = {
@@ -38,7 +38,8 @@ export class PostService {
     }
   }
 
-  public async getFeed(userId: string) {
+  public async getFeed(userId: string, token: string) {
+    this.header.headers.Authorization = `Bearer ${token}`;
     try {
       const follower: User[] = await lastValueFrom(
         this.httpService
@@ -46,12 +47,13 @@ export class PostService {
           .pipe(map((res) => res.data)),
       );
       const Ids = follower.map((user) => user.id);
-      return this.postRepository.find({
+      const postlist = await this.postRepository.find({
         where: { userId: In(Ids) },
         order: {
           createdAt: 'DESC',
         },
       });
+      return await this.postResponseFetchComment(postlist);
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException('Error doing request');
