@@ -10,21 +10,21 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - DB_PORT=5432
-      - DB_DATABASE=my_store
-      - DB_USER=osmait
-      - DB_PASSWORD=admin123
-      - DB_HOSTNAME=postgres
-
-
-
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment:
+#      - DB_PORT=5432
+#      - DB_DATABASE=my_store
+#      - DB_USER=osmait
+#      - DB_PASSWORD=admin123
+#      - DB_HOSTNAME=postgres
+#
+#
+#
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - postgres
 

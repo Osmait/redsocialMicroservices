@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,10 +42,18 @@ public class UserController {
         return  new ResponseEntity<>(user,HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("/profile/{id}")
     public ResponseEntity<UserResponse>Profile(@PathVariable("id") UUID id){
        UserResponse user =  userServices.findProfile(id);
        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("/find")
+    public  ResponseEntity<List<User>>FindUsersByName(@RequestParam("name") String name ){
+      List<User> list =   userServices.findUsersByName(name);
+      return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
 

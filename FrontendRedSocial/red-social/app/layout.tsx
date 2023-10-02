@@ -7,7 +7,7 @@ import { Providers } from "./providers";
 import { Navbar } from "@/components/navbar";
 import { Link } from "@nextui-org/link";
 import clsx from "clsx";
-import SearchInput from "../components/search-input";
+import SearchInput from "./components/search-input";
 import { UserImage } from "../components/user-image";
 import twLogo from "../public/iconmonstr-twitter-1-240.png";
 import Image from "next/image";

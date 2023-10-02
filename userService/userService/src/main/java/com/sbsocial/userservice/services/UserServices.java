@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -47,5 +48,10 @@ public class UserServices {
                 user.getUpdateAt()
         );
 
+    }
+
+    public List<User>findUsersByName(String name ){
+       List<User> listUser =  userRepository.findByName(name).orElseThrow(()-> new RuntimeException("Error"));
+       return listUser;
     }
 }
