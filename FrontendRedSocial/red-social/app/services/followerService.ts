@@ -58,3 +58,20 @@ export async function postFollow(followRequest: followRequest) {
 
   console.log(response.status);
 }
+
+export async function unFollow(followRequest: followRequest) {
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjUyMTgxNH0.Kv6Lzq_S0WJR3gRZMUrQUcFxVYpsZjB-ytqXcPWSZcc";
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
+      Authorization: `Bearer ${token}`,
+    },
+    next: { revalidate: 0 },
+    body: JSON.stringify(followRequest),
+  };
+  const response = await fetch("http://localhost:3001/unfollow/", options);
+
+  console.log(response.status);
+}
