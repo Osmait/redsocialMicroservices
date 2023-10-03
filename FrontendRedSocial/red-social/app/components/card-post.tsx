@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import {
   Card,
   CardHeader,
@@ -12,12 +12,14 @@ import {
 import { IconHeart, IconMessageCircle } from "@tabler/icons-react";
 import { ModalComment } from "../../components/modal-comment";
 import { PostResponse } from "../../types";
+import { findProfile } from "../services/userService";
 
 export interface Props {
   post: PostResponse;
 }
 
-export default function CardPost({ post }: Props) {
+export default async function CardPost({ post }: Props) {
+  const user = await findProfile(post.post.userId);
   return (
     <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none ">
       <CardHeader className="justify-between">
@@ -30,10 +32,10 @@ export default function CardPost({ post }: Props) {
           />
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
-              Zoey Lang
+              {`${user.name} ${user.LastName}`}
             </h4>
             <h5 className="text-small tracking-tight text-default-400">
-              @zoeylang
+              {`@${user.name}${user.LastName}`}
             </h5>
           </div>
         </div>
