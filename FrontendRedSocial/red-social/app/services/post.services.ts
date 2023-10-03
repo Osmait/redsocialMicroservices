@@ -1,9 +1,6 @@
 import { request } from "http";
 import { PostRequest, PostResponse } from "../../types";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
-import { Router } from "next/router";
-import { redirect } from "next/navigation";
 
 export async function findProfilePost(id: string): Promise<PostResponse[]> {
   const token =

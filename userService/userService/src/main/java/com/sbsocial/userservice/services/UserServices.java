@@ -51,6 +51,7 @@ public class UserServices {
     }
 
     public List<User>findUsersByName(String name ){
+
        List<User> listUser =  userRepository.findByName(name).orElseThrow(()-> new RuntimeException("Error"));
        return listUser;
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.sbsocial.userservice.UserServiceApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-10-02T16:46:32" hostname="osmait-ms7b86" time="0.343">
+<testsuite name="com.sbsocial.userservice.UserServiceApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-10-03T14:29:53" hostname="osmait-ms7b86" time="0.34">
   <properties/>
-  <testcase name="contextLoads()" classname="com.sbsocial.userservice.UserServiceApplicationTests" time="0.343"/>
-  <system-out><![CDATA[12:46:29.796 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sbsocial.userservice.UserServiceApplicationTests]: UserServiceApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-12:46:29.868 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sbsocial.userservice.UserServiceApplication for test class com.sbsocial.userservice.UserServiceApplicationTests
+  <testcase name="contextLoads()" classname="com.sbsocial.userservice.UserServiceApplicationTests" time="0.34"/>
+  <system-out><![CDATA[10:29:50.322 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sbsocial.userservice.UserServiceApplicationTests]: UserServiceApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+10:29:50.393 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sbsocial.userservice.UserServiceApplication for test class com.sbsocial.userservice.UserServiceApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -13,33 +13,33 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.2)
 
-2023-10-02T12:46:30.142-04:00  INFO 62623 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Starting UserServiceApplicationTests using Java 17.0.6 with PID 62623 (started by osmait in /home/osmait/Documents/WorkSpace/redsocialMicroservices/userService/userService)
-2023-10-02T12:46:30.143-04:00  INFO 62623 --- [    Test worker] c.s.u.UserServiceApplicationTests        : No active profile set, falling back to 1 default profile: "default"
-2023-10-02T12:46:30.531-04:00  INFO 62623 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-10-02T12:46:30.563-04:00  INFO 62623 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 1 JPA repository interfaces.
-2023-10-02T12:46:30.903-04:00  INFO 62623 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-10-02T12:46:30.939-04:00  INFO 62623 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
-2023-10-02T12:46:30.941-04:00  INFO 62623 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2023-10-02T12:46:31.020-04:00  INFO 62623 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-10-02T12:46:31.107-04:00  INFO 62623 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-10-02T12:46:31.215-04:00  INFO 62623 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-10-02T12:46:31.310-04:00  INFO 62623 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@15994b0b
-2023-10-02T12:46:31.312-04:00  INFO 62623 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-10-02T12:46:31.488-04:00  INFO 62623 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-10-02T12:46:31.839-04:00  INFO 62623 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-10-03T10:29:50.646-04:00  INFO 17733 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Starting UserServiceApplicationTests using Java 17.0.6 with PID 17733 (started by osmait in /home/osmait/Documents/WorkSpace/redsocialMicroservices/userService/userService)
+2023-10-03T10:29:50.647-04:00  INFO 17733 --- [    Test worker] c.s.u.UserServiceApplicationTests        : No active profile set, falling back to 1 default profile: "default"
+2023-10-03T10:29:51.033-04:00  INFO 17733 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-10-03T10:29:51.073-04:00  INFO 17733 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 1 JPA repository interfaces.
+2023-10-03T10:29:51.328-04:00  INFO 17733 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-10-03T10:29:51.357-04:00  INFO 17733 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
+2023-10-03T10:29:51.359-04:00  INFO 17733 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-10-03T10:29:51.433-04:00  INFO 17733 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-10-03T10:29:51.512-04:00  INFO 17733 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-10-03T10:29:51.521-04:00  INFO 17733 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-10-03T10:29:51.584-04:00  INFO 17733 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@538b3c88
+2023-10-03T10:29:51.585-04:00  INFO 17733 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-10-03T10:29:51.718-04:00  INFO 17733 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-10-03T10:29:52.071-04:00  INFO 17733 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
 Hibernate: alter table if exists users alter column update_at set data type timestamp(6)
 Hibernate: alter table if exists users alter column created_at set data type timestamp(6)
-2023-10-02T12:46:31.870-04:00  INFO 62623 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-10-02T12:46:32.061-04:00  INFO 62623 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2023-10-02T12:46:32.305-04:00  WARN 62623 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-10-02T12:46:32.317-04:00  WARN 62623 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+2023-10-03T10:29:52.100-04:00  INFO 17733 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-10-03T10:29:52.305-04:00  INFO 17733 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2023-10-03T10:29:52.583-04:00  WARN 17733 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-10-03T10:29:52.596-04:00  WARN 17733 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: e8b27a5a-7c09-4f26-88be-2e62478177ba
+Using generated security password: c1d22220-4c22-4c14-8fa2-e86dc0257810
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2023-10-02T12:46:32.510-04:00  INFO 62623 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@39d62e47, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1ced1fb9, org.springframework.security.web.context.SecurityContextHolderFilter@301b89e1, org.springframework.security.web.header.HeaderWriterFilter@3956df0a, org.springframework.web.filter.CorsFilter@5d28e108, org.springframework.security.web.authentication.logout.LogoutFilter@354ff4f6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@64f1e9f8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@60773809, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4d2bcca8, org.springframework.security.web.access.ExceptionTranslationFilter@d96f413, org.springframework.security.web.access.intercept.AuthorizationFilter@4f5d587c]
-2023-10-02T12:46:32.709-04:00  INFO 62623 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Started UserServiceApplicationTests in 2.751 seconds (process running for 3.546)
+2023-10-03T10:29:52.791-04:00  INFO 17733 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6a4c4261, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@88fe9a8, org.springframework.security.web.context.SecurityContextHolderFilter@540ac21e, org.springframework.security.web.header.HeaderWriterFilter@60773809, org.springframework.web.filter.CorsFilter@17d606c9, org.springframework.security.web.authentication.logout.LogoutFilter@1226ba98, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@14f08a97, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7b6c3b37, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6f45a2fd, org.springframework.security.web.access.ExceptionTranslationFilter@454f6cc5, org.springframework.security.web.access.intercept.AuthorizationFilter@2b592f17]
+2023-10-03T10:29:52.999-04:00  INFO 17733 --- [    Test worker] c.s.u.UserServiceApplicationTests        : Started UserServiceApplicationTests in 2.504 seconds (process running for 3.212)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

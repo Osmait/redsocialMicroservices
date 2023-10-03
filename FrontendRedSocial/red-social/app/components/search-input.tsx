@@ -24,6 +24,7 @@ const SearchInput = () => {
 
   const handleBlur = () => {
     setTimeout(() => {
+      setListUser([]);
       setIsFocused(false);
     }, 300);
   };

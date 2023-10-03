@@ -52,7 +52,7 @@ public class UserController {
     @CrossOrigin
     @GetMapping("/find")
     public  ResponseEntity<List<User>>FindUsersByName(@RequestParam("name") String name ){
-      List<User> list =   userServices.findUsersByName(name);
+      List<User> list =userServices.findUsersByName(name);
       return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
