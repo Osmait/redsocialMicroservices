@@ -63,4 +63,8 @@ export class FollowerService {
     }
     return listUSer;
   }
+
+  public async unFollow(follower: Follower) {
+    this.followerRepository.delete(follower);
+  }
 }

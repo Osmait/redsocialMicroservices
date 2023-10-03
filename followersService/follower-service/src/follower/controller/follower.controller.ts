@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { FollowerService } from '../service/follower.service';
 import { Follower } from '../domain/follower';
 
@@ -20,5 +20,9 @@ export class FollowerController {
   @Get('follower/:id')
   public getfollowers(@Param('id') id: string) {
     return this.followerService.getfollowers(id);
+  }
+  @Delete('/unfollow')
+  public unFollow(@Body() follower: Follower) {
+    this.followerService.unFollow(follower);
   }
 }
