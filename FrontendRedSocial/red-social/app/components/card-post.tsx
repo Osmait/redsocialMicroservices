@@ -13,6 +13,7 @@ import { IconHeart, IconMessageCircle } from "@tabler/icons-react";
 import { ModalComment } from "../../components/modal-comment";
 import { PostResponse } from "../../types";
 import { findProfile } from "../services/userService";
+import Link from "next/link";
 
 export interface Props {
   post: PostResponse;
@@ -28,12 +29,14 @@ export default async function CardPost({ post }: Props) {
             isBordered
             radius="full"
             size="md"
-            src="/avatars/avatar-1.png"
+            src={`https://unavatar.io/${user.name}`}
           />
-          <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-600">
-              {`${user.name} ${user.LastName}`}
-            </h4>
+          <div className="flex gap-1 items-center justify-center">
+            <Link href={`/profile/${user.id}`} className="hover:border-b-1">
+              <h4 className="text-small font-semibold leading-none text-default-600">
+                {`${user.name} ${user.LastName}`}
+              </h4>
+            </Link>
             <h5 className="text-small tracking-tight text-default-400">
               {`@${user.name}${user.LastName}`}
             </h5>
