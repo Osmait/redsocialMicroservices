@@ -27,7 +27,7 @@ export const NotificationList = () => {
       newSocket.close();
     };
   }, []);
-  console.log("hola");
+
   console.log(message);
   return <div>NotificationList</div>;
 };

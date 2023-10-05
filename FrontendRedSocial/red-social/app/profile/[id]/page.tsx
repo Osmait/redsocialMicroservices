@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const following = await findFollowing(params.id);
   const profile = await findProfile(params.id);
   const follower = await findFollower(params.id);
-  const listFollowing = following.map((f) => f.id);
+  const listFollowing = following ? following.map((f) => f.id) : [];
   const isFollow = listFollowing.includes(params.id);
 
   const followReques = {

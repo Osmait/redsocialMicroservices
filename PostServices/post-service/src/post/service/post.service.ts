@@ -37,6 +37,20 @@ export class PostService {
       throw new InternalServerErrorException('Error Creating Post');
     }
   }
+  async findById(id: string, token: string) {
+    this.header.headers.Authorization = `Bearer ${token}`;
+    const post = await this.postRepository.findOne({
+      where: { id },
+    });
+    const comment = await lastValueFrom(
+      this.httpService
+        .get(`${COMMENT_URL}/comment/${post.id}`, this.header)
+        .pipe(map((res) => res.data)),
+    );
+
+    const postR = new PostResponse(post, comment);
+    return postR;
+  }
 
   public async getFeed(userId: string, token: string) {
     this.header.headers.Authorization = `Bearer ${token}`;
@@ -47,6 +61,7 @@ export class PostService {
           .pipe(map((res) => res.data)),
       );
       const Ids = follower.map((user) => user.id);
+      Ids.push(userId);
       const postlist = await this.postRepository.find({
         where: { userId: In(Ids) },
         order: {

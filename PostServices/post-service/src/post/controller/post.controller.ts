@@ -69,4 +69,13 @@ export class PostController {
     }
     return this.postService.getFeed(id, token);
   }
+
+  @Get('/one/:id')
+  public findPostById(@Param('id') id: string, @Req() request: Request) {
+    const token = request.headers['token'];
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.postService.findById(id, token);
+  }
 }

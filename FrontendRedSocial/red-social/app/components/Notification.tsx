@@ -5,32 +5,32 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 export const Notification = () => {
-  const [message, setMessage] = useState("");
-  //   const [socket, setSocket] = useState<any>();
+  // const [message, setMessage] = useState("");
+  // //   const [socket, setSocket] = useState<any>();
 
-  useEffect(() => {
-    const newSocket = new WebSocket("ws://localhost:8083/ws/1"); // Cambia la URL por la de tu servidor Go
-    newSocket.onopen = () => {
-      console.log("Conexión WebSocket abierta");
-    };
+  // useEffect(() => {
+  //   const newSocket = new WebSocket("ws://localhost:8083/ws/1"); // Cambia la URL por la de tu servidor Go
+  //   newSocket.onopen = () => {
+  //     console.log("Conexión WebSocket abierta");
+  //   };
 
-    newSocket.onmessage = (event) => {
-      console.log(event.data);
-      const ms = JSON.parse(event.data);
-      console.log(ms);
-      setMessage(ms); // Actualizar el estado con el mensaje recibido
-    };
+  //   newSocket.onmessage = (event) => {
+  //     console.log(event.data);
+  //     const ms = JSON.parse(event.data);
+  //     console.log(ms);
+  //     setMessage(ms); // Actualizar el estado con el mensaje recibido
+  //   };
 
-    newSocket.onerror = (e) => {
-      console.log(e);
-    };
+  //   newSocket.onerror = (e) => {
+  //     console.log(e);
+  //   };
 
-    return () => {
-      newSocket.close();
-    };
-  }, []);
+  //   return () => {
+  //     newSocket.close();
+  //   };
+  // }, []);
 
-  console.log(message);
+  // console.log(message);
 
   return (
     <div className=" flex  gap-3">

@@ -3,6 +3,7 @@ import { findProfilePost } from "../services/post.services";
 
 export default async function ProfilePage() {
   const posts = await findProfilePost("1");
+
   return (
     <div className=" flex gap-4 flex-col w-2/5 border-1 border-zinc-500 border-t-0">
       <div className="text-gray-600">

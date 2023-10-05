@@ -3,13 +3,15 @@
 import { useRef } from "react";
 import { UserImage } from "../../components/user-image";
 import { PostButton } from "../../components/post-buttom";
-import { PostRequest } from "../../types";
-import { createPost } from "../services/post.services";
-
-import { Textarea } from "@nextui-org/input";
+import { CommentRequest, PostRequest } from "../../types";
+import { createComment, createPost } from "../services/post.services";
 import { useRouter } from "next/navigation";
+import { Textarea } from "@nextui-org/input";
 
-export function ComposePost() {
+interface Props {
+  id: string;
+}
+export function ComposeComment({ id }: Props) {
   const postFrom = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
@@ -21,12 +23,13 @@ export function ComposePost() {
 
     const formData = new FormData(postFrom.current);
 
-    const data: PostRequest = {
+    const data: CommentRequest = {
       content: formData.get("content") as string,
       userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+      postId: id,
     };
 
-    await createPost(data);
+    await createComment(data);
     postFrom.current.reset();
     router.refresh();
   };

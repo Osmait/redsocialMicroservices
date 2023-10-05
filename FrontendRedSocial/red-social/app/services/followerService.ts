@@ -2,7 +2,7 @@ import { followRequest } from "../components/FollowButton";
 
 export async function findFollowing(id: string): Promise<any[]> {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjQ0NTA1N30.nEVDOCFTBWZ8td1N3sm1jES4TRwFfM17UKVRHqfjgs8";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
   const options = {
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
@@ -23,7 +23,7 @@ export async function findFollowing(id: string): Promise<any[]> {
 
 export async function findFollower(id: string): Promise<any[]> {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjQ0NTA1N30.nEVDOCFTBWZ8td1N3sm1jES4TRwFfM17UKVRHqfjgs8";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
   const options = {
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
@@ -44,7 +44,7 @@ export async function findFollower(id: string): Promise<any[]> {
 
 export async function postFollow(followRequest: followRequest) {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjUyMTgxNH0.Kv6Lzq_S0WJR3gRZMUrQUcFxVYpsZjB-ytqXcPWSZcc";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
   const options = {
     method: "POST",
     headers: {
@@ -61,7 +61,7 @@ export async function postFollow(followRequest: followRequest) {
 
 export async function unFollow(followRequest: followRequest) {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjUyMTgxNH0.Kv6Lzq_S0WJR3gRZMUrQUcFxVYpsZjB-ytqXcPWSZcc";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
   const options = {
     method: "DELETE",
     headers: {

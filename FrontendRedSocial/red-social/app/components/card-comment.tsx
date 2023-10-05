@@ -11,16 +11,17 @@ import {
 
 import { IconHeart, IconMessageCircle } from "@tabler/icons-react";
 import { ModalComment } from "../../components/modal-comment";
-import { PostResponse } from "../../types";
+import { Comment, PostResponse } from "../../types";
 import { findProfile } from "../services/userService";
 import Link from "next/link";
 
 export interface Props {
-  post: PostResponse;
+  comment: Comment;
 }
 
-export default async function CardPost({ post }: Props) {
-  const user = await findProfile(post.post.userId);
+export default async function CardComment2({ comment }: Props) {
+  console.log(comment);
+  const user = await findProfile(comment.user_id);
   return (
     <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none ">
       <CardHeader className="justify-between">
@@ -43,16 +44,16 @@ export default async function CardPost({ post }: Props) {
           </div>
         </div>
       </CardHeader>
-      <Link href={`/post/${post.post.id}`}>
+      <Link href={`/post/${comment.post_id}`}>
         <CardBody className="px-3 py-0 text-small  text-white">
-          <p>{post.post.content}</p>
+          <p>{comment.content}</p>
         </CardBody>
         <CardFooter className="gap-3">
           <button>
             <IconHeart className="w-4 h-4" color="#71767B" />
           </button>
           <div className="flex gap-1  text-zinc-500">
-            <ModalComment comments={post.comment} />
+            {/* <ModalComment comments={post.comment} /> */}
           </div>
         </CardFooter>
       </Link>
