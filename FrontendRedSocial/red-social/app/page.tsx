@@ -1,5 +1,6 @@
 import CardPost from "./components/card-post";
 import { ComposePost } from "./components/compose-post";
+import { Feed } from "./components/feed";
 import { findProfilePost } from "./services/post.services";
 
 export default async function Home() {
@@ -10,10 +11,7 @@ export default async function Home() {
       <div className="p-6 border-b-1 border-zinc-500">
         <h1 className="text-2xl font-bold ">Inicio</h1>
       </div>
-      <ComposePost />
-      {posts.map((post) => (
-        <CardPost key={post.post.id} post={post} />
-      ))}
+      <Feed posts={posts} />
     </div>
   );
 }

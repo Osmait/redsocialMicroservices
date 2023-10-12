@@ -9,27 +9,29 @@ import { createPost } from "../services/post.services";
 import { Textarea } from "@nextui-org/input";
 import { useRouter } from "next/navigation";
 
-export function ComposePost() {
-  const postFrom = useRef<HTMLFormElement>(null);
-  const router = useRouter();
+export function ComposePost({ postFrom, handlerSubmit }: any) {
+  // const router = useRouter();
+  // const postFrom = useRef<HTMLFormElement>(null);
 
-  const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!postFrom.current) {
-      return;
-    }
+  // const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (!postFrom.current) {
+  //     return;
+  //   }
 
-    const formData = new FormData(postFrom.current);
+  //   const formData = new FormData(postFrom.current);
 
-    const data: PostRequest = {
-      content: formData.get("content") as string,
-      userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
-    };
+  //   const data: PostRequest = {
+  //     content: formData.get("content") as string,
+  //     userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+  //   };
+  //   router.refresh();
 
-    await createPost(data);
-    postFrom.current.reset();
-    router.refresh();
-  };
+  //   await createPost(data);
+  //   console.log(data);
+
+  //   postFrom.current.reset();
+  // };
 
   return (
     <form

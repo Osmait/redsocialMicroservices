@@ -1,16 +1,14 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	cors "github.com/rs/cors/wrapper/gin"
-	"github.com/streadway/amqp"
+	"github.com/osmait/notificationservice/internas/service"
 )
 
 func UnmarshalMessage(data []byte) (Message, error) {
@@ -44,63 +42,12 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-type RabbitMQEventStore struct {
-	conn   *amqp.Connection
-	userId string
-	url    string
-}
-
-func newRabbitMQEventStore(conn *amqp.Connection, userId string) *RabbitMQEventStore {
-	return &RabbitMQEventStore{
-		conn:   conn,
-		userId: userId,
-	}
-}
-
-func (r RabbitMQEventStore) Consume() <-chan amqp.Delivery {
-	ch, err := r.conn.Channel()
-	if err != nil {
-		log.Fatal(err)
-	}
-	ch.QueueDeclare(
-		"notification_queue",
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-
-	msgs, err := ch.Consume(
-		"notification_queue",
-		"",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return msgs
-
-}
-
-func main() {
-	hostRabbit := os.Getenv("HOST_RABBIT")
-	url := fmt.Sprintf("amqp://guest:guest@%s:5672/", hostRabbit)
-	conn, err := amqp.Dial(url)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	router := gin.Default()
-	router.Use(cors.Default())
-	router.GET("/ws/:id", func(c *gin.Context) {
+func Notification(notificationService service.NotificationService) gin.HandlerFunc {
+	return func(c *gin.Context) {
 		id := c.Param("id")
-		rabi := newRabbitMQEventStore(conn, id)
-		msgs := rabi.Consume()
+
+		msgs := notificationService.GetMessages()
+
 		ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
 			log.Print("upgrade:", err)
@@ -135,7 +82,6 @@ func main() {
 
 			}
 		}
-	})
+	}
 
-	router.Run(":8083")
 }

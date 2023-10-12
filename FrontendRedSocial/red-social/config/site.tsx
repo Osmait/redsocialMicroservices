@@ -13,11 +13,8 @@ export const siteConfig = {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="2"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <path d="M5 12l-2 0l9 -9l9 9l-2 0"></path>
@@ -36,11 +33,8 @@ export const siteConfig = {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="2"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
