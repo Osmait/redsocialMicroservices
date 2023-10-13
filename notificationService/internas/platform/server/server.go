@@ -11,7 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/osmait/notificationservice/internas/platform/server/handlers"
+	"github.com/osmait/notificationservice/internas/platform/server/websocket"
 	"github.com/osmait/notificationservice/internas/service"
 	cors "github.com/rs/cors/wrapper/gin"
 )
@@ -21,6 +21,7 @@ type Server struct {
 	Engine              *gin.Engine
 	notificationService service.NotificationService
 	shutdownTimeout     time.Duration
+	Hub                 *websocket.Hub
 }
 
 func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, notificationService service.NotificationService) (context.Context, Server) {
@@ -29,14 +30,18 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 		httpAddr:            fmt.Sprintf("%s:%d", host, port),
 		notificationService: notificationService,
 		shutdownTimeout:     shutdownTimeout,
+		Hub:                 websocket.NewHub(),
 	}
 	srv.registerRoutes()
+
 	return serverContext(ctx), srv
 }
 func (s *Server) registerRoutes() {
+
 	// s.Engine.Use(middleware.CheckAuthMiddleware())
 
-	s.Engine.GET("/ws/:id", handlers.Notification(s.notificationService))
+	// s.Engine.GET("/ws/:id", handlers.Notification(s.notificationService))
+	s.Engine.GET("/ws/:id", s.Hub.HandleWebSocket(s.notificationService))
 
 }
 func (s *Server) Run(ctx context.Context) error {
@@ -47,6 +52,7 @@ func (s *Server) Run(ctx context.Context) error {
 		Handler: s.Engine,
 	}
 
+	go s.Hub.Run()
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal("server shut down", err)

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -44,7 +43,8 @@ var upgrader = websocket.Upgrader{
 
 func Notification(notificationService service.NotificationService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.Param("id")
+
+		// id := c.Param("id")
 
 		msgs := notificationService.GetMessages()
 
@@ -54,33 +54,33 @@ func Notification(notificationService service.NotificationService) gin.HandlerFu
 			return
 		}
 		defer ws.Close()
-		var message Message
+		// var message Message
 
 		for msg := range msgs {
 
-			json.Unmarshal(msg.Body, &message)
-			fmt.Println(message)
-			if message.Pattern == "new-follow" {
-				if val, ok := message.Data.(map[string]interface{}); ok {
-					followingId, _ := val["followingId"]
-					fmt.Println(followingId)
-					if followingId == id {
+			// json.Unmarshal(msg.Body, &message)
+			// fmt.Println(message)
+			// if message.Pattern == "new-follow" {
+			// 	if val, ok := message.Data.(map[string]interface{}); ok {
+			// 		followingId, _ := val["followingId"]
+			// 		fmt.Println(followingId)
+			// 		if followingId == id {
 
-						ws.WriteMessage(websocket.TextMessage, msg.Body)
-					}
+			ws.WriteMessage(websocket.TextMessage, msg.Body)
+			// 		}
 
-				}
+			// 	}
 
-			}
-			if val, ok := message.Data.(map[string]interface{}); ok {
-				userId, _ := val["userId"]
-				fmt.Println(userId)
-				if userId == id {
+			// }
+			// if val, ok := message.Data.(map[string]interface{}); ok {
+			// 	userId, _ := val["userId"]
+			// 	fmt.Println(userId)
+			// 	if userId == id {
 
-					ws.WriteMessage(websocket.TextMessage, msg.Body)
-				}
+			// 		ws.WriteMessage(websocket.TextMessage, msg.Body)
+			// 	}
 
-			}
+			// }
 		}
 	}
 

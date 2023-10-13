@@ -24,7 +24,9 @@ func Run() error {
 		log.Fatal("Error doing Conn")
 	}
 	rabbitStore := rabbitmq.NewRabbitMQEventStore(conn)
+
 	notificationService := service.NewNotificationService(*rabbitStore)
+
 	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.shutdownTimeout, *notificationService)
 
 	return srv.Run(ctx)

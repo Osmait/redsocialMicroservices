@@ -16,10 +16,17 @@ func failOnError(err error, msg string) {
 	}
 }
 
-type Messge struct {
-	Id string
+type Message struct {
+	Pattern string `json:"pattern"`
+	Data    any    `json:"data"`
+}
 
-	Content string
+type Data struct {
+	Content   string `json:"content"`
+	UserID    string `json:"userId"`
+	ID        string `json:"id"`
+	Deleted   bool   `json:"deleted"`
+	CreatedAt string `json:"createdAt"`
 }
 
 func main() {
@@ -34,7 +41,14 @@ func main() {
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-	body := Messge{Id: "1", Content: "prueba3"}
+	body := Message{Pattern: "new-post",
+		Data: Data{
+			Content:   "Message 1",
+			UserID:    "2",
+			ID:        "1",
+			Deleted:   false,
+			CreatedAt: "2023-10-10",
+		}}
 
 	// We create a Queue to send the message to.
 	q, err := ch.QueueDeclare(
