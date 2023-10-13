@@ -8,6 +8,10 @@ import { useNotification } from "../store/state";
 export const Notification = () => {
   const notifications = useNotification((state) => state.messages);
   const setMessage = useNotification((state) => state.setMessages);
+  const notificationLen = useNotification((state) => state.notificationLen);
+  const setNotificationLen = useNotification(
+    (state) => state.setNotificationLen
+  );
 
   useEffect(() => {
     const newSocket = new WebSocket("ws://localhost:8083/ws/2");
@@ -29,7 +33,8 @@ export const Notification = () => {
       newSocket.close();
     };
   });
-  console.log(notifications.length);
+  // setNotificationLen(notifications.length);
+
   return (
     <div className=" flex  gap-3">
       <Badge
