@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 export async function findProfilePost(id: string): Promise<PostResponse[]> {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
   const options: any = {
     cache: "no-cache",
     headers: {
@@ -18,13 +18,14 @@ export async function findProfilePost(id: string): Promise<PostResponse[]> {
     options
   );
   const result = await response.json();
+  console.log(result);
 
   return result;
 }
 
 export async function createPost(post: PostRequest) {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
   const options = {
     method: "POST",
     headers: {
@@ -45,7 +46,7 @@ export async function createPost(post: PostRequest) {
 
 export async function createComment(post: CommentRequest) {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
   const options: any = {
     method: "POST",
     headers: {
@@ -64,7 +65,7 @@ export async function createComment(post: CommentRequest) {
 }
 export async function findOnePost(id: string): Promise<PostResponse> {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NjcwMDAzMH0.jOgDTlNC55cTUjrGAd5PjGK1QPBs_h8vZl0FDw6Hink";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
   const options: any = {
     cache: "no-cache",
     headers: {

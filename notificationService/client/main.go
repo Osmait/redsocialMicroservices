@@ -45,7 +45,7 @@ func main() {
 		Data: Data{
 			Content:   "Message 1",
 			UserID:    "2",
-			ID:        "1",
+			ID:        "5fb73ca5-6bb4-412d-ad91-d5e78a73b477",
 			Deleted:   false,
 			CreatedAt: "2023-10-10",
 		}}

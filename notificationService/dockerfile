@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Copy and build the Go application
 COPY . .
-RUN go build -o notificationService
+RUN go build -o notificationService ./cmd/
 
 # Use a minimal base image for the final image
 FROM alpine:latest

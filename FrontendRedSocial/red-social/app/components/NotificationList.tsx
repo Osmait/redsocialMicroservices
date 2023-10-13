@@ -1,33 +1,25 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useNotification } from "../store/state";
 
 export const NotificationList = () => {
-  const [message, setMessage] = useState({});
-
-  useEffect(() => {
-    const newSocket = new WebSocket(
-      "ws://localhost:8083/ws/ec5707f4-32bc-48ce-a3bb-d1a3d3f674d2"
-    );
-    newSocket.onopen = () => {
-      console.log("Conexión WebSocket abierta");
-    };
-
-    newSocket.onmessage = (event) => {
-      const ms = JSON.parse(event.data);
-      console.log(event.origin);
-
-      setMessage(ms);
-    };
-
-    newSocket.onerror = (e) => {
-      console.log(e);
-    };
-
-    return () => {
-      newSocket.close();
-    };
-  }, []);
+  const message = useNotification((state) => state.messages);
+  // const [message, setMessage] = useState<any>([]);
 
   console.log(message);
-  return <div>NotificationList</div>;
+  return (
+    <div className=" flex  flex-col w-2/5 border-1 border-zinc-500 border-t-0">
+      {message.map((ms: any) => (
+        <Link key={ms.data.id} href={`/post/${ms.data.id}`}>
+          <div className="p-6 border-b-1 border-zinc-500" key={ms.data.content}>
+            <h1 className="border-b-1">
+              {ms.pattern === "new-post" ? "New Post" : ""}
+            </h1>
+            <h2>{ms.data.content}</h2>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
 };

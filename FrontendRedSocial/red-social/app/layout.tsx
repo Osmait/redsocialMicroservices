@@ -53,7 +53,7 @@ export default function RootLayout({
                 <div className="flex flex-col gap-5 items-center w-1/5 ">
                   <Image src={twLogo} alt="logo" className=" h-8 w-8" />
                   <Navbar />
-                  {/* <Notification /> */}
+                  <Notification />
                 </div>
 
                 {children}

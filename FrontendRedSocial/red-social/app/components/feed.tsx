@@ -6,7 +6,7 @@ import { ComposePost } from "./compose-post";
 import CardPost from "./card-post";
 
 import { createPost } from "../services/post.services";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 export interface Props {
   posts: PostResponse[];
 }
@@ -29,7 +29,7 @@ export function Feed({ posts }: Props) {
 
     await createPost(data);
     console.log(data);
-    router.reload();
+    router.refresh();
 
     postFrom.current.reset();
   };

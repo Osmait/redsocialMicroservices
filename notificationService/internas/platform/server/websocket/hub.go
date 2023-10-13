@@ -126,7 +126,7 @@ func (hub *Hub) HandleWebSocket(notificationService service.NotificationService)
 
 					if followingId == id {
 
-						// ws.WriteMessage(websocket.TextMessage, msg.Body)
+						// socket.WriteMessage(websocket.TextMessage, msg.Body)
 
 						go hub.Broadcast(msg.Body, nil)
 
@@ -140,12 +140,12 @@ func (hub *Hub) HandleWebSocket(notificationService service.NotificationService)
 				fmt.Println(userId)
 				if userId == id {
 
-					// ws.WriteMessage(websocket.TextMessage, msg.Body)
+					// socket.WriteMessage(websocket.TextMessage, msg.Body)
 					go hub.Broadcast(msg.Body, nil)
 				}
 
 			}
-			fmt.Println(message)
+			// fmt.Println(message)
 			go client.Write()
 		}
 

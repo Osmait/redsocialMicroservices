@@ -20,10 +20,19 @@ func NewClient(hub *Hub, socket *websocket.Conn) *Client {
 }
 
 func (c *Client) Write() {
+	// fmt.Println(c.id)
+	for {
+		select {
 
-	ms := <-c.outbound
+		case ms, ok := <-c.outbound:
+			if !ok {
+				c.socket.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
 
-	c.socket.WriteMessage(websocket.TextMessage, ms)
+			c.socket.WriteMessage(websocket.TextMessage, ms)
+		}
+	}
 
 }
 
