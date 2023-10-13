@@ -5,7 +5,6 @@ import { useNotification } from "../store/state";
 
 export const NotificationList = () => {
   const message = useNotification((state) => state.messages);
-  // const [message, setMessage] = useState<any>([]);
 
   console.log(message);
   return (
