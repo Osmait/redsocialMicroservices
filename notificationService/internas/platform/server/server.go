@@ -41,7 +41,8 @@ func (s *Server) registerRoutes() {
 	// s.Engine.Use(middleware.CheckAuthMiddleware())
 
 	// s.Engine.GET("/ws/:id", handlers.Notification(s.notificationService))
-	s.Engine.GET("/ws/:id", s.Hub.HandleWebSocket(s.notificationService))
+	// s.Engine.GET("/ws/:id", s.Hub.HandleWebSocket(s.notificationService))
+	s.Engine.GET("/ws/:id", websocket.HandlerWs(s.Hub, s.notificationService))
 
 }
 func (s *Server) Run(ctx context.Context) error {

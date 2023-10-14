@@ -118,4 +118,14 @@ export class PostService {
     }
     return postReponse;
   }
+
+  public async getFollower(userId: string) {
+    const follower: User[] = await lastValueFrom(
+      this.httpService
+        .get(`${FOLLOWER_URL}/follower/${userId}`, this.header)
+        .pipe(map((res) => res.data)),
+    );
+    const Ids = follower.map((user) => user.id);
+    return Ids;
+  }
 }

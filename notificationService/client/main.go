@@ -18,10 +18,15 @@ func failOnError(err error, msg string) {
 
 type Message struct {
 	Pattern string `json:"pattern"`
-	Data    any    `json:"data"`
+	Data    Data   `json:"data"`
 }
 
 type Data struct {
+	Post     `json:"post"`
+	Follower []string `json:"follower"`
+}
+
+type Post struct {
 	Content   string `json:"content"`
 	UserID    string `json:"userId"`
 	ID        string `json:"id"`
@@ -41,14 +46,38 @@ func main() {
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-	body := Message{Pattern: "new-post",
-		Data: Data{
-			Content:   "Message 1",
-			UserID:    "2",
-			ID:        "5fb73ca5-6bb4-412d-ad91-d5e78a73b477",
-			Deleted:   false,
-			CreatedAt: "2023-10-10",
-		}}
+
+	// body := Message{Pattern: "new-post",
+	// 	Data: {
+	// 		Post{
+	// 			Content:   "Message 1",
+	// 			UserID:    "a5698235-a37b-4c70-ac46-a234f359ada0",
+	// 			ID:        "1",
+	// 			Deleted:   false,
+	// 			CreatedAt: "2023-10-10",
+	// 		},
+	// 		Follower: []string{"1", "2"},
+	// 	},
+	// }
+	post := Post{
+		Content:   "Este es el contenido del post",
+		UserID:    "a5698235-a37b-4c70-ac46-a234f359ada0",
+		ID:        "456",
+		Deleted:   false,
+		CreatedAt: "2023-10-09",
+	}
+
+	// Crear una instancia de Data con el post y una lista de seguidores
+	data := Data{
+		Post:     post,
+		Follower: []string{"a5698235-a37b-4c70-ac46-a234f359ada0", "1", "2"},
+	}
+
+	// Crear una instancia de Message con el patrón y los datos
+	body := Message{
+		Pattern: "new-post",
+		Data:    data,
+	}
 
 	// We create a Queue to send the message to.
 	q, err := ch.QueueDeclare(

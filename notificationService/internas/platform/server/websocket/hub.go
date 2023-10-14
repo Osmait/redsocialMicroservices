@@ -1,15 +1,8 @@
 package websocket
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"sync"
-
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
-	"github.com/osmait/notificationservice/internas/service"
+	// "github.com/osmait/notificationservice/internas/service"
 )
 
 type Message struct {
@@ -25,129 +18,59 @@ type Data struct {
 	CreatedAt string `json:"createdAt"`
 }
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool { return true },
-}
-
 type Hub struct {
-	clients    []*Client
-	register   chan *Client
+	// Registered clients.
+	clients map[*Client]bool
+
+	// Inbound messages from the clients.
+	broadcast chan []byte
+
+	// Register requests from the clients.
+	register chan *Client
+
+	// Unregister requests from clients.
 	unregister chan *Client
-	mutex      *sync.Mutex
 }
 
 func NewHub() *Hub {
 	return &Hub{
-		clients:    make([]*Client, 0),
+		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
-		mutex:      &sync.Mutex{},
+		clients:    make(map[*Client]bool),
 	}
 }
 
-func (hub *Hub) Run() {
-
+func (h *Hub) Run() {
 	for {
 		select {
-		case client := <-hub.register:
-			hub.onConnect(client)
-		case client := <-hub.unregister:
-			hub.onDisconnect(client)
-		}
-	}
-}
-func (hub *Hub) Broadcast(message []byte, ignore *Client) {
-
-	for _, client := range hub.clients {
-
-		if client != ignore {
-			client.outbound <- message
-		}
-	}
-}
-
-func (hub *Hub) onConnect(client *Client) {
-
-	log.Println("Client connected", client.socket.RemoteAddr())
-
-	hub.mutex.Lock()
-	defer hub.mutex.Unlock()
-	client.id = client.socket.RemoteAddr().String()
-
-	hub.clients = append(hub.clients, client)
-
-}
-
-func (hub *Hub) onDisconnect(client *Client) {
-	log.Println("Client disconnected", client.socket.RemoteAddr())
-
-	client.Close()
-	hub.mutex.Lock()
-	defer hub.mutex.Unlock()
-
-	i := -1
-	for j, c := range hub.clients {
-		if c.id == client.id {
-			i = j
-			break
-		}
-	}
-	copy(hub.clients[i:], hub.clients[i+1:])
-	hub.clients[len(hub.clients)-1] = nil
-	hub.clients = hub.clients[:len(hub.clients)-1]
-
-}
-
-func (hub *Hub) HandleWebSocket(notificationService service.NotificationService) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id := c.Param("id")
-
-		msgs := notificationService.GetMessages()
-
-		socket, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-		if err != nil {
-			log.Println(err)
-			c.JSON(http.StatusInternalServerError, "Error upgrading connection")
-			return
-		}
-
-		var message Message
-		client := NewClient(hub, socket)
-
-		hub.register <- client
-
-		for msg := range msgs {
-
-			json.Unmarshal(msg.Body, &message)
-
-			if message.Pattern == "new-follow" {
-				if val, ok := message.Data.(map[string]interface{}); ok {
-					followingId, _ := val["followingId"]
-
-					if followingId == id {
-
-						// socket.WriteMessage(websocket.TextMessage, msg.Body)
-
-						go hub.Broadcast(msg.Body, nil)
-
-					}
-
-				}
-
+		case client := <-h.register:
+			h.clients[client] = true
+		case client := <-h.unregister:
+			if _, ok := h.clients[client]; ok {
+				delete(h.clients, client)
+				close(client.send)
 			}
-			if val, ok := message.Data.(map[string]interface{}); ok {
-				userId, _ := val["userId"]
-				fmt.Println(userId)
-				if userId == id {
-
-					// socket.WriteMessage(websocket.TextMessage, msg.Body)
-					go hub.Broadcast(msg.Body, nil)
+		case message := <-h.broadcast:
+			for client := range h.clients {
+				select {
+				case client.send <- message:
+				default:
+					close(client.send)
+					delete(h.clients, client)
 				}
-
 			}
-			// fmt.Println(message)
-			go client.Write()
 		}
-
 	}
+}
+
+func containsElement(slice []string, element string) bool {
+	fmt.Println(slice)
+	fmt.Println(element)
+	for _, item := range slice {
+		if item == element {
+			return true
+		}
+	}
+	return false
 }

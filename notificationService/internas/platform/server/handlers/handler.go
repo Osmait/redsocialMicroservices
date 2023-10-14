@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -43,45 +44,83 @@ var upgrader = websocket.Upgrader{
 
 func Notification(notificationService service.NotificationService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
-		// id := c.Param("id")
-
+		id := c.Param("id")
+		fmt.Println(id)
 		msgs := notificationService.GetMessages()
 
-		ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+		socket, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
-			log.Print("upgrade:", err)
+			log.Println(err)
+			c.JSON(http.StatusInternalServerError, "Error upgrading connection")
 			return
 		}
-		defer ws.Close()
-		// var message Message
 
-		for msg := range msgs {
+		var message Message
+		// client := NewClient(hub, socket)
 
-			// json.Unmarshal(msg.Body, &message)
-			// fmt.Println(message)
-			// if message.Pattern == "new-follow" {
-			// 	if val, ok := message.Data.(map[string]interface{}); ok {
-			// 		followingId, _ := val["followingId"]
-			// 		fmt.Println(followingId)
-			// 		if followingId == id {
+		// hub.register <- client
+		for {
 
-			ws.WriteMessage(websocket.TextMessage, msg.Body)
-			// 		}
+			for msg := range msgs {
 
-			// 	}
+				json.Unmarshal(msg.Body, &message)
+				fmt.Println(message.Pattern)
 
-			// }
-			// if val, ok := message.Data.(map[string]interface{}); ok {
-			// 	userId, _ := val["userId"]
-			// 	fmt.Println(userId)
-			// 	if userId == id {
+				if message.Pattern == "new-follow" {
+					if val, ok := message.Data.(map[string]interface{}); ok {
+						followingId, _ := val["followingId"]
 
-			// 		ws.WriteMessage(websocket.TextMessage, msg.Body)
-			// 	}
+						if followingId == id {
 
-			// }
+							socket.WriteMessage(websocket.TextMessage, msg.Body)
+
+							// go hub.Broadcast(msg.Body, nil)
+							// go client.Write()
+							// return
+
+						}
+
+					}
+
+				}
+				if message.Pattern == "new-post" {
+
+					if val, ok := message.Data.(map[string]interface{}); ok {
+						fmt.Println(val)
+						post, _ := val["post"].(map[string]interface{})
+						userId, _ := post["userId"].(string)
+						fmt.Println(userId)
+
+						follower, _ := val["follower"].([]interface{})
+
+						followerSlice := make([]string, len(follower))
+						for i, v := range follower {
+							followerSlice[i] = v.(string)
+						}
+
+						if containsElement(followerSlice, id) {
+
+							socket.WriteMessage(websocket.TextMessage, msg.Body)
+							// go hub.Broadcast(msg.Body, nil)
+							// go client.Write()
+							// return
+						}
+
+					}
+				}
+				// fmt.Println(message)
+			}
 		}
 	}
 
+}
+func containsElement(slice []string, element string) bool {
+	fmt.Println(slice)
+	fmt.Println(element)
+	for _, item := range slice {
+		if item == element {
+			return true
+		}
+	}
+	return false
 }

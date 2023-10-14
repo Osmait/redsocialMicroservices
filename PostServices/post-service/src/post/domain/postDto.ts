@@ -9,6 +9,11 @@ export class PostResponse {
     this.comment = comment;
   }
 }
+
+export interface PostWithFollower {
+  post: Post;
+  followers: string[];
+}
 export interface User {
   id: string;
   name: string;

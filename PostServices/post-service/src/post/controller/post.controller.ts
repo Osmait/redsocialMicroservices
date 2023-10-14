@@ -13,6 +13,7 @@ import {
 import { PostService } from '../service/post.service';
 import { Post as PostModel } from '../domain/post.entity';
 import { ClientProxy } from '@nestjs/microservices';
+import { PostWithFollower } from '../domain/postDto';
 
 @Controller('post')
 export class PostController {
@@ -39,7 +40,7 @@ export class PostController {
   }
 
   @Post('/')
-  public createdPost(@Body() post: PostModel, @Req() request: Request) {
+  public async createdPost(@Body() post: PostModel, @Req() request: Request) {
     const userId = request.headers['user'];
     if (!userId) {
       throw new UnauthorizedException();
@@ -47,7 +48,12 @@ export class PostController {
     post.userId = userId;
     this.postService.created(post);
 
-    this.client.emit('new-Post', post);
+    const followers = await this.postService.getFollower(userId);
+    const postWithFollower: PostWithFollower = {
+      post,
+      followers,
+    };
+    this.client.emit('new-Post', postWithFollower);
   }
 
   @Delete('/:id')
