@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/osmait/notificationservice/internas/platform/utils"
 	"github.com/osmait/notificationservice/internas/service"
 )
 
@@ -48,11 +49,58 @@ type Client struct {
 	send chan []byte
 }
 
-// readPump pumps messages from the websocket connection to the hub.
-//
-// The application runs readPump in a per-connection goroutine. The application
-// ensures that there is at most one reader on a connection by executing all
-// reads from this goroutine.
+func handleNewFollow(message any, id string, msg []byte, c *Client) {
+
+	info, err := json.Marshal(message)
+	if err != nil {
+		log.Println(err)
+
+		return
+	}
+	follower, err := utils.UnmarshalFollowe(info)
+	if err != nil {
+		log.Println(err)
+		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		return
+	}
+
+	if follower.FollowingID == id {
+		messageb := bytes.TrimSpace(bytes.Replace(msg, newline, space, -1))
+		c.hub.broadcast <- messageb
+
+	}
+
+}
+
+func handleNewPost(message any, id string, msg []byte, c *Client) {
+
+	info, err := json.Marshal(message)
+	if err != nil {
+		log.Println(err)
+		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		return
+	}
+	data, err := utils.UnmarshalData(info)
+	if err != nil {
+		log.Println(err)
+		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		return
+	}
+
+	if containsElement(data.Follower, id) {
+
+		messageb := bytes.TrimSpace(bytes.Replace(msg, newline, space, -1))
+		c.hub.broadcast <- messageb
+
+	}
+
+}
+
+var patternHandlers = map[string]func(any, string, []byte, *Client){
+	"new-follow": handleNewFollow,
+	"new-post":   handleNewPost,
+}
+
 func (c *Client) readPump(notificationservice service.NotificationService, id string) {
 	defer func() {
 		c.hub.unregister <- c
@@ -65,55 +113,14 @@ func (c *Client) readPump(notificationservice service.NotificationService, id st
 	msgs := notificationservice.GetMessages()
 	var message Message
 
-	// client := NewClient(hub, socket)
-	// hub.register <- client
 	for msg := range msgs {
-
 		json.Unmarshal(msg.Body, &message)
-
-		if message.Pattern == "new-follow" {
-			if val, ok := message.Data.(map[string]interface{}); ok {
-				followingId, _ := val["followingId"]
-
-				if followingId == id {
-
-					messageb := bytes.TrimSpace(bytes.Replace(msg.Body, newline, space, -1))
-					c.hub.broadcast <- messageb
-
-				}
-
-			}
-
-		}
-		if message.Pattern == "new-post" {
-
-			if val, ok := message.Data.(map[string]interface{}); ok {
-
-				follower, _ := val["follower"].([]interface{})
-
-				followerSlice := make([]string, len(follower))
-				for i, v := range follower {
-					followerSlice[i] = v.(string)
-				}
-
-				if containsElement(followerSlice, id) {
-
-					messageb := bytes.TrimSpace(bytes.Replace(msg.Body, newline, space, -1))
-					c.hub.broadcast <- messageb
-
-				}
-
-			}
-		}
+		handler := patternHandlers[message.Pattern]
+		handler(&message.Data, id, msg.Body, c)
 
 	}
 }
 
-// writePump pumps messages from the hub to the websocket connection.
-//
-// A goroutine running writePump is started for each connection. The
-// application ensures that there is at most one writer to a connection by
-// executing all writes from this goroutine.
 func (c *Client) writePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {

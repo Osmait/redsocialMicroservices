@@ -5,8 +5,13 @@ import { useNotification } from "../store/state";
 
 export const NotificationList = () => {
   const message = useNotification((state) => state.messages);
-
-  console.log(message);
+  // const setNotificationLen = useNotification(
+  //   (state) => state.setNotificationLen
+  // );
+  const reset = useNotification((state) => state.reset);
+  useEffect(() => {
+    reset();
+  }, []);
   return (
     <div className=" flex  flex-col w-2/5 border-1 border-zinc-500 border-t-0">
       {message.map((ms: any) => (

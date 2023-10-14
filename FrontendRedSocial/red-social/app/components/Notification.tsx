@@ -12,6 +12,7 @@ export const Notification = () => {
   const setNotificationLen = useNotification(
     (state) => state.setNotificationLen
   );
+  const reset = useNotification((state) => state.reset);
 
   useEffect(() => {
     const newSocket = new WebSocket(
@@ -35,25 +36,27 @@ export const Notification = () => {
       newSocket.close();
     };
   });
-  // setNotificationLen(notifications.length);
+  setNotificationLen(notifications.length);
 
   return (
     <div className=" flex  gap-3">
-      <Badge
-        content={notifications.length > 0 ? notifications.length : ""}
-        shape="circle"
-        color="danger"
-      >
-        <Button
+      <Link href={"/notifications"} onClick={() => reset()}>
+        <Badge
+          content={notifications.length > 0 ? notificationLen : ""}
+          shape="circle"
+          color="danger"
+        >
+          {/* <Button
           radius="full"
           isIconOnly
           aria-label="more than 99 notifications"
           variant="light"
-        >
+        > */}
           <IconBellFilled size={24} />
-        </Button>
-      </Badge>
-      <Link href={"/notifications"}>Notificaciones</Link>
+          {/* </Button> */}
+        </Badge>
+        Notificaciones
+      </Link>
     </div>
   );
 };
