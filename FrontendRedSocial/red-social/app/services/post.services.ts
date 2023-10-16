@@ -1,10 +1,9 @@
-import { revalidateTag } from "next/cache";
 import { CommentRequest, PostRequest, PostResponse } from "../../types";
-import { redirect } from "next/navigation";
 
+
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzY0NjQzNH0.Xo9JZjLCAVxSl5qJ0US5yU0b6IU9v7u5kNrgy3zukjM"
 export async function findProfilePost(id: string): Promise<PostResponse[]> {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
+  const token = TOKEN
   const options: any = {
     cache: "no-cache",
     headers: {
@@ -24,8 +23,7 @@ export async function findProfilePost(id: string): Promise<PostResponse[]> {
 }
 
 export async function createPost(post: PostRequest) {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
+  const token = TOKEN
   const options = {
     method: "POST",
     headers: {
@@ -45,8 +43,7 @@ export async function createPost(post: PostRequest) {
 }
 
 export async function createComment(post: CommentRequest) {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
+  const token = TOKEN
   const options: any = {
     method: "POST",
     headers: {
@@ -57,15 +54,14 @@ export async function createComment(post: CommentRequest) {
   };
 
   try {
-    const response = await fetch("http://localhost:8000/comment", options);
+    const response = await fetch("http://localhost:5000/api/comment", options);
     console.log(response.status);
   } catch (error) {
     console.log(error);
   }
 }
 export async function findOnePost(id: string): Promise<PostResponse> {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzM4MTIzM30.MhVEq8K0x8ovWbvxcNSovWKkXr8FGAdI5tgqLHvXsrY";
+  const token = TOKEN
   const options: any = {
     cache: "no-cache",
     headers: {
