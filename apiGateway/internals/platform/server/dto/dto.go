@@ -59,8 +59,8 @@ type Post struct {
 	CreatedAt string `json:"createdAt"`
 }
 
-func UnmarshalComment(data []byte) (Comment, error) {
-	var r Comment
+func UnmarshalComment(data []byte) ([]Comment, error) {
+	var r []Comment
 	err := json.Unmarshal(data, &r)
 	return r, err
 }

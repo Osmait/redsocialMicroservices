@@ -12,7 +12,6 @@ import (
 )
 
 func GetUser(c config.Config) gin.HandlerFunc {
-
 	return func(ctx *gin.Context) {
 		userUrl := c.UserUrl
 		// Realizar una solicitud GET al servicio backend 1
@@ -24,7 +23,6 @@ func GetUser(c config.Config) gin.HandlerFunc {
 
 		// Devolver la respuesta del servicio backend 1
 		ctx.JSON(http.StatusOK, responseBody)
-
 	}
 }
 
@@ -51,13 +49,11 @@ func CreateUser(c config.Config) gin.HandlerFunc {
 			return
 		}
 		ctx.Status(http.StatusCreated)
-
 	}
 }
 
 func CreatePost(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
 		postUrl := c.PostUrl
 
 		id, ok := ctx.Get("X-User-Id")
@@ -94,7 +90,6 @@ func CreatePost(c config.Config) gin.HandlerFunc {
 			return
 		}
 		ctx.Status(http.StatusCreated)
-
 	}
 }
 
@@ -109,7 +104,6 @@ func FindPost(c config.Config) gin.HandlerFunc {
 			return
 		}
 		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s%s", postUrl, id), token)
-
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -121,12 +115,10 @@ func FindPost(c config.Config) gin.HandlerFunc {
 		}
 
 		ctx.JSON(http.StatusOK, postResponse)
-
 	}
 }
 
 func FindFolowing(c config.Config) gin.HandlerFunc {
-
 	return func(ctx *gin.Context) {
 		followeURL := c.FolloweUrl
 		token, ok := ctx.Get("X-token")
@@ -147,7 +139,6 @@ func FindFolowing(c config.Config) gin.HandlerFunc {
 		}
 
 		ctx.JSON(http.StatusOK, followinResponse)
-
 	}
 }
 
@@ -171,7 +162,6 @@ func FindFollowers(c config.Config) gin.HandlerFunc {
 			return
 		}
 		ctx.JSON(http.StatusOK, followeResponse)
-
 	}
 }
 
@@ -203,6 +193,30 @@ func Follow(c config.Config) gin.HandlerFunc {
 			return
 		}
 		ctx.Status(http.StatusCreated)
+	}
+}
 
+func GetComment(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		commentUrl := c.CommentUrl
+		id := ctx.Param("id")
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+
+		reponseComment, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s/%s", commentUrl, id), token)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		comments, err := dto.UnmarshalComment(reponseComment)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		ctx.JSON(http.StatusOK, comments)
 	}
 }

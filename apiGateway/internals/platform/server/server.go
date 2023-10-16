@@ -35,6 +35,7 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 	srv.registerRoutes()
 	return serverContext(ctx), srv
 }
+
 func (s *Server) registerRoutes() {
 	s.Engine.Use(middleware.CheckAuthMiddleware())
 
@@ -47,8 +48,9 @@ func (s *Server) registerRoutes() {
 	s.Engine.POST("/api/follower", handlers.Follow(s.Config))
 	s.Engine.GET("/api/following/:id", handlers.FindFolowing(s.Config))
 	s.Engine.GET("/api/follower/:id", handlers.FindFollowers(s.Config))
-
+	s.Engine.GET("/api/comment/:id", handlers.GetComment(s.Config))
 }
+
 func (s *Server) Run(ctx context.Context) error {
 	log.Println("Server running on", s.httpAddr)
 
@@ -77,7 +79,6 @@ func serverContext(ctx context.Context) context.Context {
 	go func() {
 		<-c
 		cancel()
-
 	}()
 
 	return ctx
