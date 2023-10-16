@@ -61,8 +61,8 @@ type Post struct {
 
 type CommentRequest struct {
 	Content string `json:"content"`
-	UserID  string `json:"user_id"`
-	PostID  string `json:"post_id"`
+	UserID  string `json:"userId"`
+	PostID  string `json:"postId"`
 }
 
 func unmarshalCommentRequest(data []byte) (CommentRequest, error) {
