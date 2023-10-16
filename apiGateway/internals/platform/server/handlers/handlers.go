@@ -220,3 +220,30 @@ func GetComment(c config.Config) gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, comments)
 	}
 }
+
+func CreateComment(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		commenturl := c.CommentUrl
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+		var request dto.CommentRequest
+		err := ctx.BindJSON(&request)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
+		data, err := request.Marshal()
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
+		err = utils.MakeBackendRequest(token, commenturl, data)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+		}
+		ctx.Status(http.StatusCreated)
+	}
+}

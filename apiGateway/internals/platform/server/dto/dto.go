@@ -59,6 +59,22 @@ type Post struct {
 	CreatedAt string `json:"createdAt"`
 }
 
+type CommentRequest struct {
+	Content string `json:"content"`
+	UserID  string `json:"user_id"`
+	PostID  string `json:"post_id"`
+}
+
+func unmarshalCommentRequest(data []byte) (CommentRequest, error) {
+	var r CommentRequest
+	err := json.Unmarshal(data, &r)
+	return r, err
+}
+
+func (r *CommentRequest) Marshal() ([]byte, error) {
+	return json.Marshal(r)
+}
+
 func UnmarshalComment(data []byte) ([]Comment, error) {
 	var r []Comment
 	err := json.Unmarshal(data, &r)
