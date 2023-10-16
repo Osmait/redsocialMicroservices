@@ -48,6 +48,7 @@ func (s *Server) registerRoutes() {
 	s.Engine.POST("/api/follower", handlers.Follow(s.Config))
 	s.Engine.GET("/api/following/:id", handlers.FindFolowing(s.Config))
 	s.Engine.GET("/api/follower/:id", handlers.FindFollowers(s.Config))
+
 	s.Engine.GET("/api/comment/:id", handlers.GetComment(s.Config))
 	s.Engine.POST("/api/comment", handlers.CreateComment(s.Config))
 }
