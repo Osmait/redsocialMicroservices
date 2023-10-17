@@ -67,7 +67,7 @@ const SearchInput = () => {
                 }
               />
               <li>
-                <Link href={`/profile/${user.id}`}>
+                <Link href={`/home/profile/${user.id}`}>
                   {user.name} {user.lastName}
                 </Link>
               </li>

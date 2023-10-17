@@ -1,13 +1,30 @@
-import CardPost from "../../components/card-post";
-import { findProfilePost } from "../../services/post.services";
-import { findProfile } from "../../services/userService";
-import { findFollower, findFollowing } from "../../services/followerService";
-import { ImageProfile } from "../../components/imageProfile";
+// import CardPost from "../components/card-post";
+// import { findProfilePost } from "../services/post.services";
+// import { findProfile } from "../services/userService";
+// import { findFollower, findFollowing } from "../../services/followerService";
+// import { ImageProfile } from "../components/imageProfile";
+//
+// import { FollowSection } from "../components/followSection";
 
-import { FollowSection } from "../../components/followSection";
+import CardPost from "@/app/components/card-post";
+import { FollowSection } from "@/app/components/followSection";
+import { ImageProfile } from "@/app/components/imageProfile";
+import { findFollower, findFollowing } from "@/app/services/followerService";
+import { findProfilePost } from "@/app/services/post.services";
+import { findProfile } from "@/app/services/userService";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
+//
 export default async function Page({ params }: { params: { id: string } }) {
-  const posts = await findProfilePost(params.id);
+  const token = cookies().get("x-token");
+  if (!token) {
+    redirect("/login")
+  }
+
+
+
+  const posts = await findProfilePost(params.id, token.value);
   const following = await findFollowing(params.id);
   const profile = await findProfile(params.id);
   const follower = await findFollower(params.id);
