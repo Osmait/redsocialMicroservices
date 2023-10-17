@@ -10,6 +10,7 @@ type Config struct {
 	PostUrl    string
 	FolloweUrl string
 	CommentUrl string
+	FeedUrl    string
 }
 
 func NewConfig() *Config {
@@ -25,7 +26,6 @@ func NewConfig() *Config {
 	followeHost := os.Getenv("FOLLOWER_HOST")
 
 	userUrl := fmt.Sprintf("http://%s:%s/user", userHost, userPort)
-
 	postUrl := fmt.Sprintf("http://%s:%s/post/", postHost, postport)
 	commentsUrl := fmt.Sprintf("http://%s:%s/comment", commentHost, commentport)
 	followeURL := fmt.Sprintf("http://%s:%s", followeHost, followerPort)

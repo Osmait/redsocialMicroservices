@@ -118,6 +118,31 @@ func FindPost(c config.Config) gin.HandlerFunc {
 	}
 }
 
+func GetFeed(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id := ctx.Param("id")
+		feedUrl := fmt.Sprintf("%sfeed/%s", c.PostUrl, id)
+
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+
+		response, err := utils.MakeBackendGetRequest(feedUrl, token)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		feed, err := dto.UnmarshalPostResponse(response)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		ctx.JSON(http.StatusOK, feed)
+	}
+}
+
 func FindFolowing(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		followeURL := c.FolloweUrl
