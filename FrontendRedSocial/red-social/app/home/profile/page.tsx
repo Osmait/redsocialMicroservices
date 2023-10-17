@@ -1,8 +1,14 @@
-import CardPost from "../components/card-post";
-import { findProfilePost } from "../services/post.services";
+import CardPost from "../../components/card-post";
+import { findMyProfilePost } from "../../services/post.services";
+import { cookies } from "next/headers";
 
 export default async function ProfilePage() {
-  const posts = await findProfilePost("1");
+  const token = cookies().get("x-token");
+
+  if (!token) {
+    return
+  }
+  const posts = await findMyProfilePost(token.value);
 
   return (
     <div className=" flex gap-4 flex-col w-2/5 border-1 border-zinc-500 border-t-0">

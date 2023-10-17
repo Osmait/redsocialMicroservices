@@ -7,6 +7,7 @@ import { CommentRequest, PostRequest } from "../../types";
 import { createComment, createPost } from "../services/post.services";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@nextui-org/input";
+import Cookies from "js-cookie";
 
 interface Props {
   id: string;
@@ -29,7 +30,12 @@ export function ComposeComment({ id }: Props) {
       postId: id,
     };
 
-    await createComment(data);
+    const token = Cookies.get("x-token");
+    if (!token) {
+      return;
+    }
+
+    await createComment(data, token);
     postFrom.current.reset();
     router.refresh();
   };

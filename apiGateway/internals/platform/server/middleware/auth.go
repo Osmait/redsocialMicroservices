@@ -8,12 +8,9 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var (
-	NO_AUTH_NEEDED = []string{
-
-		"user",
-	}
-)
+var NO_AUTH_NEEDED = []string{
+	"user",
+}
 
 func shoulCheckToken(route string) bool {
 	for _, p := range NO_AUTH_NEEDED {

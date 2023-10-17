@@ -3,13 +3,17 @@ import { Button, Input } from "@nextui-org/react";
 import React, { useRef, useState } from "react";
 import { EyeSlashFilledIcon } from "./eyeSlashFilledIcon";
 import { EyeFilledIcon } from "./eyesFilledIcon";
-import { useRouter } from "next/router";
+
 import { loginService } from "../services/AuthService";
+import { useRouter } from "next/navigation";
+import { useNotification } from "../store/state";
+import Cookies from "js-cookie";
 
 export const LoginForm = () => {
   const [isVisible, setIsVisible] = useState(false);
   const loginFrom = useRef<HTMLFormElement>(null);
-  //   const router = useRouter();
+  const router = useRouter();
+  const setUser = useNotification((state) => state.setUser);
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,13 +29,14 @@ export const LoginForm = () => {
     };
     console.log(data);
     await loginService(data);
+    const token = Cookies.get("x-token");
 
-    const token = localStorage.getItem("x-token");
     if (!token) {
       throw Error("Login err");
     }
+
     loginFrom.current.reset();
-    // router.push("/");
+    router.push("/home");
   };
 
   const toggleVisibility = () => setIsVisible(!isVisible);

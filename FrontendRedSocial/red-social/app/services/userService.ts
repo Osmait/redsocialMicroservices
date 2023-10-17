@@ -8,7 +8,6 @@ export async function findUser(name: string): Promise<any[]> {
   //       cache: "no-cache",
   //     },
   //   };
-
   const response = await fetch(`http://localhost:8080/user/find?name=${name}`);
   const result = await response.json();
 

@@ -6,7 +6,7 @@ export const siteConfig = {
   navItems: [
     {
       label: "Inicio",
-      href: "/",
+      href: "/home",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@ export const siteConfig = {
 
     {
       label: "Perfil",
-      href: "/profile",
+      href: "/home/profile",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -33,10 +33,15 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 	srv.registerRoutes()
 	return serverContext(ctx), srv
 }
-func (s *Server) registerRoutes() {
 
+func (s *Server) registerRoutes() {
+	s.Engine.Use(cors.Default())
 	s.Engine.POST("/login", handlers.LoginHandler(s.AuthService))
+	s.Engine.GET("/health", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"status": "Up"})
+	})
 }
+
 func (s *Server) Run(ctx context.Context) error {
 	log.Println("Server running on", s.httpAddr)
 
@@ -54,7 +59,6 @@ func (s *Server) Run(ctx context.Context) error {
 	<-ctx.Done()
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), s.shutdownTimeout)
 	defer cancel()
-	s.Engine.Use(cors.Default())
 	return srv.Shutdown(ctxShutDown)
 }
 
@@ -65,7 +69,6 @@ func serverContext(ctx context.Context) context.Context {
 	go func() {
 		<-c
 		cancel()
-
 	}()
 
 	return ctx

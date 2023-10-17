@@ -7,6 +7,7 @@ import CardPost from "./card-post";
 
 import { createPost } from "../services/post.services";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 export interface Props {
   posts: PostResponse[];
 }
@@ -27,7 +28,12 @@ export function Feed({ posts }: Props) {
       userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
     };
 
-    await createPost(data);
+    const token = Cookies.get("x-token");
+    if (!token) {
+      return;
+    }
+
+    await createPost(data, token);
     console.log(data);
     router.refresh();
 

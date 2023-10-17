@@ -2,8 +2,10 @@ import { LoginForm } from "../components/loginForm";
 
 export default async function Login() {
   return (
-    <div>
-      <LoginForm />
-    </div>
+    <section className="flex justify-center">
+      <div>
+        <LoginForm />
+      </div>
+    </section>
   );
 }

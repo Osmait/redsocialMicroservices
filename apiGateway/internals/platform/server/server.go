@@ -32,18 +32,21 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 
 		shutdownTimeout: shutdownTimeout,
 	}
+
 	srv.registerRoutes()
 	return serverContext(ctx), srv
 }
 
 func (s *Server) registerRoutes() {
+	s.Engine.Use(cors.AllowAll())
 	s.Engine.Use(middleware.CheckAuthMiddleware())
 
 	s.Engine.GET("/api/user", handlers.GetUser(s.Config))
 	s.Engine.POST("/api/user", handlers.CreateUser(s.Config))
+	s.Engine.GET("/api/profile", handlers.GetProfile(s.Config))
 
 	s.Engine.POST("/api/post", handlers.CreatePost(s.Config))
-	s.Engine.GET("/api/post/:id", handlers.FindPost(s.Config))
+	s.Engine.GET("/api/post/", handlers.FindPost(s.Config))
 	s.Engine.GET("/api/feed/:id", handlers.GetFeed(s.Config))
 
 	s.Engine.POST("/api/follower", handlers.Follow(s.Config))
@@ -71,7 +74,6 @@ func (s *Server) Run(ctx context.Context) error {
 	<-ctx.Done()
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), s.shutdownTimeout)
 	defer cancel()
-	s.Engine.Use(cors.Default())
 	return srv.Shutdown(ctxShutDown)
 }
 

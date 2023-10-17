@@ -26,6 +26,30 @@ func GetUser(c config.Config) gin.HandlerFunc {
 	}
 }
 
+func GetProfile(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		userId, ok := ctx.Get("X-User-Id")
+		userUrl := fmt.Sprintf("%s/profile/%s", c.UserUrl, userId)
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+		responseBody, err := utils.MakeBackendGetRequest(userUrl, nil)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		user, err := dto.UnmarshalUser(responseBody)
+		if err != nil {
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+		fmt.Println("aquiii")
+
+		ctx.JSON(http.StatusOK, user)
+	}
+}
+
 func CreateUser(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userUrl := c.UserUrl
@@ -97,13 +121,17 @@ func FindPost(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// Realizar una solicitud GET al servicio backend 1
 		postUrl := c.PostUrl
-		id := ctx.Param("id")
 		token, ok := ctx.Get("X-token")
 		if !ok {
 			ctx.Status(http.StatusUnauthorized)
 			return
 		}
-		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s%s", postUrl, id), token)
+		userId, ok := ctx.Get("X-User-Id")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s%s", postUrl, userId), token)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
