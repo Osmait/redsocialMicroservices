@@ -1,9 +1,9 @@
 import { followRequest } from "../components/FollowButton";
 
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzY0NjQzNH0.Xo9JZjLCAVxSl5qJ0US5yU0b6IU9v7u5kNrgy3zukjM"
+const TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzY0NjQzNH0.Xo9JZjLCAVxSl5qJ0US5yU0b6IU9v7u5kNrgy3zukjM";
 
-export async function findFollowing(id: string): Promise<any[]> {
-  const token = TOKEN
+export async function findFollowing(id: string, token: string): Promise<any[]> {
   const options = {
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
@@ -14,7 +14,7 @@ export async function findFollowing(id: string): Promise<any[]> {
   };
 
   const response = await fetch(
-    "http://localhost:5000/api/following/2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+    "http://127.0.0.1:5000/api/following/2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
     options
   );
   const result = await response.json();
@@ -22,8 +22,7 @@ export async function findFollowing(id: string): Promise<any[]> {
   return result;
 }
 
-export async function findFollower(id: string): Promise<any[]> {
-  const token = TOKEN
+export async function findFollower(id: string, token: string): Promise<any[]> {
   const options = {
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
@@ -34,7 +33,7 @@ export async function findFollower(id: string): Promise<any[]> {
   };
 
   const response = await fetch(
-    "http://localhost:5000/api/follower/2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+    "http://127.0.0.1:5000/api/follower/2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
     options
   );
   const result = await response.json();
@@ -42,8 +41,7 @@ export async function findFollower(id: string): Promise<any[]> {
   return result;
 }
 
-export async function postFollow(followRequest: followRequest) {
-  const token = TOKEN
+export async function postFollow(followRequest: followRequest, token: string) {
   const options = {
     method: "POST",
     headers: {
@@ -53,13 +51,10 @@ export async function postFollow(followRequest: followRequest) {
     next: { revalidate: 0 },
     body: JSON.stringify(followRequest),
   };
-  const response = await fetch("http://localhost:3001/follower/", options);
+  const response = await fetch("http://127.0.0.1:3001/follower/", options);
 
-  console.log(response.status);
 }
-
-export async function unFollow(followRequest: followRequest) {
-  const token = TOKEN
+export async function unFollow(followRequest: followRequest, token: string) {
   const options = {
     method: "DELETE",
     headers: {
@@ -69,7 +64,7 @@ export async function unFollow(followRequest: followRequest) {
     next: { revalidate: 0 },
     body: JSON.stringify(followRequest),
   };
-  const response = await fetch("http://localhost:3001/unfollow/", options);
+  const response = await fetch("http://127.0.0.1:3001/unfollow/", options);
 
   console.log(response.status);
 }

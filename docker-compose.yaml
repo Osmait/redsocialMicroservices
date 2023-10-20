@@ -1,15 +1,14 @@
 services:
-
   rabbitmq-notification:
     image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq'
+    container_name: "rabbitmq"
     ports:
-        - 5672:5672
-        - 15672:15672
+      - 5672:5672
+      - 15672:15672
     volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-        
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
   auth-service:
     build:
       context: AuthService/
@@ -17,24 +16,24 @@ services:
     ports:
       - 8001:8001
 
-# Api GateWay
-  # api-gateway:
-  #   build:
-  #     context: apiGateway/
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 5000:5000
-  #   environment:
-  #     - USER_HOST=user-service
-  #     - USER_PORT=8080 
-  #     - POST_HOST=post-service
-  #     - POST_PORT=3000
-  #     - COMMENT_HOST=comment-service
-  #     - COMMENT_PORT=8000 
-  #     - FOLLOWER_HOST=follower-service
-  #     - FOLLOWER_PORT=3001
+  # Api GateWay
+  api-gateway:
+    build:
+      context: apiGateway/
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - USER_HOST=user-service
+      - USER_PORT=8080
+      - POST_HOST=post-service
+      - POST_PORT=3000
+      - COMMENT_HOST=comment-service
+      - COMMENT_PORT=8000
+      - FOLLOWER_HOST=follower-service
+      - FOLLOWER_PORT=3001
 
-# UserService
+  # UserService
   postgres-user:
     image: postgres:13
     environment:
@@ -60,9 +59,9 @@ services:
       - 8080:8080
     depends_on:
       - postgres-user
-    restart: always 
+    restart: always
 
-# PostService
+  # PostService
 
   # postgres-post:
   #   image: postgres:13
@@ -88,14 +87,11 @@ services:
       - USER_URL=comment-service
     ports:
       - 3000:3000
-    restart: always 
+    restart: always
     # depends_on:
     #   - postgres-post
- 
 
-
-
-# CommentService
+  # CommentService
 
   comment-service:
     build:
@@ -103,7 +99,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8000:8000
-    restart: always 
+    restart: always
 
   # postgres-comment:
   #   image: postgres:13
@@ -116,11 +112,10 @@ services:
   #   volumes:
   #     - ./postgres_data:/var/lib/postgresql/data
 
-
-    # Notification Service
+  # Notification Service
 
   notification-service:
-    build: 
+    build:
       context: notificationService/
       dockerfile: Dockerfile
     environment:
@@ -129,26 +124,26 @@ services:
       - 8083:8083
     depends_on:
       - rabbitmq-notification
-    restart: always 
+    restart: always
 
-# Follower Service
+  # Follower Service
   follower-service:
-      build: 
-        context: followersService/follower-service
-        dockerfile: Dockerfile
-      environment:
-        - DB_PORT=5432
-        - DB_DATABASE=my_store
-        - DB_USER=osmait
-        - DB_PASSWORD=admin123
-        - DB_HOSTNAME=postgres-user
-        - USER_URL="http//user-service:8080"
-      ports:
-        - 3001:3001
-      # depends_on:
-      
-      #   - postgres-follower
-      restart: always 
+    build:
+      context: followersService/follower-service
+      dockerfile: Dockerfile
+    environment:
+      - DB_PORT=5432
+      - DB_DATABASE=my_store
+      - DB_USER=osmait
+      - DB_PASSWORD=admin123
+      - DB_HOSTNAME=postgres-user
+      - USER_URL="http//user-service:8080"
+    ports:
+      - 3001:3001
+    # depends_on:
+
+    #   - postgres-follower
+    restart: always
 
   # postgres-follower:
   #     image: postgres:13
@@ -160,13 +155,3 @@ services:
   #       - 5435:5435
   #     volumes:
   #       - ./postgres_data:/var/lib/postgresql/data
-
-
-  
-      
-      
-
-
-
-    
-

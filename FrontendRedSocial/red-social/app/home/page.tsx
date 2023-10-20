@@ -3,12 +3,11 @@ import { cookies } from "next/headers";
 import { Feed } from "../components/feed";
 import { findProfilePost } from "../services/post.services";
 
-
 export default async function Home() {
   const token = cookies().get("x-token");
 
   if (!token) {
-    return
+    return;
   }
   const options: any = {
     headers: {
@@ -16,7 +15,7 @@ export default async function Home() {
       Authorization: `Bearer ${token?.value}`,
     },
   };
-  const response = await fetch("http://localhost:5000/api/profile", options);
+  const response = await fetch("http://127.0.0.1:5000/api/profile", options);
   const user = await response.json();
 
   const posts = await findProfilePost(user?.id, token.value);

@@ -8,7 +8,7 @@ export async function findUser(name: string): Promise<any[]> {
   //       cache: "no-cache",
   //     },
   //   };
-  const response = await fetch(`http://localhost:8080/user/find?name=${name}`);
+  const response = await fetch(`http://127.0.0.1:8080/user/find?name=${name}`);
   const result = await response.json();
 
   return result;
@@ -25,7 +25,7 @@ export async function findProfile(id: string): Promise<any> {
   //     },
   //   };
 
-  const response = await fetch(`http://localhost:8080/user/profile/${id}`);
+  const response = await fetch(`http://127.0.0.1:8080/user/profile/${id}`);
   const result = await response.json();
 
   return result;

@@ -1,8 +1,8 @@
 "use client";
-import { Button } from "@nextui-org/react";
 import React from "react";
 import { postFollow } from "../services/followerService";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export interface followRequest {
   followingId: string;
@@ -15,11 +15,16 @@ type Props = {
   setFollow: any;
 };
 
-export const FollowButton = ({ followRequest, isFollow, setFollow }: Props) => {
+export const FollowButton = ({ followRequest, setFollow }: Props) => {
+  const token = Cookies.get("x-token");
+  if (!token) {
+    return
+  }
+
   const router = useRouter();
-  console.log(followRequest);
+
   const handlerFollow = async () => {
-    await postFollow(followRequest);
+    await postFollow(followRequest, token);
     setFollow(true);
     router.refresh();
   };

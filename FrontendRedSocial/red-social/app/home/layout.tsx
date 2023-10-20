@@ -14,9 +14,8 @@ export default async function HomeLayout({
 }) {
   const token = cookies().get("x-token");
   if (!token) {
-    redirect("/login")
+    redirect("/login");
   }
-
 
   const options: any = {
     headers: {
@@ -25,9 +24,9 @@ export default async function HomeLayout({
     },
   };
 
-  const response = await fetch("http://localhost:5000/api/profile", options);
+  const response = await fetch("http://127.0.0.1:5000/api/profile", options);
   const user = await response.json();
-  console.log(user)
+  console.log(user);
 
   return (
     <section className="flex justify-center">

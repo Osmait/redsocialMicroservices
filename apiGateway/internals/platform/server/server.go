@@ -46,6 +46,7 @@ func (s *Server) registerRoutes() {
 	s.Engine.GET("/api/profile", handlers.GetProfile(s.Config))
 
 	s.Engine.POST("/api/post", handlers.CreatePost(s.Config))
+	s.Engine.GET("/api/post/:id", handlers.FindPostById(s.Config))
 	s.Engine.GET("/api/post/", handlers.FindPost(s.Config))
 	s.Engine.GET("/api/feed/:id", handlers.GetFeed(s.Config))
 

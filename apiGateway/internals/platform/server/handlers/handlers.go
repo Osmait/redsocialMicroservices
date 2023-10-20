@@ -146,6 +146,35 @@ func FindPost(c config.Config) gin.HandlerFunc {
 	}
 }
 
+func FindPostById(c config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// Realizar una solicitud GET al servicio backend 1
+		postUrl := c.PostUrl
+		id := ctx.Param("id")
+		token, ok := ctx.Get("X-token")
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+		if !ok {
+			ctx.Status(http.StatusUnauthorized)
+			return
+		}
+		responseBody, err := utils.MakeBackendGetRequest(fmt.Sprintf("%s%s", postUrl, id), token)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		postResponse, err := dto.UnmarshalPostResponse(responseBody)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		ctx.JSON(http.StatusOK, postResponse)
+	}
+}
+
 func GetFeed(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id := ctx.Param("id")

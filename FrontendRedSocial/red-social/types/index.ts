@@ -36,3 +36,14 @@ export interface CommentRequest {
   userId: string;
   postId: string;
 }
+
+export interface User {
+  id: string
+  name: string
+  LastName: string
+  phone?: string
+  address: string
+  email: string
+  img?: string
+
+}
