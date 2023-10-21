@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const follower = await findFollower(params.id, token.value);
   const options = {
     headers: {
-      "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token?.value}`,
     },
   };
@@ -28,11 +28,13 @@ export default async function Page({ params }: { params: { id: string } }) {
   const response = await fetch("http://127.0.0.1:5000/api/profile", options);
   const user: User = await response.json();
 
-  const following = await findFollowing(params.id, token.value);
+  const following = await findFollowing(user.id, token.value);
 
   const listFollowing = following ? following.map((f) => f.id) : [];
+  console.log(listFollowing)
 
-  const isFollow = listFollowing.includes(user.id);
+  const isFollow = listFollowing.includes(params.id);
+  console.log(isFollow)
   const followReques = {
     followingId: params.id,
     followerId: user.id

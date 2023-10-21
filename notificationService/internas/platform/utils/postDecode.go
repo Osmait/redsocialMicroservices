@@ -14,7 +14,7 @@ func (r *DataClass) Marshal() ([]byte, error) {
 
 type DataClass struct {
 	Post     Post     `json:"post"`
-	Follower []string `json:"follower"`
+	Follower []string `json:"followers"`
 }
 
 type Post struct {

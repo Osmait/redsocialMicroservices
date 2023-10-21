@@ -21,15 +21,15 @@ type Message struct {
 	Data    Data   `json:"data"`
 }
 
-// type Data struct {
-// 	Post     `json:"post"`
-// 	Follower []string `json:"follower"`
-// }
-
 type Data struct {
-	FollowerID  string `json:"followerId"`
-	FollowingID string `json:"followingId"`
+	Post     `json:"post"`
+	Follower []string `json:"follower"`
 }
+
+// type Data struct {
+// 	FollowerID  string `json:"followerId"`
+// 	FollowingID string `json:"followingId"`
+// }
 
 type Post struct {
 	Content   string `json:"content"`
@@ -52,27 +52,27 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
-	// post := Post{
-	// 	Content:   "Este es el contenido del post",
-	// 	UserID:    "a5698235-a37b-4c70-ac46-a234f359ada0",
-	// 	ID:        "456",
-	// 	Deleted:   false,
-	// 	CreatedAt: "2023-10-09",
-	// }
+	post := Post{
+		Content:   "Este es el contenido del post",
+		UserID:    "a5698235-a37b-4c70-ac46-a234f359ada0",
+		ID:        "456",
+		Deleted:   false,
+		CreatedAt: "2023-10-09",
+	}
 
 	// Crear una instancia de Data con el post y una lista de seguidores
-	// data := Data{
-	// 	Post:     post,
-	// 	Follower: []string{"a5698235-a37b-4c70-ac46-a234f359ada0", "1", "2"},
-	// }
 	data := Data{
-		FollowerID:  "1",
-		FollowingID: "1",
+		Post:     post,
+		Follower: []string{"a5698235-a37b-4c70-ac46-a234f359ada0", "1", "2", "ec5707f4-32bc-48ce-a3bb-d1a3d3f674d2"},
 	}
+	// data := Data{
+	// 	FollowerID:  "1",
+	// 	FollowingID: "ec5707f4-32bc-48ce-a3bb-d1a3d3f674d2",
+	// }
 
 	// Crear una instancia de Message con el patrón y los datos
 	body := Message{
-		Pattern: "new-follow",
+		Pattern: "new-post",
 		Data:    data,
 	}
 

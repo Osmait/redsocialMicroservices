@@ -16,7 +16,7 @@ export const Notification = () => {
 
   useEffect(() => {
     const newSocket = new WebSocket(
-      "ws://localhost:8083/ws/a5698235-a37b-4c70-ac46-a234f359ada0"
+      "ws://localhost:8083/ws/ec5707f4-32bc-48ce-a3bb-d1a3d3f674d2"
     );
     newSocket.onopen = () => {
       console.log("Conexión WebSocket abierta");

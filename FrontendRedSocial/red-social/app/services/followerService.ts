@@ -1,7 +1,5 @@
 import { followRequest } from "../components/FollowButton";
 
-const TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjNTcwN2Y0LTMyYmMtNDhjZS1hM2JiLWQxYTNkM2Y2NzRkMiIsImV4cCI6MTY5NzY0NjQzNH0.Xo9JZjLCAVxSl5qJ0US5yU0b6IU9v7u5kNrgy3zukjM";
 
 export async function findFollowing(id: string, token: string): Promise<any[]> {
   const options = {
@@ -14,7 +12,8 @@ export async function findFollowing(id: string, token: string): Promise<any[]> {
   };
 
   const response = await fetch(
-    "http://127.0.0.1:5000/api/following/2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+    `http://127.0.0.1:5000/api/following/${id}`,
+
     options
   );
   const result = await response.json();
@@ -33,7 +32,7 @@ export async function findFollower(id: string, token: string): Promise<any[]> {
   };
 
   const response = await fetch(
-    "http://127.0.0.1:5000/api/follower/2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+    `http://127.0.0.1:5000/api/follower/${id}`,
     options
   );
   const result = await response.json();

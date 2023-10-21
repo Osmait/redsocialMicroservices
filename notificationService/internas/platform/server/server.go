@@ -36,15 +36,16 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 
 	return serverContext(ctx), srv
 }
-func (s *Server) registerRoutes() {
 
+func (s *Server) registerRoutes() {
+	s.Engine.Use(cors.AllowAll())
 	// s.Engine.Use(middleware.CheckAuthMiddleware())
 
 	// s.Engine.GET("/ws/:id", handlers.Notification(s.notificationService))
 	// s.Engine.GET("/ws/:id", s.Hub.HandleWebSocket(s.notificationService))
 	s.Engine.GET("/ws/:id", websocket.HandlerWs(s.Hub, s.notificationService))
-
 }
+
 func (s *Server) Run(ctx context.Context) error {
 	log.Println("Server running on", s.httpAddr)
 
@@ -63,7 +64,6 @@ func (s *Server) Run(ctx context.Context) error {
 	<-ctx.Done()
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), s.shutdownTimeout)
 	defer cancel()
-	s.Engine.Use(cors.Default())
 	return srv.Shutdown(ctxShutDown)
 }
 
@@ -74,7 +74,6 @@ func serverContext(ctx context.Context) context.Context {
 	go func() {
 		<-c
 		cancel()
-
 	}()
 
 	return ctx

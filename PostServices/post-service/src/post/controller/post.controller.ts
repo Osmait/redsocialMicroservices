@@ -20,7 +20,7 @@ export class PostController {
   constructor(
     private postService: PostService,
     @Inject('POST') private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   @Get('/:id')
   public getPost(
@@ -49,6 +49,7 @@ export class PostController {
     this.postService.created(post);
 
     const followers = await this.postService.getFollower(userId);
+    console.log(followers)
     const postWithFollower: PostWithFollower = {
       post,
       followers,
