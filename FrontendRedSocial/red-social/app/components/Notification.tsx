@@ -4,6 +4,8 @@ import { IconBellFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useNotification } from "../store/state";
+import { User } from "@/types";
+import Cookies from "js-cookie";
 
 export const Notification = () => {
   const notifications = useNotification((state) => state.messages);
@@ -13,10 +15,32 @@ export const Notification = () => {
     (state) => state.setNotificationLen
   );
   const reset = useNotification((state) => state.reset);
+  const token = Cookies.get("x-token");
+  if (!token) {
+    return
+  }
+
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const [user, setUser] = useState<User>()
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch("http://127.0.0.1:5000/api/profile", options);
+      const user: User = await response.json();
+      setUser(user)
+    }
+    fetchUser()
+  }, [])
+
+
 
   useEffect(() => {
     const newSocket = new WebSocket(
-      "ws://localhost:8083/ws/ec5707f4-32bc-48ce-a3bb-d1a3d3f674d2"
+      `ws://localhost:8083/ws/${user?.id}`
     );
     newSocket.onopen = () => {
       console.log("Conexión WebSocket abierta");
@@ -40,7 +64,7 @@ export const Notification = () => {
 
   return (
     <div className=" flex  gap-3">
-      <Link href={"/notifications"} onClick={() => reset()}>
+      <Link href={"/home/notifications"} onClick={() => reset()}>
         <Badge
           content={notifications.length > 0 ? notificationLen : ""}
           shape="circle"

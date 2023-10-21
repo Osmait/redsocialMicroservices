@@ -12,27 +12,31 @@ export const NotificationList = () => {
   useEffect(() => {
     reset();
   }, []);
+  console.log(message)
   return (
     <div className=" flex  flex-col w-2/5 border-1 border-zinc-500 border-t-0">
       {message.map((ms: any) => (
-        <div key={ms.pattern === "new-post" ? ms.data.id : ms.data.followerId}>
-          {ms.pattern === "new-post" ? (
-            <Link href={`/post/${ms.data.id}`}>
+        <div key={ms.pattern === "new-Post" ? ms.data.post.id : ms.data.followerId}>
+          {ms.pattern === "new-Post" ? (
+            <Link href={`/home/post/${ms.data.post.id}`}>
               <div
                 className="p-6 border-b-1 border-zinc-500"
-                key={ms.data.content}
+                key={ms.data.post.content}
               >
                 <h1 className="border-b-1">
-                  {ms.pattern === "new-post" ? "New Post" : ""}
+                  {ms.pattern === "new-Post" ? "New Post" : ""}
                 </h1>
-                <h2>{ms.data.content}</h2>
+                <h2>{ms.data.post.content}</h2>
               </div>
             </Link>
           ) : (
             <div className="p-6 border-b-1 border-zinc-500">
-              <h1>New Follower</h1>
-              <p>{ms.data.followerId}</p>
-              <p>{ms.data.followingId}</p>
+              <Link href={`/home/profile/${ms.data.followerId}`}>
+                <h1>New Follower</h1>
+                <p>{ms.data.followerId}</p>
+                <p>{ms.data.followingId}</p>
+
+              </Link>
             </div>
           )}
         </div>
