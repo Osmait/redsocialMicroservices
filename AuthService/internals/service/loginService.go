@@ -38,5 +38,5 @@ func (s *AuthService) LoginService(loginRequest dtos.LoginRequest) (*string, err
 		return nil, err
 	}
 
-	return &token, nil
+	return token, nil
 }

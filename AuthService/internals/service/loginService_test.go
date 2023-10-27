@@ -41,7 +41,6 @@ func TestAuthService_LoginService(t *testing.T) {
 
 	// Configurar el comportamiento del mock
 	userRepository.On("GetUser", simulatedUser.Email).Return(simulatedUser, nil)
-
 	// Llamar a la función LoginService con datos simulados
 	loginRequest := dtos.LoginRequest{
 		Email:    "example@example.com",

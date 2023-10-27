@@ -19,7 +19,7 @@ func TestJwtCreate(t *testing.T) {
 	assert.NotEmpty(t, tokenString, "Expected the tokenString not to be empty")
 
 	// Decode the token to verify its content
-	token, err := jwt.ParseWithClaims(tokenString, &AppClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(*tokenString, &AppClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secreto"), nil
 	})
 

@@ -11,8 +11,7 @@ type AppClaims struct {
 	jwt.StandardClaims
 }
 
-func JwtCreate(id string) (string, error) {
-
+func JwtCreate(id string) (*string, error) {
 	claims := AppClaims{
 		UserId: id,
 		StandardClaims: jwt.StandardClaims{
@@ -23,7 +22,9 @@ func JwtCreate(id string) (string, error) {
 
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte("secreto"))
+	if err != nil {
+		return nil, err
+	}
 
-	return tokenString, err
-
+	return &tokenString, err
 }
