@@ -2,23 +2,24 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useNotification } from "../store/state";
+import { findProfile } from "../services/userService";
 
 export const NotificationList = () => {
   const message = useNotification((state) => state.messages);
   // const setNotificationLen = useNotification(
   //   (state) => state.setNotificationLen
   // );
+
+
   const reset = useNotification((state) => state.reset);
-  useEffect(() => {
-    reset();
-  }, []);
+
   console.log(message)
   return (
     <div className=" flex  flex-col w-2/5 border-1 border-zinc-500 border-t-0">
       {message.map((ms: any) => (
         <div key={ms.pattern === "new-Post" ? ms.data.post.id : ms.data.followerId}>
           {ms.pattern === "new-Post" ? (
-            <Link href={`/home/post/${ms.data.post.id}`}>
+            <Link href={`/home/post/${ms.data.post.id}`} >
               <div
                 className="p-6 border-b-1 border-zinc-500"
                 key={ms.data.post.content}

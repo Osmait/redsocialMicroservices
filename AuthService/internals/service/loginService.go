@@ -22,20 +22,21 @@ func NewAuthService(repository repository.Repository) *AuthService {
 	}
 }
 
-func (s *AuthService) LoginService(loginRequest dtos.LoginRequest) (string, error) {
-
+func (s *AuthService) LoginService(loginRequest dtos.LoginRequest) (*string, error) {
 	user, err := s.UserRepository.GetUser(loginRequest.Email)
+	if err != nil {
+		return nil, err
+	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	token, err := utils.JwtCreate(user.ID)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return token, nil
-
+	return &token, nil
 }
