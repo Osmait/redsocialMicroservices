@@ -48,12 +48,17 @@ describe('PostController', () => {
       post1.id = '12';
       post1.userId = '1';
       const expectedResult: PostResponse[] = [{ post: post1, comment }];
+      const token = '1';
+      const req = {
+        headers: {},
+      } as Request;
+      req.headers['token'] = token;
 
       jest.spyOn(postService, 'findAll').mockResolvedValue(expectedResult);
 
-      const result = await postController.getPost(userId, comment);
+      const result = await postController.getPost(userId, comment, req);
 
-      expect(postService.findAll).toHaveBeenCalledWith(userId);
+      expect(postService.findAll).toHaveBeenCalledWith(userId, token);
       expect(result).toEqual(expectedResult);
     });
   });

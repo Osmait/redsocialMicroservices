@@ -7,8 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,38 +15,37 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-     private UUID id;
-    @Column(nullable = false)
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(name = "last_name",nullable = false)
-    private String lastName;
+  @Column(name = "last_name", nullable = false)
+  private String lastName;
 
-    private String phone;
+  private String phone;
 
-    @Column(nullable = false)
-    private  String address;
+  @Column(nullable = false)
+  private String address;
 
-    @Column(nullable = false ,unique = true)
-    private  String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    private String img;
+  private String img;
 
-    @Column(nullable = false)
-    private  String password;
+  @Column(nullable = false)
+  private String password;
 
-    @Column(name = "deleted",columnDefinition = "boolean default false")
-    private  boolean deleted;
+  @Column(name = "deleted", columnDefinition = "boolean default false")
+  private boolean deleted;
 
-    @Column(name = "created_at")
-    @CreationTimestamp
-    private LocalDateTime createAt;
+  @Column(name = "created_at")
+  @CreationTimestamp
+  private LocalDateTime createAt;
 
-    @Column(name = "update_at")
-    @UpdateTimestamp
-    private LocalDateTime UpdateAt;
-
+  @Column(name = "update_at")
+  @UpdateTimestamp
+  private LocalDateTime UpdateAt;
 
 }

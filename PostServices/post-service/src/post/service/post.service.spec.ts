@@ -73,7 +73,7 @@ describe('PostService', () => {
       };
 
       jest.spyOn(httpService, 'get').mockReturnValue(of(mockCommentResponse));
-      const result = await postService.findAll(userId);
+      const result = await postService.findAll(userId, '1');
 
       expect(result.length).toBe(mockPostList.length);
       expect(httpService.get).toHaveBeenCalled();
@@ -100,7 +100,7 @@ describe('PostService', () => {
           config: undefined,
         },
         isAxiosError: false,
-        toJSON: function (): object {
+        toJSON: function(): object {
           throw new Error('Function not implemented.');
         },
       };
@@ -108,7 +108,7 @@ describe('PostService', () => {
         .spyOn(httpService, 'get')
         .mockReturnValue(throwError(() => mockError));
 
-      await expect(postService.findAll(userId)).rejects.toThrow(
+      await expect(postService.findAll(userId, '1')).rejects.toThrow(
         InternalServerErrorException,
       );
     });
