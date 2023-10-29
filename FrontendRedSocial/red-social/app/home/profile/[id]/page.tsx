@@ -44,10 +44,10 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className=" flex gap-4 flex-col w-2/5 border-1 border-zinc-500 border-t-0">
-      <ImageProfile name={profile.name} />
+      <ImageProfile userName={profile.name} />
       <div className="text-gray-600">
         {
-          followReques.followerId == followReques.followingId ? "" :
+          followReques.followerId === followReques.followingId ? "" :
             <FollowSection isFollow={isFollow} followRequet={followReques} />
         }
         <h1 className="text-white font-bold text-3xl">{`${profile.name} ${profile.LastName}`}</h1>

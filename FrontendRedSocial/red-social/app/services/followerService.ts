@@ -50,7 +50,7 @@ export async function postFollow(followRequest: followRequest, token: string) {
     next: { revalidate: 0 },
     body: JSON.stringify(followRequest),
   };
-  const response = await fetch("http://127.0.0.1:3001/follower/", options);
+  await fetch("http://127.0.0.1:3001/follower/", options);
 
 }
 export async function unFollow(followRequest: followRequest, token: string) {
@@ -63,7 +63,6 @@ export async function unFollow(followRequest: followRequest, token: string) {
     next: { revalidate: 0 },
     body: JSON.stringify(followRequest),
   };
-  const response = await fetch("http://127.0.0.1:3001/unfollow/", options);
+  await fetch("http://127.0.0.1:3001/unfollow/", options);
 
-  console.log(response.status);
 }

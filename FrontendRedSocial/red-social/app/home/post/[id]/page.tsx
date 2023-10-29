@@ -3,7 +3,6 @@ import CardComment2 from "../../../components/card-comment";
 import CardPost from "../../../components/card-post";
 import { ComposeComment } from "../../../components/compose-comment";
 import { findOnePost } from "../../../services/post.services";
-import { Redirect } from "../../../middleware/redirect";
 import { redirect } from "next/navigation";
 
 export default async function PostPage({ params }: { params: { id: string } }) {

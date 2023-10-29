@@ -14,7 +14,7 @@ export async function findMyProfilePost(
     },
   };
 
-  const response = await fetch(`http://127.0.0.1:5000/api/post`, options);
+  const response = await fetch('http://127.0.0.1:5000/api/post', options);
   const result = await response.json();
 
   return result;
@@ -43,7 +43,6 @@ export async function findProfilePost(
   token: string
 ): Promise<PostResponse[]> {
   console.log(id);
-  // const token = TOKEN;
   const options: any = {
     cache: "no-cache",
     headers: {
@@ -78,7 +77,7 @@ export async function createPost(post: PostRequest, token: string) {
 }
 
 export async function createComment(post: CommentRequest, token: string) {
-  const options: any = {
+  const options = {
     method: "POST",
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
@@ -88,7 +87,7 @@ export async function createComment(post: CommentRequest, token: string) {
   };
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/api/comment", options);
+    await fetch("http://127.0.0.1:5000/api/comment", options);
   } catch (error) {
     console.log(error);
   }

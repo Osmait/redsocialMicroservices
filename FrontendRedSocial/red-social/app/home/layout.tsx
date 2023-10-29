@@ -17,7 +17,7 @@ export default async function HomeLayout({
     redirect("/login");
   }
 
-  const options: any = {
+  const options = {
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
       Authorization: `Bearer ${token?.value}`,
