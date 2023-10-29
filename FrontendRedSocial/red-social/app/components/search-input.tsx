@@ -1,8 +1,9 @@
 "use client";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { findUser } from "../services/userService";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
+import { User } from "@/types";
 
 const SearchInput = () => {
   const [name, setName] = useState<string | null>(null);
@@ -39,10 +40,12 @@ const SearchInput = () => {
         viewBox="0 0 24 24"
         stroke="currentColor"
         fill="none"
+
       >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-        <path d="M21 21l-6 -6"></path>
+        <title>search logo</title>
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+        <path d="M21 21l-6 -6" />
       </svg>
       <input
         type="text"
@@ -54,7 +57,7 @@ const SearchInput = () => {
       />
       {isFocused && (
         <div className="absolute top-full left-0 mt-2 bg-black rounded-md shadow-sm shadow-zinc-500 w-full">
-          {listUser.map((user: any) => (
+          {listUser.map((user: User) => (
             <ul
               key={user.id}
               className="flex gap-1 mb-2 justify-start items-center"
@@ -63,12 +66,12 @@ const SearchInput = () => {
                 src={
                   user.img
                     ? user.img
-                    : `https://ui-avatars.com/api/?name=${user.name}+${user.lastName}`
+                    : `https://ui-avatars.com/api/?name=${user.name}+${user.LastName}`
                 }
               />
               <li>
                 <Link href={`/home/profile/${user.id}`}>
-                  {user.name} {user.lastName}
+                  {user.name} {user.LastName}
                 </Link>
               </li>
             </ul>

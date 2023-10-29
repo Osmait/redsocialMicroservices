@@ -19,16 +19,14 @@ export interface Props {
 }
 
 export default function CardPost({ post }: Props) {
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<User>();
   useEffect(() => {
     const getUser = async () => {
-
       const user = await findProfile(post.post.userId);
-      setUser(user)
-    }
-    getUser()
-
-  }, [])
+      setUser(user);
+    };
+    getUser();
+  }, []);
   return (
     <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none ">
       <CardHeader className="justify-between">

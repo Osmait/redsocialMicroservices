@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useRef } from "react";
 import { PostRequest, PostResponse } from "../../types";
 import { ComposePost } from "./compose-post";
@@ -40,7 +39,7 @@ export function Feed({ posts }: Props) {
     postFrom.current.reset();
   };
   return (
-    <div>
+    <div id="feed-id">
       <ComposePost postFrom={postFrom} handlerSubmit={handlerSubmit} />
       {posts.map((post) => (
         <CardPost key={post.post.id} post={post} />

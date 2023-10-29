@@ -1,5 +1,5 @@
 "use client";
-import { Badge, Button } from "@nextui-org/react";
+import { Badge } from "@nextui-org/react";
 import { IconBellFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -14,11 +14,10 @@ export const Notification = () => {
   const setNotificationLen = useNotification(
     (state) => state.setNotificationLen
   );
+
+  const [user, setUser] = useState<User>();
   const reset = useNotification((state) => state.reset);
   const token = Cookies.get("x-token");
-  if (!token) {
-    return
-  }
 
   const options = {
     headers: {
@@ -26,22 +25,20 @@ export const Notification = () => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const [user, setUser] = useState<User>()
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await fetch("http://127.0.0.1:5000/api/profile", options);
+      const response = await fetch(
+        "http://127.0.0.1:5000/api/profile",
+        options
+      );
       const user: User = await response.json();
-      setUser(user)
-    }
-    fetchUser()
-  }, [])
-
-
+      setUser(user);
+    };
+    fetchUser();
+  });
 
   useEffect(() => {
-    const newSocket = new WebSocket(
-      `ws://localhost:8083/ws/${user?.id}`
-    );
+    const newSocket = new WebSocket(`ws://localhost:8083/ws/${user?.id}`);
     newSocket.onopen = () => {
       console.log("Conexión WebSocket abierta");
     };

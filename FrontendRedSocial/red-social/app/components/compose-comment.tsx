@@ -3,8 +3,8 @@
 import { useRef } from "react";
 import { UserImage } from "../../components/user-image";
 import { PostButton } from "../../components/post-buttom";
-import { CommentRequest, PostRequest } from "../../types";
-import { createComment, createPost } from "../services/post.services";
+import { CommentRequest } from "../../types";
+import { createComment } from "../services/post.services";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@nextui-org/input";
 import Cookies from "js-cookie";
@@ -55,7 +55,7 @@ export function ComposeComment({ id }: Props) {
           rows={4}
           placeholder="¡¿Qué está pasando!?"
           className="bg-black"
-        ></Textarea>
+        />
         <PostButton />
       </div>
     </form>

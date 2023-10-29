@@ -9,7 +9,7 @@ export default async function Home() {
   if (!token) {
     return;
   }
-  const options: any = {
+  const options = {
     headers: {
       "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
       Authorization: `Bearer ${token?.value}`,

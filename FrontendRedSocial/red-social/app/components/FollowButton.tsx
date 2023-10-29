@@ -12,16 +12,17 @@ export interface followRequest {
 type Props = {
   followRequest: followRequest;
   isFollow: boolean;
-  setFollow: any;
+  setFollow: (b: boolean) => void;
 };
 
 export const FollowButton = ({ followRequest, setFollow }: Props) => {
-  const token = Cookies.get("x-token");
-  if (!token) {
-    return
-  }
 
   const router = useRouter();
+  const token = Cookies.get("x-token");
+  if (!token) {
+    throw new Error("Error token dont exist")
+  }
+
 
   const handlerFollow = async () => {
     await postFollow(followRequest, token);
@@ -30,7 +31,7 @@ export const FollowButton = ({ followRequest, setFollow }: Props) => {
   };
 
   return (
-    <button
+    <button type="button"
       onClick={handlerFollow}
       className="px-4 py-1 rounded-full font-semibold bg-transparent border border-gray-300 text-gray-300"
     >

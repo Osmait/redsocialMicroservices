@@ -1,37 +1,17 @@
 "use client";
 
-import { useRef } from "react";
 import { UserImage } from "../../components/user-image";
 import { PostButton } from "../../components/post-buttom";
-import { PostRequest } from "../../types";
-import { createPost } from "../services/post.services";
 
 import { Textarea } from "@nextui-org/input";
-import { useRouter } from "next/navigation";
 
-export function ComposePost({ postFrom, handlerSubmit }: any) {
-  // const router = useRouter();
-  // const postFrom = useRef<HTMLFormElement>(null);
+type Props = {
+  postFrom: React.RefObject<HTMLFormElement>,
+  handlerSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>
+}
 
-  // const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!postFrom.current) {
-  //     return;
-  //   }
 
-  //   const formData = new FormData(postFrom.current);
-
-  //   const data: PostRequest = {
-  //     content: formData.get("content") as string,
-  //     userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
-  //   };
-  //   router.refresh();
-
-  //   await createPost(data);
-  //   console.log(data);
-
-  //   postFrom.current.reset();
-  // };
+export function ComposePost({ postFrom, handlerSubmit }: Props) {
 
   return (
     <form
@@ -48,7 +28,7 @@ export function ComposePost({ postFrom, handlerSubmit }: any) {
           rows={4}
           placeholder="¡¿Qué está pasando!?"
           className="bg-black"
-        ></Textarea>
+        />
         <PostButton />
       </div>
     </form>

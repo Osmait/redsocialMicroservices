@@ -1,17 +1,15 @@
 "use client";
-import React, { use } from "react";
+import React from "react";
 import {
   Card,
   CardHeader,
   CardBody,
   CardFooter,
   Avatar,
-  Button,
 } from "@nextui-org/react";
 
-import { IconHeart, IconMessageCircle } from "@tabler/icons-react";
-import { ModalComment } from "../../components/modal-comment";
-import { Comment, PostResponse } from "../../types";
+import { IconHeart } from "@tabler/icons-react";
+import { Comment } from "../../types";
 import { findProfile } from "../services/userService";
 import Link from "next/link";
 
@@ -49,7 +47,7 @@ export default async function CardComment2({ comment }: Props) {
           <p>{comment.content}</p>
         </CardBody>
         <CardFooter className="gap-3">
-          <button>
+          <button type="button">
             <IconHeart className="w-4 h-4" color="#71767B" />
           </button>
           <div className="flex gap-1  text-zinc-500">

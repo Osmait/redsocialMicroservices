@@ -7,7 +7,8 @@ import Cookies from "js-cookie";
 type Props = {
   followRequest: followRequest;
   isFollow: boolean;
-  setFollow: any;
+  setFollow: (b: boolean) => void;
+
 };
 
 export const UnFollowButton = ({
@@ -16,7 +17,7 @@ export const UnFollowButton = ({
 }: Props) => {
   const token = Cookies.get("x-token");
   if (!token) {
-    return
+    throw new Error("Error Token Dont exist ")
   }
 
 
@@ -27,6 +28,7 @@ export const UnFollowButton = ({
   };
   return (
     <button
+      type="button"
       onClick={handlerFollow}
       className="px-4 py-1 rounded-full font-semibold bg-blue-500 border border-blue-500 text-white hover:bg-red-500 hover:border-red-500 hover:text-white transition duration-300 ease-in-out"
     >

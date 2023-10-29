@@ -12,6 +12,8 @@ def comment_service():
     return CommentService(mock_db)
 
 # Prueba para create utilizando Mock
+
+
 def test_create(comment_service):
     # Configura un Mock para el comentario
     mock_comment = Mock(spec=CommentDto)
@@ -33,21 +35,23 @@ def test_create(comment_service):
     assert result is None
 
 # Prueba para find_all_by_id utilizando Mock
+
+
 def test_find_all_by_id(comment_service):
     fake_comment_data = {
         "content": "Fake Comment Text",
         "user_id": "user123",
         "post_id": "post456",
     }
-    mock_comment = Comment(**fake_comment_data)    # Configura un Mock de Comment para simular la base de datos
- 
+    # Configura un Mock de Comment para simular la base de datos
+    mock_comment = Comment(**fake_comment_data)
 
     # Configura la función filter para devolver los comentarios simulados según el post_id
-    comment_service.db.query(Comment).filter(Comment.post_id == "post456").all.return_value = [mock_comment]
+    comment_service.db.query(Comment).filter(
+        Comment.post_id == "post456").all.return_value = [mock_comment]
 
     # Llama a la función find_all_by_id con un post_id específico
     comments = comment_service.find_all_by_id("post456")
 
     # Verifica que la función devuelva los comentarios correctos según el post_id
     assert len(comments) == 1
- 
