@@ -3,11 +3,12 @@ import { cookies } from "next/headers";
 import { Feed } from "../components/feed";
 import { findProfilePost } from "../services/post.services";
 
+import { redirect } from "next/navigation";
 export default async function Home() {
   const token = cookies().get("x-token");
 
   if (!token) {
-    return;
+    redirect("/login");;
   }
   const options = {
     headers: {
