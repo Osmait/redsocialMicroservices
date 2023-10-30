@@ -38,7 +38,7 @@ export default function CardPost({ post }: Props) {
             src={`https://unavatar.io/${user?.name}`}
           />
           <div className="flex gap-1 items-center justify-center">
-            <Link href={`/profile/${user?.id}`} className="hover:border-b-1">
+            <Link href={`/home/profile/${user?.id}`} className="hover:border-b-1">
               <h4 className="text-small font-semibold leading-none text-default-600">
                 {`${user?.name} ${user?.LastName}`}
               </h4>
@@ -49,12 +49,12 @@ export default function CardPost({ post }: Props) {
           </div>
         </div>
       </CardHeader>
-      <Link href={`/post/${post.post.id}`}>
+      <Link href={`/home/post/${post.post.id}`}>
         <CardBody className="px-3 py-0 text-small  text-white">
           <p>{post.post.content}</p>
         </CardBody>
         <CardFooter className="gap-3">
-          <button>
+          <button type="button">
             <IconHeart className="w-4 h-4" color="#71767B" />
           </button>
           <div className="flex gap-1  text-zinc-500">

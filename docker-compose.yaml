@@ -114,18 +114,18 @@ services:
 
   # Notification Service
 
-  # notification-service:
-  #   build:
-  #     context: notificationService/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - HOST_RABBIT=rabbitmq-notification
-  #   ports:
-  #     - 8083:8083
-  #   depends_on:
-  #     - rabbitmq-notification
-  #   restart: always
-  #
+  notification-service:
+    build:
+      context: notificationService/
+      dockerfile: Dockerfile
+    environment:
+      - HOST_RABBIT=rabbitmq-notification
+    ports:
+      - 8083:8083
+    depends_on:
+      - rabbitmq-notification
+    restart: always
+
   # Follower Service
   follower-service:
     build:

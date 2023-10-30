@@ -34,8 +34,13 @@ export const LoginForm = () => {
     if (!token) {
       throw Error("Login err");
     }
-    const user = await findAuthProfile(token)
-    setUser(user);
+    try {
+
+      const user = await findAuthProfile(token)
+      setUser(user);
+    } catch (error) {
+      throw new Error("login Error ")
+    }
 
     loginFrom.current.reset();
     router.push("/home");

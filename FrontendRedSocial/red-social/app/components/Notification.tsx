@@ -2,10 +2,9 @@
 import { Badge } from "@nextui-org/react";
 import { IconBellFilled } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNotification } from "../store/state";
-import { User } from "@/types";
-import Cookies from "js-cookie";
+
 
 export const Notification = () => {
   const notifications = useNotification((state) => state.messages);
@@ -14,28 +13,9 @@ export const Notification = () => {
   const setNotificationLen = useNotification(
     (state) => state.setNotificationLen
   );
+  const user = useNotification(state => state.user)
 
-  const [user, setUser] = useState<User>();
   const reset = useNotification((state) => state.reset);
-  const token = Cookies.get("x-token");
-
-  const options = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch(
-        "http://127.0.0.1:5000/api/profile",
-        options
-      );
-      const user: User = await response.json();
-      setUser(user);
-    };
-    fetchUser();
-  });
 
   useEffect(() => {
     const newSocket = new WebSocket(`ws://localhost:8083/ws/${user?.id}`);
@@ -56,7 +36,7 @@ export const Notification = () => {
     return () => {
       newSocket.close();
     };
-  });
+  }, []);
   setNotificationLen(notifications.length);
 
   return (
@@ -67,14 +47,7 @@ export const Notification = () => {
           shape="circle"
           color="danger"
         >
-          {/* <Button
-          radius="full"
-          isIconOnly
-          aria-label="more than 99 notifications"
-          variant="light"
-        > */}
           <IconBellFilled size={24} />
-          {/* </Button> */}
         </Badge>
         Notificaciones
       </Link>

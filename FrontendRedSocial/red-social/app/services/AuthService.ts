@@ -13,7 +13,6 @@ export async function loginService(loginRequest: any) {
     const response = await fetch("http://localhost:8001/login", options);
     console.log(response.status);
     const token = await response.json();
-    console.log(token);
     Cookies.set("x-token", token.token);
   } catch (error) {
     console.log(error);

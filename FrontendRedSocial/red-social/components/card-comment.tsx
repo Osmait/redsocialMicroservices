@@ -12,7 +12,7 @@ export interface Props {
   comment: Comment;
 }
 
-export default function CardComment({ comment }: Props) {
+export default function CardComment2({ comment }: Props) {
   return (
     <Card className="max-w-[750px] hover:bg-zinc-800 ">
       <CardHeader className="justify-between">

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import CardComment2 from "../../../components/card-comment";
+import CardComment from "../../../components/card-comment";
 import CardPost from "../../../components/card-post";
 import { ComposeComment } from "../../../components/compose-comment";
 import { findOnePost } from "../../../services/post.services";
@@ -19,7 +19,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
       <div>
         <ComposeComment id={post.post.id} />
         {post.comment.map((cm) => (
-          <CardComment2 key={cm.id} comment={cm} />
+          <CardComment key={cm.id} comment={cm} />
         ))}
       </div>
     </div>

@@ -17,7 +17,7 @@ export interface Props {
   comment: Comment;
 }
 
-export default async function CardComment2({ comment }: Props) {
+export default async function CardComment({ comment }: Props) {
   const user = await findProfile(comment.user_id);
   return (
     <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none ">

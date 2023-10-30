@@ -1,19 +1,10 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNotification } from "../store/state";
-import { findProfile } from "../services/userService";
 
 export const NotificationList = () => {
   const message = useNotification((state) => state.messages);
-  // const setNotificationLen = useNotification(
-  //   (state) => state.setNotificationLen
-  // );
-
-
-  const reset = useNotification((state) => state.reset);
-
-  console.log(message)
   return (
     <div className=" flex  flex-col w-2/5 border-1 border-zinc-500 border-t-0">
       {message.map((ms: any) => (

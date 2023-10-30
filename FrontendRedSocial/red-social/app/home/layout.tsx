@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Notification } from "../components/Notification";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { AuthValidation } from "../components/authValidation";
 
 export default async function HomeLayout({
   children,
@@ -21,6 +22,7 @@ export default async function HomeLayout({
 
   return (
     <section className="flex justify-center">
+      <AuthValidation />
       <div className="flex flex-col gap-5 items-center w-1/5 ">
         <Image src={twLogo} alt="logo" className=" h-8 w-8" />
         <Navbar />
