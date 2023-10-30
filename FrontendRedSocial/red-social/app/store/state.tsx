@@ -1,14 +1,16 @@
+"use client"
+import { User } from "@/types";
 import { create } from "zustand";
 
 type State = {
   messages: any[];
   notificationLen: number;
-  user: null | {};
+  user: null | User;
 };
 
 type Actions = {
   setMessages: (ms: any) => void;
-  setUser: (u: any) => void;
+  setUser: (u: User) => void;
   setNotificationLen: (n: number) => void;
   reset: () => void;
 };
@@ -23,7 +25,7 @@ const inicialState: State = {
 export const useNotification = create<State & Actions>((set) => ({
   ...inicialState,
   setNotificationLen: (n: number) => set((state) => ({ notificationLen: n })),
-  setUser: (u: any) => set((state) => ({ user: u })),
+  setUser: (u: User) => set((state) => ({ user: u })),
   setMessages: (ms: any) =>
     set((state) => ({ messages: [...state.messages, ms] })), // Usar el operador spread para crear un nuevo array
   reset: () => {

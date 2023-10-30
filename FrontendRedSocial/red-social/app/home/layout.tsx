@@ -12,21 +12,12 @@ export default async function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   const token = cookies().get("x-token");
   if (!token) {
     redirect("/login");
   }
 
-  const options = {
-    headers: {
-      "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
-      Authorization: `Bearer ${token?.value}`,
-    },
-  };
-
-  const response = await fetch("http://127.0.0.1:5000/api/profile", options);
-  const user = await response.json();
-  console.log(user);
 
   return (
     <section className="flex justify-center">

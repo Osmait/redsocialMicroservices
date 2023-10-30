@@ -34,6 +34,16 @@ export const LoginForm = () => {
     if (!token) {
       throw Error("Login err");
     }
+    const options = {
+      headers: {
+        "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await fetch("http://127.0.0.1:5000/api/profile", options);
+    const user = await response.json();
+    setUser(user);
 
     loginFrom.current.reset();
     router.push("/home");
