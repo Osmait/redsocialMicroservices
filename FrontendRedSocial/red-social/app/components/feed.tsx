@@ -25,7 +25,6 @@ export function Feed({ posts }: Props) {
 
     const formData = new FormData(postFrom.current);
 
-
     const data: PostRequest = {
       content: formData.get("content") as string,
       userId: user?.id as string,

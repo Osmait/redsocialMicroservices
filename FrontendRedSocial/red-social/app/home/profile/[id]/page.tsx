@@ -3,43 +3,30 @@ import { FollowSection } from "@/app/components/followSection";
 import { ImageProfile } from "@/app/components/imageProfile";
 import { findFollower, findFollowing } from "@/app/services/followerService";
 import { findPost } from "@/app/services/post.services";
-import { findProfile } from "@/app/services/userService";
-import { User } from "@/types";
+import { findAuthProfile, findProfile } from "@/app/services/userService";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-//
 export default async function Page({ params }: { params: { id: string } }) {
+
   const token = cookies().get("x-token");
   if (!token) {
     redirect("/login")
   }
-  console.log(params.id)
   const posts = await findPost(params.id, token.value);
   const profile = await findProfile(params.id);
   const follower = await findFollower(params.id, token.value);
-  const options = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token?.value}`,
-    },
-  };
-
-  const response = await fetch("http://127.0.0.1:5000/api/profile", options);
-  const user: User = await response.json();
-
+  const user = await findAuthProfile(token.value)
   const following = await findFollowing(user.id, token.value);
 
   const listFollowing = following ? following.map((f) => f.id) : [];
-  console.log(listFollowing)
 
   const isFollow = listFollowing.includes(params.id);
-  console.log(isFollow)
+
   const followReques = {
     followingId: params.id,
     followerId: user.id
   };
-  console.log(followReques)
 
 
   return (

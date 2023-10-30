@@ -37,7 +37,7 @@ export default function CardComment({ comment }: Props) {
         <p>{comment.content}</p>
       </CardBody>
       <CardFooter className="gap-3">
-        <button>
+        <button type="button">
           <IconHeart className="w-4 h-4" color="#71767B" />
         </button>
       </CardFooter>

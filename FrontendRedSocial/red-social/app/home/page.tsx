@@ -4,21 +4,14 @@ import { Feed } from "../components/feed";
 import { findProfilePost } from "../services/post.services";
 
 import { redirect } from "next/navigation";
+import { findAuthProfile } from "../services/userService";
 export default async function Home() {
   const token = cookies().get("x-token");
 
   if (!token) {
     redirect("/login");;
   }
-  const options = {
-    headers: {
-      "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
-      Authorization: `Bearer ${token?.value}`,
-    },
-  };
-  const response = await fetch("http://127.0.0.1:5000/api/profile", options);
-  const user = await response.json();
-
+  const user = await findAuthProfile(token.value)
   const posts = await findProfilePost(user?.id, token.value);
 
   return (

@@ -8,11 +8,13 @@ import { createComment } from "../services/post.services";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@nextui-org/input";
 import Cookies from "js-cookie";
+import { useNotification } from "../store/state";
 
 interface Props {
   id: string;
 }
 export function ComposeComment({ id }: Props) {
+  const user = useNotification(state => state.user)
   const postFrom = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
@@ -26,7 +28,7 @@ export function ComposeComment({ id }: Props) {
 
     const data: CommentRequest = {
       content: formData.get("content") as string,
-      userId: "2d4d7fec-8857-4bb5-9fa0-a3cff12a161e",
+      userId: user?.id as string,
       postId: id,
     };
 

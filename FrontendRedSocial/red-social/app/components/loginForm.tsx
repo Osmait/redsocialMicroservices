@@ -8,6 +8,7 @@ import { loginService } from "../services/AuthService";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../store/state";
 import Cookies from "js-cookie";
+import { findAuthProfile } from "../services/userService";
 
 export const LoginForm = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -27,22 +28,13 @@ export const LoginForm = () => {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
     };
-    console.log(data);
     await loginService(data);
     const token = Cookies.get("x-token");
 
     if (!token) {
       throw Error("Login err");
     }
-    const options = {
-      headers: {
-        "Content-Type": "application/json", // Especificamos que estamos enviando datos JSON
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const response = await fetch("http://127.0.0.1:5000/api/profile", options);
-    const user = await response.json();
+    const user = await findAuthProfile(token)
     setUser(user);
 
     loginFrom.current.reset();
