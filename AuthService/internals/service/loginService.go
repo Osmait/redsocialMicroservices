@@ -9,7 +9,7 @@ import (
 )
 
 type Service interface {
-	LoginService(loginRequest dtos.LoginRequest) (string, error)
+	LoginService(loginRequest dtos.LoginRequest) (*string, error)
 }
 
 type AuthService struct {
