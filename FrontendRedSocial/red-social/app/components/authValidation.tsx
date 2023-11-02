@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 export const AuthValidation = () => {
   const router = useRouter()
   const setUser = useNotification((state) => state.setUser);
+
   useEffect(() => {
     const check = async () => {
       const token = Cookies.get("x-token");
