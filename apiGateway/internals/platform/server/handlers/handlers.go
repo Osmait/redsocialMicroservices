@@ -14,14 +14,12 @@ import (
 func GetUser(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userUrl := c.UserUrl
-		// Realizar una solicitud GET al servicio backend 1
 		responseBody, err := utils.MakeBackendGetRequest(userUrl, nil)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		// Devolver la respuesta del servicio backend 1
 		ctx.JSON(http.StatusOK, responseBody)
 	}
 }
@@ -148,7 +146,6 @@ func FindPost(c config.Config) gin.HandlerFunc {
 
 func FindPostById(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// Realizar una solicitud GET al servicio backend 1
 		postUrl := c.PostUrl
 		id := ctx.Param("id")
 		token, ok := ctx.Get("X-token")
@@ -177,8 +174,10 @@ func FindPostById(c config.Config) gin.HandlerFunc {
 
 func GetFeed(c config.Config) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		page := ctx.Query("page")
+		limit := ctx.Query("limit")
 		id := ctx.Param("id")
-		feedUrl := fmt.Sprintf("%sfeed/%s", c.PostUrl, id)
+		feedUrl := fmt.Sprintf("%sfeed/%s?page=%s&limit=%s", c.PostUrl, id, page, limit)
 
 		token, ok := ctx.Get("X-token")
 		if !ok {
