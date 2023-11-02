@@ -1,5 +1,6 @@
 "use client";
 
+import { useNotification } from "@/app/store/state";
 import { siteConfig } from "@/config/site";
 
 import NextLink from "next/link";
@@ -7,6 +8,7 @@ import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
+  const user = useNotification(state => state.user)
   const pathname = usePathname();
   return (
     <>
@@ -18,7 +20,7 @@ export const Navbar = () => {
             className={`text-2xl ${pathname === item.href && "font-bold"}`}
             key={item.href}
             color="foreground"
-            href={item.href}
+            href={item.href === "/home/profile" ? `${item.href}/${user?.id}` : item.href}
           >
             {item.label}
           </NextLink>
