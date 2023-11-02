@@ -28,11 +28,11 @@ export default function CardPost({ post }: Props) {
       setUset(profile)
     }
     getUserPost()
-  }, [])
+  }, [post])
 
   const imgUrl = user?.img ? user.img : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg"
   return (
-    <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none ">
+    <Card className="max-w-[750px] hover:bg-zinc-900 bg-black border-b-1 border-zinc-600 rounded-none   ">
       {
         user ?
           <>

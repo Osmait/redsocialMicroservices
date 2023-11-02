@@ -1,21 +1,27 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PostRequest, PostResponse } from "../../types";
 import { ComposePost } from "./compose-post";
 import CardPost from "./card-post";
-
-import { createPost } from "../services/post.services";
+import { createPost, findProfilePost } from "../services/post.services";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useNotification } from "../store/state";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import LoadingSkeleton from "./LoadingSkeleton";
 export interface Props {
-  posts: PostResponse[];
+  id: string,
+  token: string
 }
 
-export function Feed({ posts }: Props) {
+export function Feed({ id, token }: Props) {
   const router = useRouter();
   const user = useNotification(state => state.user)
+  const [posts, setPosts] = useState<PostResponse[]>([])
   const postFrom = useRef<HTMLFormElement>(null);
+  const [currentPage, SetCurrentPage] = useState(0)
+
+
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,14 +49,49 @@ export function Feed({ posts }: Props) {
 
   };
 
+  const getPost = async () => {
+    const postList = await findProfilePost(id, token, currentPage)
+    setPosts(prev => prev.concat(postList))
+    SetCurrentPage(prev => prev + 1)
+
+  }
+  useEffect(() => {
+    getPost();
+  }, []);
+
+
+
+
   const imgUrl = user?.img ? user.img : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg"
   return (
     <div id="feed-id">
       <ComposePost img={imgUrl} postFrom={postFrom} handlerSubmit={handlerSubmit} />
-
-      {posts ? posts.map((post) => (
-        <CardPost key={post.post.id} post={post} />
-      )) : <p>No hay Post..</p>}
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={getPost}
+        hasMore={true}
+        loader={
+          <>
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+          </>
+        }
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>No hay Mas..</b>
+          </p>
+        }
+      >
+        {posts ? posts.map((post) => (
+          <CardPost key={post.post.id} post={post} />
+        )) : <p>No hay Post..</p>}
+      </InfiniteScroll>
     </div>
   );
 }

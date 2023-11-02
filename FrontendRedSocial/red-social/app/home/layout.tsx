@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AuthValidation } from "../components/authValidation";
 
+
 export default async function HomeLayout({
   children,
 }: {
