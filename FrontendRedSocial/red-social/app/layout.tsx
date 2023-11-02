@@ -40,7 +40,7 @@ export default function RootLayout({
             <main className="container mx-auto max-w-full  flex-grow  ">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-3"></footer>
+            <footer className="w-full flex items-center justify-center py-3" />
           </div>
         </Providers>
       </body>
