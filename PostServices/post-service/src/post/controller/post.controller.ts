@@ -21,7 +21,7 @@ export class PostController {
     private postService: PostService,
     @Inject('POST')
     private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   @Get('/:id')
   public getPost(
@@ -66,16 +66,18 @@ export class PostController {
   @Get('/feed/:id')
   public getfeed(
     @Param('id') id: string,
-
     @Req() request: Request,
+    @Query('page')
+    page: number,
+    @Query('limit')
+    limit: number,
   ) {
     const token = request.headers['token'];
-    // const userId = request.headers['user'];
 
     if (!token) {
       throw new UnauthorizedException();
     }
-    return this.postService.getFeed(id, token);
+    return this.postService.getFeed(id, token, page, limit);
   }
 
   @Get('/one/:id')
