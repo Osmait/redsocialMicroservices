@@ -9,6 +9,9 @@ import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
   const user = useNotification(state => state.user)
+
+
+
   const pathname = usePathname();
   return (
     <>
