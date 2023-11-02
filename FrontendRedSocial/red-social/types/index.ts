@@ -45,5 +45,5 @@ export interface User {
   address: string
   email: string
   img?: string
-
+  createdAt: string
 }
