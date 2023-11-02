@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -10,17 +10,25 @@ import {
 
 import { IconHeart } from "@tabler/icons-react";
 import { ModalComment } from "../../components/modal-comment";
-import { PostResponse } from "../../types";
+import { PostResponse, User } from "../../types";
 import Link from "next/link";
-import { useNotification } from "../store/state";
 import LoadingSkeleton from "./LoadingSkeleton";
+import { findProfile } from "../services/userService";
 
 export interface Props {
   post: PostResponse;
 }
 
 export default function CardPost({ post }: Props) {
-  const user = useNotification(state => state.user)
+  const [user, setUset] = useState<User | null>(null)
+
+  useEffect(() => {
+    const getUserPost = async () => {
+      const profile = await findProfile(post.post.userId);
+      setUset(profile)
+    }
+    getUserPost()
+  })
 
   const imgUrl = user?.img ? user.img : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg"
   return (
@@ -40,11 +48,11 @@ export default function CardPost({ post }: Props) {
                   <div className="flex gap-1 items-center justify-center">
                     <Link href={`/home/profile/${user?.id}`} className="hover:border-b-1">
                       <h4 className="text-small font-semibold leading-none text-default-600">
-                        {`${user?.name} ${user?.lastName}`}
+                        {`${user?.name} ${user?.LastName}`}
                       </h4>
                     </Link>
                     <h5 className="text-small tracking-tight text-default-400">
-                      {`@${user?.name}${user?.lastName}`}
+                      {`@${user?.name}${user?.LastName}`}
                     </h5>
                   </div>
                 </div>
