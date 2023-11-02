@@ -37,17 +37,20 @@ export function Feed({ posts }: Props) {
     }
 
     await createPost(data, token);
-    console.log(data);
     router.refresh();
 
     postFrom.current.reset();
+
   };
+
+  const imgUrl = user?.img ? user.img : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg"
   return (
     <div id="feed-id">
-      <ComposePost postFrom={postFrom} handlerSubmit={handlerSubmit} />
-      {posts.map((post) => (
+      <ComposePost img={imgUrl} postFrom={postFrom} handlerSubmit={handlerSubmit} />
+
+      {posts ? posts.map((post) => (
         <CardPost key={post.post.id} post={post} />
-      ))}
+      )) : <p>No hay Post..</p>}
     </div>
   );
 }

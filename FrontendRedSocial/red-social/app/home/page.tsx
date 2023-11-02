@@ -21,5 +21,6 @@ export default async function Home() {
       </div>
       <Feed posts={posts} />
     </div>
+
   );
 }
