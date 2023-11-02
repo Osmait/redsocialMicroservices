@@ -40,7 +40,8 @@ export async function findPost(
 
 export async function findProfilePost(
   id: string,
-  token: string
+  token: string,
+  page: number,
 ): Promise<PostResponse[]> {
   console.log(id);
   const options: any = {
@@ -50,8 +51,9 @@ export async function findProfilePost(
       Authorization: `Bearer ${token}`,
     },
   };
+  console.log(page)
+  const response = await fetch(`http://127.0.0.1:5000/api/feed/${id}?page=${page}&limit=10`, options);
 
-  const response = await fetch(`http://127.0.0.1:5000/api/feed/${id}`, options);
   const result = await response.json();
 
   return result;
@@ -70,7 +72,6 @@ export async function createPost(post: PostRequest, token: string) {
 
   try {
     const response = await fetch("http://localhost:5000/api/post", options);
-    console.log(response)
   } catch (error) {
     console.log(error);
   }
