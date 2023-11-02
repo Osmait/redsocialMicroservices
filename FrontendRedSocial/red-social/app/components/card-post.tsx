@@ -28,28 +28,28 @@ export default function CardPost({ post }: Props) {
       {
         user ?
           <>
-            <CardHeader className="justify-between">
-              <div className="flex gap-5">
-                <Avatar
-                  isBordered
-                  radius="full"
-                  size="md"
-                  src={imgUrl}
-                />
-                <div className="flex gap-1 items-center justify-center">
-                  <Link href={`/home/profile/${user?.id}`} className="hover:border-b-1">
-                    <h4 className="text-small font-semibold leading-none text-default-600">
-                      {`${user?.name} ${user?.lastName}`}
-                    </h4>
-                  </Link>
-                  <h5 className="text-small tracking-tight text-default-400">
-                    {`@${user?.name}${user?.lastName}`}
-                  </h5>
-                </div>
-              </div>
-            </CardHeader>
-
             <Link href={`/home/post/${post.post.id}`}>
+              <CardHeader className="justify-between">
+                <div className="flex gap-5">
+                  <Avatar
+                    isBordered
+                    radius="full"
+                    size="md"
+                    src={imgUrl}
+                  />
+                  <div className="flex gap-1 items-center justify-center">
+                    <Link href={`/home/profile/${user?.id}`} className="hover:border-b-1">
+                      <h4 className="text-small font-semibold leading-none text-default-600">
+                        {`${user?.name} ${user?.lastName}`}
+                      </h4>
+                    </Link>
+                    <h5 className="text-small tracking-tight text-default-400">
+                      {`@${user?.name}${user?.lastName}`}
+                    </h5>
+                  </div>
+                </div>
+              </CardHeader>
+
               <CardBody className="px-3 py-0 text-small  text-white">
                 <p>{post.post.content}</p>
               </CardBody>
