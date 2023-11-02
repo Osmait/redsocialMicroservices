@@ -40,7 +40,7 @@ export interface CommentRequest {
 export interface User {
   id: string
   name: string
-  LastName: string
+  lastName: string
   phone?: string
   address: string
   email: string
