@@ -4,7 +4,6 @@ import { UserImage } from "../../components/user-image";
 import { PostButton } from "../../components/post-buttom";
 
 import { Textarea } from "@nextui-org/input";
-import { User } from "@/types";
 
 type Props = {
   img: string
