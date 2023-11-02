@@ -28,7 +28,7 @@ export default function CardPost({ post }: Props) {
       setUset(profile)
     }
     getUserPost()
-  })
+  }, [])
 
   const imgUrl = user?.img ? user.img : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg"
   return (
