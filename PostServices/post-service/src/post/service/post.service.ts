@@ -9,7 +9,7 @@ import { In, Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
 import { HttpService } from '@nestjs/axios';
 import { PostResponse, User } from '../domain/postDto';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom, map, take } from 'rxjs';
 
 const COMMENT_URL = 'http://comment-service:8000';
 const FOLLOWER_URL = 'http://follower-service:3001';
@@ -25,7 +25,7 @@ export class PostService {
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
     private readonly httpService: HttpService,
-  ) {}
+  ) { }
 
   created(post: Post) {
     post.id = randomUUID();
@@ -52,7 +52,7 @@ export class PostService {
     return postR;
   }
 
-  public async getFeed(userId: string, token: string) {
+  public async getFeed(userId: string, token: string, s: number, t: number) {
     this.header.headers.Authorization = `Bearer ${token}`;
     try {
       const follower: User[] = await lastValueFrom(
@@ -67,6 +67,8 @@ export class PostService {
         order: {
           createdAt: 'DESC',
         },
+        skip: s,
+        take: t,
       });
       return await this.postResponseFetchComment(postlist);
     } catch (error) {
