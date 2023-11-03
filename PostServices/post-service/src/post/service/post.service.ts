@@ -6,10 +6,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../domain/post.entity';
 import { In, Repository } from 'typeorm';
-import { randomUUID } from 'crypto';
+
 import { HttpService } from '@nestjs/axios';
 import { PostResponse, User } from '../domain/postDto';
-import { lastValueFrom, map, take } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
+import { randomUUID } from 'crypto';
 
 const COMMENT_URL = 'http://comment-service:8000';
 const FOLLOWER_URL = 'http://follower-service:3001';
@@ -25,7 +26,7 @@ export class PostService {
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
     private readonly httpService: HttpService,
-  ) { }
+  ) {}
 
   created(post: Post) {
     post.id = randomUUID();
@@ -55,13 +56,9 @@ export class PostService {
   public async getFeed(userId: string, token: string, s: number, t: number) {
     this.header.headers.Authorization = `Bearer ${token}`;
     try {
-      const follower: User[] = await lastValueFrom(
-        this.httpService
-          .get(`${FOLLOWER_URL}/following/${userId}`, this.header)
-          .pipe(map((res) => res.data)),
-      );
-      const Ids = follower.map((user) => user.id);
+      const Ids = await this.getFollower(userId);
       Ids.push(userId);
+
       const postlist = await this.postRepository.find({
         where: { userId: In(Ids) },
         order: {
@@ -70,9 +67,9 @@ export class PostService {
         skip: s,
         take: t,
       });
+
       return await this.postResponseFetchComment(postlist);
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Error doing request');
     }
   }
@@ -99,7 +96,7 @@ export class PostService {
     this.postRepository.save(post);
   }
 
-  private async postResponseFetchComment(
+  public async postResponseFetchComment(
     postList: Post[],
   ): Promise<PostResponse[]> {
     const postReponse: PostResponse[] = [];
@@ -124,7 +121,7 @@ export class PostService {
   public async getFollower(userId: string) {
     const follower: User[] = await lastValueFrom(
       this.httpService
-        .get(`${FOLLOWER_URL}/follower/${userId}`, this.header)
+        .get(`${FOLLOWER_URL}/following/${userId}`, this.header)
         .pipe(map((res) => res.data)),
     );
     const Ids = follower.map((user) => user.id);

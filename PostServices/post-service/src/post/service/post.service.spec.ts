@@ -8,8 +8,41 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { faker } from '@faker-js/faker';
 import { AxiosError, AxiosResponse } from 'axios';
 import { of, throwError } from 'rxjs';
+import { PostResponse } from '../domain/postDto';
+import { randomUUID } from 'crypto';
+
+// Función para generar una instancia de Post con datos simulados
+function createRandomPost(n: number): Post[] {
+  const postList = [];
+  for (let i = 0; n > i; i++) {
+    const post: Post = {
+      id: randomUUID(),
+      content: faker.lorem.paragraph(),
+      createdAt: faker.date.anytime(),
+      userId: randomUUID(),
+      deleted: false,
+    };
+
+    postList.push(post);
+  }
+  return postList;
+}
+
+// Función para generar una instancia de PostResponse con datos simulados
+function createRandomPostResponse(n: number): PostResponse[] {
+  const postRList: PostResponse[] = [];
+  for (let i = 0; n > i; i++) {
+    const post = createRandomPost(n)[0]; // Crea una instancia de Post con datos simulados
+
+    const comment = faker.lorem.sentence(); // Genera un comentario aleatorio con Faker
+    const postr = new PostResponse(post, comment);
+    postRList.push(postr);
+  }
+  return postRList;
+}
 
 describe('PostService', () => {
   let postService: PostService;
@@ -51,6 +84,28 @@ describe('PostService', () => {
 
       expect(post.id).toBeDefined();
       expect(postRepository.save).toHaveBeenCalledWith(post);
+    });
+  });
+
+  describe('GetFeed', () => {
+    it('should return a list of posts with comments', async () => {
+      const userId = '1';
+
+      const mockPostResponseList = createRandomPostResponse(5);
+      const mockPost = createRandomPost(5);
+
+      jest.spyOn(postRepository, 'find').mockResolvedValue(mockPost);
+      jest
+        .spyOn(postService, 'postResponseFetchComment')
+        .mockResolvedValue(mockPostResponseList);
+
+      jest
+        .spyOn(postService, 'getFollower')
+        .mockResolvedValue(['follower1', 'follower2']);
+
+      const result = await postService.getFeed(userId, '1', 1, 10);
+
+      expect(result.length).toBe(mockPostResponseList.length);
     });
   });
 
@@ -116,13 +171,11 @@ describe('PostService', () => {
 
   describe('delete', () => {
     it('should mark a post as deleted', async () => {
-      const postId = '1';
-      const mockPost = new Post();
-      mockPost.id = postId;
+      const mockPost = createRandomPost(1)[0];
 
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(mockPost);
 
-      await postService.delete(postId);
+      await postService.delete(mockPost.id);
 
       expect(mockPost.deleted).toBe(true);
       expect(postRepository.save).toHaveBeenCalledWith(mockPost);
