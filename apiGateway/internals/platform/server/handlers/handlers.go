@@ -105,7 +105,7 @@ func CreatePost(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		err = utils.MakeBackendRequest(token, postUrl, requestBody)
+		err = utils.MakeBackendRequest(&token, postUrl, requestBody)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -267,7 +267,7 @@ func Follow(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		err = utils.MakeBackendRequest(token, fmt.Sprintf("%s/follower", followeURL), requestBody)
+		err = utils.MakeBackendRequest(&token, fmt.Sprintf("%s/follower", followeURL), requestBody)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -321,7 +321,7 @@ func CreateComment(c config.Config) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		err = utils.MakeBackendRequest(token, commenturl, data)
+		err = utils.MakeBackendRequest(&token, commenturl, data)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err)
 		}

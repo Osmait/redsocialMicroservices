@@ -25,5 +25,4 @@ func DecodeJwt(c *gin.Context) (*jwt.Token, error) {
 	}
 
 	return token, nil
-
 }

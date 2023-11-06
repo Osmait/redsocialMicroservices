@@ -15,18 +15,15 @@ func NewUserRepository(url string) *UserRepository {
 	return &UserRepository{
 		url: url,
 	}
-
 }
 
 func (u *UserRepository) GetUser(email string) (*dtos.User, error) {
-
 	var user dtos.User
 
 	url := fmt.Sprintf("%s%s", u.url, email)
 
 	response, err := utils.MakeBackendGetRequest(url)
 	if err != nil {
-
 		return nil, err
 	}
 

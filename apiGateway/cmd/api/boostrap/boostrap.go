@@ -23,11 +23,10 @@ func Run() error {
 
 	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.shutdownTimeout, *urlConfig)
 	return srv.Run(ctx)
-
 }
 
 type Config struct {
-	//Server Configuration
+	// Server Configuration
 	Host            string        `default:"localhost"`
 	Port            uint          `default:"8080"`
 	shutdownTimeout time.Duration `default:"10s"`
