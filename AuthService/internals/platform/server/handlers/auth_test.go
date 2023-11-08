@@ -50,10 +50,11 @@ func TestLoginHandler(t *testing.T) {
 // Define a mock AuthService for testing
 type MockAuthService struct{}
 
-func (s *MockAuthService) LoginService(loginRequest dtos.LoginRequest) (string, error) {
+func (s *MockAuthService) LoginService(loginRequest dtos.LoginRequest) (*string, error) {
+	message := "your_expected_token"
 	// Simulate the behavior of the LoginService
 	if loginRequest.Email == "test@example.com" && loginRequest.Password == "password123" {
-		return "your_expected_token", nil
+		return &message, nil
 	}
-	return "", errors.New("Invalid credentials")
+	return nil, errors.New("Invalid credentials")
 }

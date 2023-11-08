@@ -47,7 +47,7 @@ func TestAuthService_LoginService(t *testing.T) {
 		Password: "password123", // Contraseña incorrecta para simular una falla
 	}
 	token, err := authService.LoginService(loginRequest)
-
+	assert.NotEqual(t, "", token, "token can't be void ")
 	// Verificar que haya ocurrido un error (contraseña incorrecta)
 	assert.Error(t, err)
 

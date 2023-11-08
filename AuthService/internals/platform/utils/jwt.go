@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -12,6 +13,9 @@ type AppClaims struct {
 }
 
 func JwtCreate(id string) (*string, error) {
+	if id == "" {
+		return nil, errors.New("id is void ")
+	}
 	claims := AppClaims{
 		UserId: id,
 		StandardClaims: jwt.StandardClaims{
