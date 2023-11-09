@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
- 
+
     ports:
       - 3000:3000
     depends_on:
@@ -25,4 +25,3 @@ services:
     #   - .:/app
     #   - "/app/node_modules"
     command: npm run start:dev
-

@@ -42,7 +42,6 @@ func GetProfile(c config.Config) gin.HandlerFunc {
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
-		fmt.Println("aquiii")
 
 		ctx.JSON(http.StatusOK, user)
 	}

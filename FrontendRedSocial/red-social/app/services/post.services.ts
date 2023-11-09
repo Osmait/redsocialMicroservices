@@ -1,10 +1,7 @@
-import { cookies } from "next/headers";
 import { CommentRequest, PostRequest, PostResponse } from "../../types";
 
-
-
 export async function findMyProfilePost(
-  token: string
+  token: string,
 ): Promise<PostResponse[]> {
   const options: any = {
     cache: "no-cache",
@@ -14,7 +11,7 @@ export async function findMyProfilePost(
     },
   };
 
-  const response = await fetch('http://127.0.0.1:5000/api/post', options);
+  const response = await fetch("http://127.0.0.1:5000/api/post", options);
   const result = await response.json();
 
   return result;
@@ -22,7 +19,7 @@ export async function findMyProfilePost(
 
 export async function findPost(
   id: string,
-  token: string
+  token: string,
 ): Promise<PostResponse[]> {
   const options: any = {
     cache: "no-cache",
@@ -43,7 +40,6 @@ export async function findProfilePost(
   token: string,
   page: number,
 ): Promise<PostResponse[]> {
-  console.log(id);
   const options: any = {
     cache: "no-cache",
     headers: {
@@ -51,8 +47,10 @@ export async function findProfilePost(
       Authorization: `Bearer ${token}`,
     },
   };
-  console.log(page)
-  const response = await fetch(`http://127.0.0.1:5000/api/feed/${id}?page=${page}&limit=10`, options);
+  const response = await fetch(
+    `http://127.0.0.1:5000/api/feed/${id}?page=${page}&limit=10`,
+    options,
+  );
 
   const result = await response.json();
 
@@ -95,7 +93,7 @@ export async function createComment(post: CommentRequest, token: string) {
 }
 export async function findOnePost(
   id: string,
-  token: string
+  token: string,
 ): Promise<PostResponse> {
   const options: any = {
     cache: "no-cache",

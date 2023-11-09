@@ -30,7 +30,6 @@ export class PostService {
 
   created(post: Post) {
     post.id = randomUUID();
-    console.log(post);
 
     try {
       this.postRepository.save(post);

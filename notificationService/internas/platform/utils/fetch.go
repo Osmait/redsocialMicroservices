@@ -20,13 +20,11 @@ func Fetch(url string) ([]byte, error) {
 	resp, err := client.Do(req)
 
 	if err != nil || resp.StatusCode != 200 {
-
 		return nil, errors.New("Internal Error with Request")
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-
 		return nil, err
 	}
 

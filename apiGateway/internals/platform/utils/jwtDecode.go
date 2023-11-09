@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +15,6 @@ type AppClaims struct {
 func DecodeJwt(c *gin.Context) (*jwt.Token, error) {
 	tokeString := strings.TrimSpace(c.GetHeader("Authorization"))
 	tokenClen := strings.Split(" ", tokeString)
-	fmt.Println(tokenClen)
 	token, err := jwt.ParseWithClaims(tokenClen[1], AppClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})

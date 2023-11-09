@@ -155,7 +155,7 @@ describe('PostService', () => {
           config: undefined,
         },
         isAxiosError: false,
-        toJSON: function(): object {
+        toJSON: function (): object {
           throw new Error('Function not implemented.');
         },
       };

@@ -45,5 +45,4 @@ func (r RabbitMQEventStore) Consume() <-chan amqp.Delivery {
 		log.Fatal(err)
 	}
 	return msgs
-
 }

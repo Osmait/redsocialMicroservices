@@ -3,7 +3,6 @@ package websocket
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -63,7 +62,6 @@ func handleNewFollow(message any, id string, msg []byte, c *Client) {
 		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 		return
 	}
-	fmt.Println(id)
 	if follower.FollowingID == id {
 		messageb := bytes.TrimSpace(bytes.Replace(msg, newline, space, -1))
 		c.hub.broadcast <- messageb
@@ -112,7 +110,6 @@ func (c *Client) readPump(notificationservice service.NotificationService, id st
 
 	for msg := range msgs {
 		json.Unmarshal(msg.Body, &message)
-		fmt.Println("Probando")
 		handler := patternHandlers[message.Pattern]
 		handler(&message.Data, id, msg.Body, c)
 
@@ -170,7 +167,6 @@ func HandlerWs(hub *Hub, notificationservice service.NotificationService) gin.Ha
 			log.Println(err)
 			return
 		}
-		fmt.Println("aquii llegaste")
 		client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 		client.hub.register <- client
 

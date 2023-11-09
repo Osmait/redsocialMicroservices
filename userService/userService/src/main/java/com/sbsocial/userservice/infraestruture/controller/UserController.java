@@ -18,43 +18,41 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
-    final private UserServices userServices;
+  final private UserServices userServices;
 
+  @GetMapping("/{id}")
+  public ResponseEntity<User> getUser(@PathVariable("id") UUID id) {
+    User user = userServices.findOne(id);
+    return new ResponseEntity<>(user, HttpStatus.OK);
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id")UUID id){
-      User user = userServices.findOne(id);
-      return  new ResponseEntity<>(user,HttpStatus.OK);
+  @PostMapping
+  public ResponseEntity<String> postUser(@RequestBody UserDto userRequest) {
+    userServices.create(userRequest);
+    return new ResponseEntity<>("Created", HttpStatus.CREATED);
+  }
+
+  @GetMapping("/email")
+  public ResponseEntity<User> getUserByEmail(@RequestParam("email") String email) {
+    if (email == null) {
+      throw new RuntimeException("Error Email Is required");
     }
+    User user = userServices.findOneByEmail(email);
+    return new ResponseEntity<>(user, HttpStatus.OK);
+  }
 
-    @PostMapping
-    public ResponseEntity<String> postUser(@RequestBody UserDto userRequest ){
-        userServices.create(userRequest);
-        return new ResponseEntity<>("Created",HttpStatus.CREATED);
-    }
+  @CrossOrigin
+  @GetMapping("/profile/{id}")
+  public ResponseEntity<UserResponse> Profile(@PathVariable("id") UUID id) {
+    UserResponse user = userServices.findProfile(id);
+    return new ResponseEntity<>(user, HttpStatus.OK);
+  }
 
-    @GetMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@RequestParam("email")String email){
-        if (email == null){
-           throw  new RuntimeException("Error Email Is required");
-        }
-        User user = userServices.findOneByEmail(email);
-        return  new ResponseEntity<>(user,HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("/profile/{id}")
-    public ResponseEntity<UserResponse>Profile(@PathVariable("id") UUID id){
-       UserResponse user =  userServices.findProfile(id);
-       return new ResponseEntity<>(user,HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("/find")
-    public  ResponseEntity<List<User>>FindUsersByName(@RequestParam("name") String name ){
-      List<User> list =userServices.findUsersByName(name);
-      return new ResponseEntity<>(list,HttpStatus.OK);
-    }
-
+  @CrossOrigin
+  @GetMapping("/find")
+  public ResponseEntity<List<User>> FindUsersByName(@RequestParam("name") String name) {
+    List<User> list = userServices.findUsersByName(name);
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
 
 }

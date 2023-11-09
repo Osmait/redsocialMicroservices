@@ -62,7 +62,6 @@ comment_service = CommentService(db)
 
 @app.get("/comment/{id}")
 async def getComment(id: str, current_user: Annotated[str, Security(get_current_id, scopes=["me"])]):
-    print(current_user)
     comments = comment_service.find_all_by_id(id)
     return comments
 

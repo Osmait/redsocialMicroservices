@@ -8,7 +8,6 @@ export class FollowerController {
 
   @Post('follower/')
   public createdfollower(@Body() follower: Follower) {
-    console.log(follower);
     this.followerService.follow(follower);
   }
 

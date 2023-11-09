@@ -8,20 +8,14 @@ type Props = {
   followRequest: followRequest;
   isFollow: boolean;
   setFollow: (b: boolean) => void;
-
 };
 
-export const UnFollowButton = ({
-  followRequest,
-  setFollow,
-}: Props) => {
+export const UnFollowButton = ({ followRequest, setFollow }: Props) => {
   const token = Cookies.get("x-token");
   if (!token) {
-    throw new Error("Error Token Dont exist ")
+    throw new Error("Error Token Dont exist ");
   }
 
-
-  console.log(followRequest);
   const handlerFollow = async () => {
     await unFollow(followRequest, token);
     setFollow(false);

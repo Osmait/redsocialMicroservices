@@ -13,10 +13,8 @@ func NewNotificationService(rabbirMqStore rabbitmq.RabbitMQEventStore) *Notifica
 	return &NotificationService{
 		rabbitMqStore: rabbirMqStore,
 	}
-
 }
 
 func (n *NotificationService) GetMessages() <-chan amqp.Delivery {
 	return n.rabbitMqStore.Consume()
-
 }

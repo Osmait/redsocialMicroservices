@@ -1,9 +1,6 @@
 package websocket
 
-import (
-	"fmt"
-	// "github.com/osmait/notificationservice/internas/service"
-)
+// "github.com/osmait/notificationservice/internas/service"
 
 type Message struct {
 	Pattern string `json:"pattern"`
@@ -65,8 +62,6 @@ func (h *Hub) Run() {
 }
 
 func containsElement(slice []string, element string) bool {
-	fmt.Println(slice)
-	fmt.Println(element)
 	for _, item := range slice {
 		if item == element {
 			return true

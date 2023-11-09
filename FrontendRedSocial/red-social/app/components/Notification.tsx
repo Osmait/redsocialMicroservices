@@ -5,15 +5,14 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useNotification } from "../store/state";
 
-
 export const Notification = () => {
   const notifications = useNotification((state) => state.messages);
   const setMessage = useNotification((state) => state.setMessages);
   const notificationLen = useNotification((state) => state.notificationLen);
   const setNotificationLen = useNotification(
-    (state) => state.setNotificationLen
+    (state) => state.setNotificationLen,
   );
-  const user = useNotification(state => state.user)
+  const user = useNotification((state) => state.user);
 
   const reset = useNotification((state) => state.reset);
 
@@ -25,7 +24,6 @@ export const Notification = () => {
 
     newSocket.onmessage = (event) => {
       const ms = JSON.parse(event.data);
-      console.log(event.data);
       setMessage(ms);
     };
 
