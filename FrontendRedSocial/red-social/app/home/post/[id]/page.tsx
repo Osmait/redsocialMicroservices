@@ -10,7 +10,6 @@ export default async function PostPage({ params }: { params: { id: string } }) {
   if (!token) {
     redirect("login");
   }
-
   const post = await findOnePost(params.id, token.value);
 
   return (
