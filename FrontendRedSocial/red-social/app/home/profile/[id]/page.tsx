@@ -8,15 +8,14 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: string } }) {
-
   const token = cookies().get("x-token");
   if (!token) {
-    redirect("/login")
+    redirect("/login");
   }
   const posts = await findPost(params.id, token.value);
   const profile = await findProfile(params.id);
   const follower = await findFollower(params.id, token.value);
-  const user = await findAuthProfile(token.value)
+  const user = await findAuthProfile(token.value);
   const following = await findFollowing(user.id, token.value);
 
   const listFollowing = following ? following.map((f) => f.id) : [];
@@ -25,18 +24,18 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   const followReques = {
     followingId: params.id,
-    followerId: user.id
+    followerId: user.id,
   };
-
 
   return (
     <div className=" flex gap-4 flex-col w-2/5 border-1 border-zinc-500 border-t-0">
       <ImageProfile userName={profile.name} />
       <div className="text-gray-600">
-        {
-          followReques.followerId === followReques.followingId ? "" :
-            <FollowSection isFollow={isFollow} followRequet={followReques} />
-        }
+        {followReques.followerId === followReques.followingId ? (
+          ""
+        ) : (
+          <FollowSection isFollow={isFollow} followRequet={followReques} />
+        )}
         <h1 className="text-white font-bold text-3xl">{`${profile.name} ${profile.LastName}`}</h1>
         <p>{profile.address}</p>
         <p> {`Se union el ${profile.createdAt}`}</p>
