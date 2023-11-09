@@ -3,25 +3,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { PostRequest, PostResponse } from "../../types";
 import { ComposePost } from "./compose-post";
 import CardPost from "./card-post";
-import { createPost, findProfilePost } from "../services/post.services";
+import { createPost, findFeed } from "../services/post.services";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useNotification } from "../store/state";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingSkeleton from "./LoadingSkeleton";
 export interface Props {
-  id: string,
-  token: string
+  id: string;
+  token: string;
 }
 
 export function Feed({ id, token }: Props) {
   const router = useRouter();
-  const user = useNotification(state => state.user)
-  const [posts, setPosts] = useState<PostResponse[]>([])
+  const user = useNotification((state) => state.user);
+  const [posts, setPosts] = useState<PostResponse[]>([]);
   const postFrom = useRef<HTMLFormElement>(null);
-  const [currentPage, SetCurrentPage] = useState(0)
-
-
+  const [currentPage, SetCurrentPage] = useState(0);
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,34 +36,37 @@ export function Feed({ id, token }: Props) {
 
     const token = Cookies.get("x-token");
     if (!token) {
-      router.push("/login")
-      return
+      router.push("/login");
+      return;
     }
 
     await createPost(data, token);
     router.refresh();
 
     postFrom.current.reset();
-
   };
 
   const getPost = async () => {
-    const postList = await findProfilePost(id, token, currentPage)
-    setPosts(prev => prev.concat(postList))
-    SetCurrentPage(prev => prev + 1)
+    const postList = await findFeed(id, token, currentPage);
 
-  }
+    setPosts((prev) => [...prev, ...postList]);
+
+    SetCurrentPage((prev) => prev + 1);
+  };
   useEffect(() => {
     getPost();
   }, []);
 
-
-
-
-  const imgUrl = user?.img ? user.img : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg"
+  const imgUrl = user?.img
+    ? user.img
+    : "https://avatars.dicebear.com/v2/male/dec006c73441fcd643d5cc092c35d14c.svg";
   return (
-    <div id="feed-id">
-      <ComposePost img={imgUrl} postFrom={postFrom} handlerSubmit={handlerSubmit} />
+    <div>
+      <ComposePost
+        img={imgUrl}
+        postFrom={postFrom}
+        handlerSubmit={handlerSubmit}
+      />
       <InfiniteScroll
         dataLength={posts.length}
         next={getPost}
@@ -83,14 +84,16 @@ export function Feed({ id, token }: Props) {
           </>
         }
         endMessage={
-          <p style={{ textAlign: 'center' }}>
+          <p style={{ textAlign: "center" }}>
             <b>No hay Mas..</b>
           </p>
         }
       >
-        {posts ? posts.map((post) => (
-          <CardPost key={post.post.id} post={post} />
-        )) : <p>No hay Post..</p>}
+        {posts ? (
+          posts.map((post) => <CardPost key={post.post.id} post={post} />)
+        ) : (
+          <p>No hay Post..</p>
+        )}
       </InfiniteScroll>
     </div>
   );
