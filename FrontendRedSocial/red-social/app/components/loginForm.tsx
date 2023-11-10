@@ -15,8 +15,10 @@ export const LoginForm = () => {
   const loginFrom = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const setUser = useNotification((state) => state.setUser);
+  const [loading, setLoading] = useState(false);
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     if (!loginFrom.current) {
       return;
@@ -35,15 +37,15 @@ export const LoginForm = () => {
       throw Error("Login err");
     }
     try {
-
-      const user = await findAuthProfile(token)
+      const user = await findAuthProfile(token);
       setUser(user);
     } catch (error) {
-      throw new Error("login Error ")
+      throw new Error("login Error ");
     }
 
     loginFrom.current.reset();
     router.push("/home");
+    setLoading(false);
   };
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -82,7 +84,7 @@ export const LoginForm = () => {
           className="max-w-xs"
         />
         <Button type="submit" className="max-w-xs">
-          Login
+          {loading ? "cargando..." : "Login"}
         </Button>
       </div>
     </form>
