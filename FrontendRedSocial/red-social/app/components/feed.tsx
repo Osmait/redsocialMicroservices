@@ -13,11 +13,16 @@ export interface Props {
   id: string;
   token: string;
 }
+interface PostAndPage {
+  post: PostResponse[];
+  total: number;
+}
 
 export function Feed({ id, token }: Props) {
   const router = useRouter();
   const user = useNotification((state) => state.user);
   const [posts, setPosts] = useState<PostResponse[]>([]);
+  const [total, setTotal] = useState(0);
   const postFrom = useRef<HTMLFormElement>(null);
   const [currentPage, SetCurrentPage] = useState(0);
 
@@ -47,9 +52,9 @@ export function Feed({ id, token }: Props) {
   };
 
   const getPost = async () => {
-    const postList = await findFeed(id, token, currentPage);
-
-    setPosts((prev) => [...prev, ...postList]);
+    const postList: PostAndPage = await findFeed(id, token, currentPage);
+    setTotal(postList.total);
+    setPosts((prev) => [...prev, ...postList.post]);
 
     SetCurrentPage((prev) => prev + 1);
   };
@@ -70,7 +75,7 @@ export function Feed({ id, token }: Props) {
       <InfiniteScroll
         dataLength={posts.length}
         next={getPost}
-        hasMore={true}
+        hasMore={total != posts.length}
         loader={
           <>
             <LoadingSkeleton />
