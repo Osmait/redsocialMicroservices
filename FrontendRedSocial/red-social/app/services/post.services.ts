@@ -10,11 +10,7 @@ export async function findPost(
   return await repository.findPost(id, token);
 }
 
-export async function findFeed(
-  id: string,
-  token: string,
-  page: number,
-): Promise<PostResponse[]> {
+export async function findFeed(id: string, token: string, page: number) {
   return repository.findFeed(id, token, page);
 }
 
