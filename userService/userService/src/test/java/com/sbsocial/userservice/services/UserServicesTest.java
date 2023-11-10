@@ -22,106 +22,104 @@ import static org.mockito.Mockito.when;
 
 class UserServicesTest {
 
-    @InjectMocks
-    private UserServices userServices;
+  @InjectMocks
+  private UserServices userServices;
 
-    @Mock
-    private UserRepository userRepository;
+  @Mock
+  private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+  @Mock
+  private PasswordEncoder passwordEncoder;
 
-    @BeforeEach
-    public void setUp(){
-        MockitoAnnotations.openMocks(this);
-    }
-    @Test
-    void create() {
+  @BeforeEach
+  public void setUp() {
+    MockitoAnnotations.openMocks(this);
+  }
 
-        UserDto userDto = new UserDto();
-        userDto.setName("saul");
-        userDto.setEmail("saulburgos@gmail.com");
-        userDto.setLastName("burgos");
-        userDto.setPassword("123456");
-        userDto.setAddress("santiago");
-        userDto.setPhone("12353453");
+  @Test
+  void create() {
 
-        when(userRepository.findByEmailAndDeletedFalse(userDto.getEmail())).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(userDto.getPassword())).thenReturn("hashedPassword");
+    UserDto userDto = new UserDto();
+    userDto.setName("saul");
+    userDto.setEmail("saulburgos@gmail.com");
+    userDto.setLastName("burgos");
+    userDto.setPassword("123456");
+    userDto.setAddress("santiago");
+    userDto.setPhone("12353453");
 
-        userServices.create(userDto);
+    when(userRepository.findByEmailAndDeletedFalse(userDto.getEmail())).thenReturn(Optional.empty());
+    when(passwordEncoder.encode(userDto.getPassword())).thenReturn("hashedPassword");
 
-        verify(userRepository).findByEmailAndDeletedFalse(userDto.getEmail());
-        verify(passwordEncoder).encode(userDto.getPassword());
-        verify(userRepository).save(any(User.class));
+    userServices.create(userDto);
 
-    }
+    verify(userRepository).findByEmailAndDeletedFalse(userDto.getEmail());
+    verify(passwordEncoder).encode(userDto.getPassword());
+    verify(userRepository).save(any(User.class));
 
-    @Test
-    void findOne() {
+  }
 
-        UUID userId = UUID.randomUUID();
-        User user = new User();
-        user.setId(userId);
-        user.setName("saul");
-        user.setLastName("burgos");
-        user.setPassword("1223455");
-        user.setAddress("santiago");
+  @Test
+  void findOne() {
 
+    UUID userId = UUID.randomUUID();
+    User user = new User();
+    user.setId(userId);
+    user.setName("saul");
+    user.setLastName("burgos");
+    user.setPassword("1223455");
+    user.setAddress("santiago");
 
-        when(userRepository.findByIdAndDeletedFalse(userId)).thenReturn(Optional.of(user));
+    when(userRepository.findByIdAndDeletedFalse(userId)).thenReturn(Optional.of(user));
 
-        User resultUser = userServices.findOne(userId);
+    User resultUser = userServices.findOne(userId);
 
+    assertEquals(user, resultUser);
+  }
 
-        assertEquals(user, resultUser);
-    }
+  @Test
+  void findOneByEmail() {
 
-    @Test
-    void findOneByEmail() {
+    UUID userId = UUID.randomUUID();
+    User user = new User();
+    user.setId(userId);
+    user.setName("saul");
+    user.setLastName("burgos");
+    user.setPassword("1223455");
+    user.setAddress("santiago");
+    user.setEmail("saulburgos@gmail.com");
 
-        UUID userId = UUID.randomUUID();
-        User user = new User();
-        user.setId(userId);
-        user.setName("saul");
-        user.setLastName("burgos");
-        user.setPassword("1223455");
-        user.setAddress("santiago");
-        user.setEmail("saulburgos@gmail.com");
+    when(userRepository.findByEmailAndDeletedFalse(user.getEmail())).thenReturn(Optional.of(user));
 
+    User resultUser = userServices.findOneByEmail(user.getEmail());
 
-        when(userRepository.findByEmailAndDeletedFalse(user.getEmail())).thenReturn(Optional.of(user));
+    assertEquals(user, resultUser);
+  }
 
-        User resultUser = userServices.findOneByEmail(user.getEmail());
+  @Test
+  void findProfile() {
 
+    UUID userId = UUID.randomUUID();
+    User user = new User();
+    user.setId(userId);
+    user.setName("Profile User");
+    user.setLastName("Last Name");
+    user.setEmail("profile@example.com");
+    user.setPhone("1234567890");
+    user.setAddress("789 Elm St");
 
-        assertEquals(user, resultUser);
-    }
+    // Mock the userRepository to return an Optional with the user when
+    // findByIdAndDeletedFalse is called
+    when(userRepository.findByIdAndDeletedFalse(userId)).thenReturn(Optional.of(user));
 
-    @Test
-    void findProfile() {
+    // Call the findProfile method
+    UserResponse userResponse = userServices.findProfile(userId);
 
-        UUID userId = UUID.randomUUID();
-        User user = new User();
-        user.setId(userId);
-        user.setName("Profile User");
-        user.setLastName("Last Name");
-        user.setEmail("profile@example.com");
-        user.setPhone("1234567890");
-        user.setAddress("789 Elm St");
+    // Verify that the UserResponse contains the expected values
+    assertEquals(userId, userResponse.id());
+    assertEquals(user.getName(), userResponse.name());
+    assertEquals(user.getLastName(), userResponse.lastName());
 
-        // Mock the userRepository to return an Optional with the user when findByIdAndDeletedFalse is called
-        when(userRepository.findByIdAndDeletedFalse(userId)).thenReturn(Optional.of(user));
-
-        // Call the findProfile method
-        UserResponse userResponse = userServices.findProfile(userId);
-
-        // Verify that the UserResponse contains the expected values
-        assertEquals(userId, userResponse.id());
-        assertEquals(user.getName(), userResponse.name());
-        assertEquals(user.getLastName(), userResponse.LastName());
-
-        assertEquals(user.getPhone(), userResponse.phone());
-        assertEquals(user.getAddress(), userResponse.address());
-    }
+    assertEquals(user.getPhone(), userResponse.phone());
+    assertEquals(user.getAddress(), userResponse.address());
+  }
 }
