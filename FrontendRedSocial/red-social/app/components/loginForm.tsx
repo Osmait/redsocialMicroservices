@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import React, { useRef, useState } from "react";
 import { EyeSlashFilledIcon } from "./eyeSlashFilledIcon";
 import { EyeFilledIcon } from "./eyesFilledIcon";
@@ -43,8 +43,8 @@ export const LoginForm = () => {
       throw new Error("login Error ");
     }
 
-    loginFrom.current.reset();
     router.push("/home");
+    loginFrom.current.reset();
     setLoading(false);
   };
 
@@ -83,9 +83,13 @@ export const LoginForm = () => {
           type={isVisible ? "text" : "password"}
           className="max-w-xs"
         />
-        <Button type="submit" className="max-w-xs">
-          {loading ? "cargando..." : "Login"}
-        </Button>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <Button type="submit" className="max-w-xs">
+            Login
+          </Button>
+        )}
       </div>
     </form>
   );
