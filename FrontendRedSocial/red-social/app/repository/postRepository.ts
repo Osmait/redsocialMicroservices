@@ -2,7 +2,7 @@ import { PostRequest, PostResponse } from "@/types";
 
 export class PostRepository {
   private url = "http://127.0.0.1:5000/api/post";
-  private feedUrl = `http://127.0.0.1:5000/api/feed`;
+  private feedUrl = `http://127.0.0.1:3000/post/feed`;
 
   private getOptions: any = {
     cache: "no-cache",
@@ -46,8 +46,8 @@ export class PostRepository {
       `${this.feedUrl}/${id}?page=${page}&limit=10`,
       this.getOptions,
     );
-
     const result = await response.json();
+    console.log(result);
 
     return result;
   }
