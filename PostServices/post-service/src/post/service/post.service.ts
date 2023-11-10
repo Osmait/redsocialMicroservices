@@ -58,7 +58,7 @@ export class PostService {
       const Ids = await this.getFollower(userId);
       Ids.push(userId);
 
-      const postlist = await this.postRepository.find({
+      const [postlist, total] = await this.postRepository.findAndCount({
         where: { userId: In(Ids) },
         order: {
           createdAt: 'DESC',
@@ -67,7 +67,10 @@ export class PostService {
         take: t,
       });
 
-      return await this.postResponseFetchComment(postlist);
+      return {
+        post: await this.postResponseFetchComment(postlist),
+        total,
+      };
     } catch (error) {
       throw new InternalServerErrorException('Error doing request');
     }
