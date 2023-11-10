@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         ) : (
           <FollowSection isFollow={isFollow} followRequet={followReques} />
         )}
-        <h1 className="text-white font-bold text-3xl">{`${profile.name} ${profile.LastName}`}</h1>
+        <h1 className="text-white font-bold text-3xl">{`${profile.name} ${profile.lastName}`}</h1>
         <p>{profile.address}</p>
         <p> {`Se union el ${profile.createdAt}`}</p>
         <div className="flex gap-2 ">
