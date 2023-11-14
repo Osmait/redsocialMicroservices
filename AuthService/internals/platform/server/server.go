@@ -13,6 +13,7 @@ import (
 	"github.com/osmait/auth-service/internals/platform/server/handlers"
 	"github.com/osmait/auth-service/internals/service"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
@@ -36,6 +37,7 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 
 func (s *Server) registerRoutes() {
 	s.Engine.Use(cors.Default())
+	s.Engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	s.Engine.POST("/login", handlers.LoginHandler(s.AuthService))
 	s.Engine.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "Up"})

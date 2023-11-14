@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { User } from "@/types";
 import { create } from "zustand";
 
@@ -32,4 +32,3 @@ export const useNotification = create<State & Actions>((set) => ({
     set({ notificationLen: 0 });
   },
 }));
-//
