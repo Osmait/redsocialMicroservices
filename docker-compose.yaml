@@ -155,3 +155,36 @@ services:
   #       - 5435:5435
   #     volumes:
   #       - ./postgres_data:/var/lib/postgresql/data
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3002:3000"
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - 9187:9187
+    environment:
+      DATA_SOURCE_NAME: "postgresql://osmait:admin123@postgres-user:5432/my_store?sslmode=disable"
+    links:
+      - postgres-user
+      - prometheus
+
+  rabbitmq-exporter:
+    image: kbudde/rabbitmq-exporter:v1.0.0-RC9
+    environment:
+      RABBIT_URL: "http://rabbitmq-notification:15672"
+
+    links:
+      - rabbitmq-notification
+      - prometheus
