@@ -1,0 +1,46 @@
+scrape_configs:
+  - job_name: auth-service
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - auth-service:8001
+
+  - job_name: notification-service
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - notification-service:8083
+
+  - job_name: user-service
+    metrics_path: /actuator/prometheus
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - user-service:8080
+
+  - job_name: post-service
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - post-service:3000
+
+  - job_name: follower-service
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - follower-service:3001
+
+  - job_name: postgres-exporter
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+
+  - job_name: "rabbitmq-exporter"
+    scrape_interval: 5s
+
+    static_configs:
+      - targets:
+          - rabbitmq-exporter:9419
