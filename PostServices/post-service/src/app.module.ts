@@ -5,11 +5,13 @@ import { PostModule } from './post/post.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
     DatabaseModule,
     PostModule,
+    PrometheusModule.register(),
     ClientsModule.register([
       {
         name: 'HELLO',

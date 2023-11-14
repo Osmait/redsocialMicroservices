@@ -9,6 +9,10 @@ export class PostResponse {
     this.comment = comment;
   }
 }
+export interface PostResponseWithTotal {
+  post: PostResponse[];
+  total: number;
+}
 
 export interface PostWithFollower {
   post: Post;

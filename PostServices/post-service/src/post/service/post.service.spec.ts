@@ -92,20 +92,29 @@ describe('PostService', () => {
       const userId = '1';
 
       const mockPostResponseList = createRandomPostResponse(5);
+
       const mockPost = createRandomPost(5);
 
-      jest.spyOn(postRepository, 'find').mockResolvedValue(mockPost);
-      jest
-        .spyOn(postService, 'postResponseFetchComment')
-        .mockResolvedValue(mockPostResponseList);
-
+      const mockPostResponseWithCommentList = {
+        post: mockPostResponseList,
+        total: mockPostResponseList.length,
+      };
       jest
         .spyOn(postService, 'getFollower')
         .mockResolvedValue(['follower1', 'follower2']);
 
+      jest
+        .spyOn(postRepository, 'findAndCount')
+        .mockResolvedValue([mockPost, 10]);
+      jest
+        .spyOn(postService, 'postResponseFetchComment')
+        .mockResolvedValue(mockPostResponseList);
+
       const result = await postService.getFeed(userId, '1', 1, 10);
 
-      expect(result.length).toBe(mockPostResponseList.length);
+      expect(result.post.length).toBe(
+        mockPostResponseWithCommentList.post.length,
+      );
     });
   });
 

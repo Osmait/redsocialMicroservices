@@ -8,7 +8,7 @@ import { Post } from '../domain/post.entity';
 import { In, Repository } from 'typeorm';
 
 import { HttpService } from '@nestjs/axios';
-import { PostResponse, User } from '../domain/postDto';
+import { PostResponse, PostResponseWithTotal, User } from '../domain/postDto';
 import { lastValueFrom, map } from 'rxjs';
 import { randomUUID } from 'crypto';
 
@@ -52,7 +52,12 @@ export class PostService {
     return postR;
   }
 
-  public async getFeed(userId: string, token: string, s: number, t: number) {
+  public async getFeed(
+    userId: string,
+    token: string,
+    s: number,
+    t: number,
+  ): Promise<PostResponseWithTotal> {
     this.header.headers.Authorization = `Bearer ${token}`;
     try {
       const Ids = await this.getFollower(userId);
@@ -76,7 +81,7 @@ export class PostService {
     }
   }
 
-  public async findAll(userId: string, token: string) {
+  public async findAll(userId: string, token: string): Promise<PostResponse[]> {
     this.header.headers.Authorization = `Bearer ${token}`;
     const postList = await this.postRepository.find({
       where: { userId, deleted: false },
@@ -87,7 +92,7 @@ export class PostService {
     return await this.postResponseFetchComment(postList);
   }
 
-  public async delete(id: string) {
+  public async delete(id: string): Promise<void> {
     const post = await this.postRepository.findOne({
       where: { id },
     });
@@ -120,7 +125,7 @@ export class PostService {
     return postReponse;
   }
 
-  public async getFollower(userId: string) {
+  public async getFollower(userId: string): Promise<string[]> {
     const follower: User[] = await lastValueFrom(
       this.httpService
         .get(`${FOLLOWER_URL}/following/${userId}`, this.header)
