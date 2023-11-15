@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"github.com/osmait/notificationservice/internas/platform/server/middleware"
 	"github.com/osmait/notificationservice/internas/platform/server/websocket"
 	"github.com/osmait/notificationservice/internas/service"
 	cors "github.com/rs/cors/wrapper/gin"
@@ -33,6 +34,7 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 		shutdownTimeout:     shutdownTimeout,
 		Hub:                 websocket.NewHub(),
 	}
+	middleware.RegisterPrometheusMetrics()
 	srv.registerRoutes()
 
 	return serverContext(ctx), srv
@@ -40,7 +42,7 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 
 func (s *Server) registerRoutes() {
 	s.Engine.Use(cors.AllowAll())
-
+	s.Engine.Use(middleware.RecordRequestLatency())
 	s.Engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	s.Engine.GET("/ws/:id", websocket.HandlerWs(s.Hub, s.notificationService))
 }

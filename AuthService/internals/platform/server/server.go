@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/osmait/auth-service/internals/platform/server/handlers"
+	"github.com/osmait/auth-service/internals/platform/server/middleware"
 	"github.com/osmait/auth-service/internals/service"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -31,12 +32,15 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 		AuthService:     authService,
 		shutdownTimeout: shutdownTimeout,
 	}
+	middleware.RegisterPrometheusMetrics()
 	srv.registerRoutes()
 	return serverContext(ctx), srv
 }
 
 func (s *Server) registerRoutes() {
 	s.Engine.Use(cors.Default())
+	s.Engine.Use(middleware.RecordEndpointAccess())
+	s.Engine.Use(middleware.RecordRequestLatency())
 	s.Engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	s.Engine.POST("/login", handlers.LoginHandler(s.AuthService))
 	s.Engine.GET("/health", func(ctx *gin.Context) {

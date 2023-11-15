@@ -1,4 +1,18 @@
+x-logging: &default-logging
+  driver: loki
+  options:
+    loki-url: "http://localhost:3100/api/prom/push"
+    loki-pipeline-stages: |
+      - multiline:
+          firstline: '^\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}:\d{2}'
+          max_wait_time: 3s
+      - regex:
+          expression: '^(?P<time>\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}:\d{2},d{3}) (?P<message>(?s:.*))$$'
 services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
   rabbitmq-notification:
     image: rabbitmq:3-management-alpine
     container_name: "rabbitmq"
@@ -8,6 +22,7 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    logging: *default-logging
 
   auth-service:
     build:
@@ -15,6 +30,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8001:8001
+
+    logging: *default-logging
 
   # Api GateWay
   api-gateway:
@@ -33,6 +50,7 @@ services:
       - FOLLOWER_HOST=follower-service
       - FOLLOWER_PORT=3001
 
+    logging: *default-logging
   # UserService
   postgres-user:
     image: postgres:13
@@ -44,6 +62,7 @@ services:
       - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    logging: *default-logging
 
   user-service:
     build:
@@ -61,6 +80,7 @@ services:
       - postgres-user
     restart: always
 
+    logging: *default-logging
   # PostService
 
   # postgres-post:
@@ -89,6 +109,7 @@ services:
       - 3000:3000
     restart: always
     # depends_on:
+    logging: *default-logging
     #   - postgres-post
 
   # CommentService
@@ -100,6 +121,7 @@ services:
     ports:
       - 8000:8000
     restart: always
+    logging: *default-logging
 
   # postgres-comment:
   #   image: postgres:13
@@ -126,6 +148,7 @@ services:
       - rabbitmq-notification
     restart: always
 
+    logging: *default-logging
   # Follower Service
   follower-service:
     build:
@@ -145,6 +168,7 @@ services:
     #   - postgres-follower
     restart: always
 
+    logging: *default-logging
   # postgres-follower:
   #     image: postgres:13
   #     environment:

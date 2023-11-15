@@ -13,6 +13,7 @@ import (
 	"github.com/osmait/api-gateway/config"
 	"github.com/osmait/api-gateway/internals/platform/server/handlers"
 	"github.com/osmait/api-gateway/internals/platform/server/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
@@ -32,13 +33,15 @@ func New(ctx context.Context, host string, port uint, shutdownTimeout time.Durat
 
 		shutdownTimeout: shutdownTimeout,
 	}
-
+	middleware.RegisterPrometheusMetrics()
 	srv.registerRoutes()
 	return serverContext(ctx), srv
 }
 
 func (s *Server) registerRoutes() {
 	s.Engine.Use(cors.AllowAll())
+	s.Engine.Use(middleware.RecordRequestLatency())
+	s.Engine.GET("/api/metrics", gin.WrapH(promhttp.Handler()))
 	s.Engine.Use(middleware.CheckAuthMiddleware())
 
 	s.Engine.GET("/api/user", handlers.GetUser(s.Config))

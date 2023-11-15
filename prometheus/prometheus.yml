@@ -6,6 +6,20 @@ scrape_configs:
       - targets:
           - auth-service:8001
 
+  - job_name: api-gateway
+    metrics_path: "api/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - api-gateway:5000
+
+  - job_name: comment-service
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - comment-service:8000
+
   - job_name: notification-service
     metrics_path: "/metrics"
     scrape_interval: 5s

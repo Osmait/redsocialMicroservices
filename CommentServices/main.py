@@ -8,13 +8,13 @@ from pydantic import ValidationError
 from database import engine, Base, Session
 from comment_model import CommentDto
 from comment_service import CommentService
-
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 Base.metadata.create_all(bind=engine)
 
 origins = [
-
     "http://localhost:3002",
 ]
 
@@ -61,7 +61,9 @@ comment_service = CommentService(db)
 
 
 @app.get("/comment/{id}")
-async def getComment(id: str, current_user: Annotated[str, Security(get_current_id, scopes=["me"])]):
+async def getComment(
+    id: str, current_user: Annotated[str, Security(get_current_id, scopes=["me"])]
+):
     comments = comment_service.find_all_by_id(id)
     return comments
 
