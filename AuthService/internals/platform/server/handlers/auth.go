@@ -21,7 +21,7 @@ func LoginHandler(s service.Service) gin.HandlerFunc {
 		resp, err := s.LoginService(loginRequest)
 		if err != nil {
 
-			c.JSON(http.StatusBadRequest, err.Error())
+			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
 

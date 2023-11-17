@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -57,9 +58,10 @@ func RecordRequestLatency() gin.HandlerFunc {
 		t := time.Now()
 
 		c.Next()
-
+		fmt.Println(c.Request.RequestURI)
 		l := time.Since(t).Seconds()
 		latency.WithLabelValues(
+
 			c.Request.Method,
 			c.Request.URL.Path,
 		).Observe(l)
