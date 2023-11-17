@@ -43,7 +43,8 @@ func MakeBackendGetRequest(url string, token any) ([]byte, error) {
 	resp, err := client.Do(req)
 
 	if err != nil || resp.StatusCode != 200 {
-		return nil, errors.New("Internal Error with Request")
+		Logger.Info("Response Error")
+		return nil, errors.New("internal Error with Request")
 	}
 
 	body, err := io.ReadAll(resp.Body)

@@ -2,18 +2,18 @@ package boostrap
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/osmait/api-gateway/config"
 	"github.com/osmait/api-gateway/internals/platform/server"
+	"github.com/osmait/api-gateway/internals/platform/utils"
 )
 
 func Run() error {
 	err := godotenv.Load("develop.env")
 	if err != nil {
-		fmt.Println("Not env")
+		utils.Logger.Warn(".Env dont Load")
 	}
 	var cfg Config
 	cfg.Port = 5000
