@@ -62,7 +62,11 @@ func handleNewFollow(message any, id string, msg []byte, c *Client, repostory po
 	follower, err := utils.UnmarshalFollowe(info)
 	if err != nil {
 		log.Println(err)
-		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		err := c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		return
 	}
 	repostory.Save(&domain.Notifcation{Pattern: "new-follow", Data: string(info), UserID: follower.FollowingID})
@@ -78,14 +82,23 @@ func handleNewPost(message any, id string, msg []byte, c *Client, repository pos
 	if err != nil {
 
 		log.Println(err)
-		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		err = c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		return
 	}
 	data, err := utils.UnmarshalData(info)
 	if err != nil {
 
 		log.Println(err)
-		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+		err = c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		return
 	}
 	for _, userId := range data.Follower {
@@ -110,8 +123,20 @@ func (c *Client) readPump(notificationservice service.NotificationService, id st
 		c.conn.Close()
 	}()
 	c.conn.SetReadLimit(maxMessageSize)
-	c.conn.SetReadDeadline(time.Now().Add(pongWait))
-	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	err := c.conn.SetReadDeadline(time.Now().Add(pongWait))
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	c.conn.SetPongHandler(func(string) error {
+		err := c.conn.SetReadDeadline(time.Now().Add(pongWait))
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		return nil
+	})
 
 	msgs := notificationservice.GetMessages()
 	var message Message
@@ -138,32 +163,59 @@ func (c *Client) writePump() {
 	for {
 		select {
 		case message, ok := <-c.send:
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			err := c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err != nil {
+				log.Println(err)
+				return
+			}
 			if !ok {
 				// The hub closed the channel.
-				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				err := c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				if err != nil {
+					log.Println(err)
+					return
+				}
 				return
 			}
 
 			w, err := c.conn.NextWriter(websocket.TextMessage)
 			if err != nil {
+				log.Println(err)
 				return
 			}
-			w.Write(message)
+			_, err = w.Write(message)
+			if err != nil {
+				log.Println(err)
+				return
+			}
 
 			// Add queued chat messages to the current websocket message.
 			n := len(c.send)
 			for i := 0; i < n; i++ {
-				w.Write(newline)
-				w.Write(<-c.send)
+				_, err := w.Write(newline)
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				_, err = w.Write(<-c.send)
+
+				if err != nil {
+					log.Println(err)
+					return
+				}
 			}
 
 			if err := w.Close(); err != nil {
 				return
 			}
 		case <-ticker.C:
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			err := c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err != nil {
+				log.Println(err)
+				return
+			}
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				log.Println(err)
 				return
 			}
 		}
