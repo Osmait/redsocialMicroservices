@@ -3,12 +3,15 @@ package websocket
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/osmait/notificationservice/internas/platform/domain"
+	"github.com/osmait/notificationservice/internas/platform/storage/postgres"
 	"github.com/osmait/notificationservice/internas/platform/utils"
 	"github.com/osmait/notificationservice/internas/service"
 )
@@ -49,7 +52,7 @@ type Client struct {
 	send chan []byte
 }
 
-func handleNewFollow(message any, id string, msg []byte, c *Client) {
+func handleNewFollow(message any, id string, msg []byte, c *Client, repostory postgres.PostgresStoreRepository) {
 	info, err := json.Marshal(message)
 	if err != nil {
 		log.Println(err)
@@ -62,6 +65,7 @@ func handleNewFollow(message any, id string, msg []byte, c *Client) {
 		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 		return
 	}
+	repostory.Save(&domain.Notifcation{Pattern: "new-follow", Data: string(info), UserID: follower.FollowingID})
 	if follower.FollowingID == id {
 		messageb := bytes.TrimSpace(bytes.Replace(msg, newline, space, -1))
 		c.hub.broadcast <- messageb
@@ -69,20 +73,24 @@ func handleNewFollow(message any, id string, msg []byte, c *Client) {
 	}
 }
 
-func handleNewPost(message any, id string, msg []byte, c *Client) {
+func handleNewPost(message any, id string, msg []byte, c *Client, repository postgres.PostgresStoreRepository) {
 	info, err := json.Marshal(message)
 	if err != nil {
+
 		log.Println(err)
 		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 		return
 	}
 	data, err := utils.UnmarshalData(info)
 	if err != nil {
+
 		log.Println(err)
 		c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 		return
 	}
-
+	for _, userId := range data.Follower {
+		repository.Save(&domain.Notifcation{Pattern: "new-post", Data: string(info), UserID: userId})
+	}
 	if containsElement(data.Follower, id) {
 
 		messageb := bytes.TrimSpace(bytes.Replace(msg, newline, space, -1))
@@ -91,12 +99,12 @@ func handleNewPost(message any, id string, msg []byte, c *Client) {
 	}
 }
 
-var patternHandlers = map[string]func(any, string, []byte, *Client){
+var patternHandlers = map[string]func(any, string, []byte, *Client, postgres.PostgresStoreRepository){
 	"new-follow": handleNewFollow,
 	"new-Post":   handleNewPost,
 }
 
-func (c *Client) readPump(notificationservice service.NotificationService, id string) {
+func (c *Client) readPump(notificationservice service.NotificationService, id string, repostory postgres.PostgresStoreRepository) {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
@@ -109,9 +117,14 @@ func (c *Client) readPump(notificationservice service.NotificationService, id st
 	var message Message
 
 	for msg := range msgs {
-		json.Unmarshal(msg.Body, &message)
+		err := json.Unmarshal(msg.Body, &message)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		handler := patternHandlers[message.Pattern]
-		handler(&message.Data, id, msg.Body, c)
+		handler(&message.Data, id, msg.Body, c, repostory)
 
 	}
 }
@@ -159,7 +172,7 @@ func (c *Client) writePump() {
 
 // serveWs handles websocket requests from the peer.
 
-func HandlerWs(hub *Hub, notificationservice service.NotificationService) gin.HandlerFunc {
+func HandlerWs(hub *Hub, notificationservice service.NotificationService, repostory postgres.PostgresStoreRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 		conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
@@ -173,6 +186,6 @@ func HandlerWs(hub *Hub, notificationservice service.NotificationService) gin.Ha
 		// Allow collection of memory referenced by the caller by doing all work in
 		// new goroutines.
 		go client.writePump()
-		go client.readPump(notificationservice, id)
+		go client.readPump(notificationservice, id, repostory)
 	}
 }

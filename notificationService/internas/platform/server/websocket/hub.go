@@ -1,5 +1,7 @@
 package websocket
 
+import "fmt"
+
 // "github.com/osmait/notificationservice/internas/service"
 
 type Message struct {
@@ -63,6 +65,7 @@ func (h *Hub) Run() {
 
 func containsElement(slice []string, element string) bool {
 	for _, item := range slice {
+		fmt.Println(item, element)
 		if item == element {
 			return true
 		}

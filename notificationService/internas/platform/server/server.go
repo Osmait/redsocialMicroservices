@@ -12,8 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"github.com/osmait/notificationservice/internas/platform/server/handler"
 	"github.com/osmait/notificationservice/internas/platform/server/middleware"
 	"github.com/osmait/notificationservice/internas/platform/server/websocket"
+	postgresStorage "github.com/osmait/notificationservice/internas/platform/storage/postgres"
 	"github.com/osmait/notificationservice/internas/service"
 	cors "github.com/rs/cors/wrapper/gin"
 )
@@ -22,15 +24,17 @@ type Server struct {
 	httpAddr            string
 	Engine              *gin.Engine
 	notificationService service.NotificationService
+	repository          postgresStorage.PostgresStoreRepository
 	shutdownTimeout     time.Duration
 	Hub                 *websocket.Hub
 }
 
-func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, notificationService service.NotificationService) (context.Context, Server) {
+func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, notificationService service.NotificationService, postgresStorage postgresStorage.PostgresStoreRepository) (context.Context, Server) {
 	srv := Server{
 		Engine:              gin.Default(),
 		httpAddr:            fmt.Sprintf("%s:%d", host, port),
 		notificationService: notificationService,
+		repository:          postgresStorage,
 		shutdownTimeout:     shutdownTimeout,
 		Hub:                 websocket.NewHub(),
 	}
@@ -44,7 +48,8 @@ func (s *Server) registerRoutes() {
 	s.Engine.Use(cors.AllowAll())
 	s.Engine.Use(middleware.RecordRequestLatency())
 	s.Engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
-	s.Engine.GET("/ws/:id", websocket.HandlerWs(s.Hub, s.notificationService))
+	s.Engine.GET("/notification/:id", handler.GetNotification(s.repository))
+	s.Engine.GET("/ws/:id", websocket.HandlerWs(s.Hub, s.notificationService, s.repository))
 }
 
 func (s *Server) Run(ctx context.Context) error {

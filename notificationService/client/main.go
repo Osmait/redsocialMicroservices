@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/streadway/amqp"
 )
@@ -23,9 +21,10 @@ type Message struct {
 
 type Data struct {
 	Post     `json:"post"`
-	Follower []string `json:"follower"`
+	Follower []string `json:"followers"`
 }
 
+//
 // type Data struct {
 // 	FollowerID  string `json:"followerId"`
 // 	FollowingID string `json:"followingId"`
@@ -40,9 +39,9 @@ type Post struct {
 }
 
 func main() {
-	hostRabbit := os.Getenv("HOST_RABBIT")
+	// hostRabbit := os.Getenv("HOST_RABBIT")
 
-	url := fmt.Sprintf("amqp://guest:guest@%s:5672/", hostRabbit)
+	url := "amqp://guest:guest@localhost:5672"
 	// Here we connect to RabbitMQ or send a message if there are any errors connecting.
 	conn, err := amqp.Dial(url)
 	failOnError(err, "Failed to connect to RabbitMQ")
@@ -53,9 +52,9 @@ func main() {
 	defer ch.Close()
 
 	post := Post{
-		Content:   "Este es el contenido del post",
+		Content:   "Este es el contenido del post numero 2",
 		UserID:    "a5698235-a37b-4c70-ac46-a234f359ada0",
-		ID:        "456",
+		ID:        "436",
 		Deleted:   false,
 		CreatedAt: "2023-10-09",
 	}
@@ -67,9 +66,9 @@ func main() {
 	}
 	// data := Data{
 	// 	FollowerID:  "1",
-	// 	FollowingID: "ec5707f4-32bc-48ce-a3bb-d1a3d3f674d2",
+	// 	FollowingID: "a5698235-a37b-4c70-ac46-a234f359ada0",
 	// }
-
+	//
 	// Crear una instancia de Message con el patrón y los datos
 	body := Message{
 		Pattern: "new-post",
