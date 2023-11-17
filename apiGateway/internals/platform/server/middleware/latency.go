@@ -31,10 +31,10 @@ func RecordRequestLatency() gin.HandlerFunc {
 
 		l := time.Since(t).Seconds()
 		s := strings.Split(c.Request.URL.Path, "/")
-		fmt.Println(s[2])
+
 		latency.WithLabelValues(
 			c.Request.Method,
-			s[2],
+			fmt.Sprintf("/%s", s[2]),
 		).Observe(l)
 	}
 }
