@@ -28,7 +28,7 @@ func Run() error {
 	if err != nil {
 		log.Fatal("Error doing Conn")
 	}
-	dsn := "host=postgres-user user=osmait password=admin123 dbname=my_store port=5432 sslmode=disable"
+	dsn := "host=localhost user=osmait password=admin123 dbname=my_store port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return err

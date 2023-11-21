@@ -71,7 +71,7 @@ func main() {
 	//
 	// Crear una instancia de Message con el patrón y los datos
 	body := Message{
-		Pattern: "new-post",
+		Pattern: "new-Post",
 		Data:    data,
 	}
 
