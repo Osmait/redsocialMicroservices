@@ -34,27 +34,33 @@ func CheckAuthMiddleware() gin.HandlerFunc {
 		}
 
 		token := strings.TrimSpace(c.GetHeader("Authorization"))
+		if token == "" {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			c.JSON(http.StatusUnauthorized, "Error dont Authorization")
+			return
+		}
 		tokenClean := strings.Split(token, " ")
+		if len(tokenClean) != 2 {
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
 
 		tokenDecode, err := jwt.ParseWithClaims(tokenClean[1], &AppClaims{}, func(t *jwt.Token) (interface{}, error) {
 			return []byte("secreto"), nil
 		})
 		if err != nil {
-
 			c.JSON(http.StatusInternalServerError, err.Error())
+			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 
 		claims, ok := tokenDecode.Claims.(*AppClaims)
 		if !ok {
-			c.JSON(http.StatusInternalServerError, err.Error())
+			c.JSON(http.StatusInternalServerError, "Error")
+			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, err.Error())
-			return
-		}
 		c.Set("X-User-Id", claims.UserId)
 		c.Set("X-token", token)
 		c.Next()

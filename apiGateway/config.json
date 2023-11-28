@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "path": "/auth/",
+      "target": "auth-service:8001"
+    },
+    {
+      "path": "/user/",
+      "target": "user-service:8080"
+    },
+    {
+      "path": "/post/",
+      "target": "post-service:3000"
+    },
+    {
+      "path": "/follow/",
+      "target": "follower-service:3001"
+    },
+    {
+      "path": "/following/",
+      "target": "follower-service:3001"
+    },
+    {
+      "path": "/comment/",
+      "target": "comment-service:8000"
+    }
+  ]
+}
