@@ -83,7 +83,6 @@ func (s *Server) registerRoutes() {
 			Scheme: "http",
 			Host:   r.Target,
 		})
-
 		s.Engine.Any(r.Path, func(c *gin.Context) {
 			proxy.ServeHTTP(c.Writer, c.Request)
 		})

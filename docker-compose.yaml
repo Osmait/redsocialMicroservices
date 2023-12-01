@@ -22,22 +22,19 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    logging: *default-logging
 
   auth-service:
-    build:
-      context: AuthService/
-      dockerfile: Dockerfile
+    image: cosmtrek/air
+    working_dir: /app
     ports:
       - 8001:8001
-
-    logging: *default-logging
+    volumes:
+      - ./AuthService:/app
 
   # Api GateWay
   api-gateway:
-    build:
-      context: apiGateway/
-      dockerfile: Dockerfile
+    image: cosmtrek/air
+    working_dir: /app
     ports:
       - 5000:5000
     environment:
@@ -49,8 +46,10 @@ services:
       - COMMENT_PORT=8000
       - FOLLOWER_HOST=follower-service
       - FOLLOWER_PORT=3001
+    volumes:
+      - ./apiGateway:/app
 
-    logging: *default-logging
+    # logging: *default-logging
   # UserService
   postgres-user:
     image: postgres:13
@@ -62,12 +61,10 @@ services:
       - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
-    logging: *default-logging
 
   user-service:
-    build:
-      context: userService/userService/
-      dockerfile: Dockerfile
+    image: openjdk:17-jdk
+    working_dir: /app
     environment:
       - DB_PORT=5432
       - DB_DATABASE=my_store
@@ -78,26 +75,14 @@ services:
       - 8080:8080
     depends_on:
       - postgres-user
+    volumes:
+      - ./userService/userService:/app
+    command: bash -c ./gradlew bootRun
     restart: always
 
-    logging: *default-logging
-  # PostService
-
-  # postgres-post:
-  #   image: postgres:13
-  #   environment:
-  #     - POSTGRES_DB=my_store
-  #     - POSTGRES_USER=osmait
-  #     - POSTGRES_PASSWORD=admin123
-  #   ports:
-  #     - 5433:5433
-  #   volumes:
-  #     - ./postgres_data:/var/lib/postgresql/data
-
   post-service:
-    build:
-      context: PostServices/post-service/
-      dockerfile: Dockerfile
+    image: node:18
+    working_dir: /app
     environment:
       - DB_PORT=5432
       - DB_DATABASE=my_store
@@ -107,11 +92,11 @@ services:
       - USER_URL=comment-service
     ports:
       - 3000:3000
-    restart: always
-    # depends_on:
-    logging: *default-logging
-    #   - postgres-post
+    volumes:
+      - ./PostServices/post-service:/app
+    command: bash -c "npm run start:dev"
 
+    restart: always
   # CommentService
 
   comment-service:
@@ -121,25 +106,11 @@ services:
     ports:
       - 8000:8000
     restart: always
-    logging: *default-logging
-
-  # postgres-comment:
-  #   image: postgres:13
-  #   environment:
-  #     - POSTGRES_DB=my_store
-  #     - POSTGRES_USER=osmait
-  #     - POSTGRES_PASSWORD=admin123
-  #   ports:
-  #     - 5434:5434
-  #   volumes:
-  #     - ./postgres_data:/var/lib/postgresql/data
-
   # Notification Service
 
   notification-service:
-    build:
-      context: notificationService/
-      dockerfile: Dockerfile
+    image: cosmtrek/air
+    working_dir: /app
     environment:
       - HOST_RABBIT=rabbitmq-notification
     ports:
@@ -147,13 +118,13 @@ services:
     depends_on:
       - rabbitmq-notification
     restart: always
+    volumes:
+      - ./notificationService:/app
 
-    logging: *default-logging
   # Follower Service
   follower-service:
-    build:
-      context: followersService/follower-service
-      dockerfile: Dockerfile
+    image: node:18
+    working_dir: /app
     environment:
       - DB_PORT=5432
       - DB_DATABASE=my_store
@@ -163,22 +134,11 @@ services:
       - USER_URL="http//user-service:8080"
     ports:
       - 3001:3001
-    # depends_on:
+    volumes:
+      - ./followersService/follower-service:/app
+    command: bash -c "npm run start:dev"
 
-    #   - postgres-follower
     restart: always
-
-    logging: *default-logging
-  # postgres-follower:
-  #     image: postgres:13
-  #     environment:
-  #       - POSTGRES_DB=my_store
-  #       - POSTGRES_USER=osmait
-  #       - POSTGRES_PASSWORD=admin123
-  #     ports:
-  #       - 5435:5435
-  #     volumes:
-  #       - ./postgres_data:/var/lib/postgresql/data
 
   prometheus:
     image: prom/prometheus

@@ -21,8 +21,6 @@ func HandlerWs(hub *Hub, notificationservice service.NotificationService, repost
 		client.hub.register <- client
 		utils.Logger.Info("client add..")
 
-		// Allow collection of memory referenced by the caller by doing all work in
-		// new goroutines.
 		go client.writePump()
 		go client.readPump(notificationservice, id, repostory)
 	}

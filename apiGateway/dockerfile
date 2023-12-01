@@ -16,6 +16,6 @@ WORKDIR /app
 
 # Copy the compiled binary from the build stage
 COPY --from=build /app/apigateway .
-# COPY --from=build /app/develop.env .
+COPY --from=build /app/config.json .
 # Run the binary
 CMD ["./apigateway"]
